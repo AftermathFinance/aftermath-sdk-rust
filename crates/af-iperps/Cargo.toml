@@ -1,0 +1,110 @@
+[package]
+description = "Move types for the `Perpetuals` package"
+name        = "af-iperps"
+version     = "0.22.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+    # Generate links to definition in rustdoc source code pages
+    # https://github.com/rust-lang/rust/pull/84176
+    "--generate-link-to-definition",
+    "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[features]
+graphql = [
+    "dep:async-stream",
+    "dep:cynic",
+    "dep:enum-as-inner",
+    "dep:futures",
+    "dep:sui-gql-client",
+    "dep:sui-gql-schema",
+    "sui-gql-client/move-type",
+    "sui-gql-client/queries",
+    "sui-gql-schema/build",
+]
+
+
+[dependencies]
+af-move-type      = { version = "0.7", path = "../af-move-type" }
+af-sui-pkg-sdk    = { version = "0.7", path = "../af-sui-pkg-sdk" }
+af-sui-types      = { version = "0.6", path = "../af-sui-types" }
+af-utilities      = { version = "0.6", path = "../af-utilities" }
+move-stdlib-sdk   = { version = "0.8", path = "../move-stdlib-sdk" }
+sui-framework-sdk = { version = "0.9", path = "../sui-framework-sdk" }
+
+bcs         = "0.1"
+clap        = { version = "4", features = ["derive"] }
+derive_more = { version = "1", features = ["display", "from", "is_variant", "try_into"] }
+fastcrypto  = "0.1"
+remain      = "0.2"
+serde       = "1"
+serde_json  = "1"
+thiserror   = "2"
+
+# GraphQL RPC (optional)
+async-stream   = { version = "0.3", optional = true }
+cynic          = { version = "3", optional = true }
+enum-as-inner  = { version = "0.6.1", optional = true }
+futures        = { version = "0.3", optional = true }
+sui-gql-client = { version = "0.13", path = "../sui-gql-client", default-features = false, optional = true }
+
+
+[build-dependencies.sui-gql-schema]
+default-features = false
+features         = ["build"]
+optional         = true
+path             = "../sui-gql-schema"
+version          = "0.7"
+
+
+[dev-dependencies]
+af-iperps      = { path = ".", features = ["graphql"] }
+clap           = { version = "4", features = ["derive"] }
+color-eyre     = "0.6"
+indicatif      = "0.17"
+insta          = "1"
+nonempty       = "0.11"
+reqwest        = "0.12"
+rgb            = "0.8"
+sui-gql-client = { path = "../sui-gql-client", features = ["reqwest"] }
+textplots      = "0.8"
+tokio          = { version = "1", features = ["full"] }
+tokio-test     = "0.4"
+
+
+[[example]]
+name = "clearing-house-orders"
+path = "examples/clearing_house_orders.rs"
+
+[[example]]
+name = "order-maps"
+path = "examples/order_maps.rs"
+
+[[example]]
+name = "map-orders"
+path = "examples/map_orders.rs"
+
+[[example]]
+name = "clearing-house-vault"
+path = "examples/clearing_house_vault.rs"
+
+[[example]]
+name = "clearing-house-positions"
+path = "examples/clearing_house_positions.rs"
+
+[[example]]
+name = "all-orders-concurrently"
+path = "examples/all_orders_concurrently.rs"

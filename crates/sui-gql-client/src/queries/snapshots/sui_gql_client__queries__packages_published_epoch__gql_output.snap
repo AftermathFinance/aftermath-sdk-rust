@@ -1,0 +1,27 @@
+---
+source: crates/sui-gql-client/src/queries/packages_published_epoch.rs
+expression: operation.query
+---
+query Query($after: String, $filter: ObjectFilter, $first: Int) {
+  objects(filter: $filter, first: $first, after: $after) {
+    nodes {
+      address
+      asMovePackage {
+        previousTransactionBlock {
+          effects {
+            epoch {
+              epochId
+            }
+            checkpoint {
+              sequenceNumber
+            }
+          }
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

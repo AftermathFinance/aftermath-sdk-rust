@@ -1,0 +1,38 @@
+[package]
+description = "Move types for the `utilities` package and off-chain numerical types for reproducing calculations"
+name        = "af-utilities"
+version     = "0.6.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[dependencies]
+af-sui-types = { version = "0.6", path = "../af-sui-types", features = ["u256"] }
+
+num-traits = "0.2"
+serde      = "1"
+thiserror  = "2"
+
+[[example]]
+name = "utilities_types"
+path = "examples/types.rs"
+
+[dev-dependencies]
+proptest = "1"

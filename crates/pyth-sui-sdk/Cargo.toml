@@ -1,0 +1,53 @@
+[package]
+description = "SDK for Pyth's Sui package; maintained by Aftermath"
+name        = "pyth-sui-sdk"
+version     = "0.14.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[features]
+json-rpc = ["dep:af-ptbuilder", "dep:sui-jsonrpc", "sui-jsonrpc/client-api"]
+ptb      = ["bytes/serde", "dep:af-ptbuilder", "dep:bytes", "dep:extension-traits"]
+
+[dependencies]
+af-move-type      = { version = "0.7", path = "../af-move-type" }
+af-sui-pkg-sdk    = { version = "0.7", path = "../af-sui-pkg-sdk" }
+af-sui-types      = { version = "0.6", path = "../af-sui-types" }
+sui-framework-sdk = { version = "0.9", path = "../sui-framework-sdk" }
+wormhole-sui-sdk  = { version = "0.9", path = "../wormhole-sui-sdk" }
+
+bcs       = "0.1"
+hex       = "0.4.3"
+serde     = "1"
+thiserror = "2"
+
+# Optional deps
+bytes            = { version = "1", optional = true }
+extension-traits = { version = "2", optional = true }
+pyth-sdk         = { version = "0.8", optional = true }
+
+# Optional aftermath deps
+af-ptbuilder = { version = "3", optional = true, path = "../af-ptbuilder" }
+sui-jsonrpc  = { version = "0.11", path = "../sui-jsonrpc", default-features = false, optional = true }
+
+
+[dev-dependencies]
+pyth-sui-sdk = { path = ".", features = ["json-rpc", "ptb"] }

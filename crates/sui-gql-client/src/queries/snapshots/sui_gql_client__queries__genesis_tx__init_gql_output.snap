@@ -1,0 +1,13 @@
+---
+source: crates/sui-gql-client/src/queries/genesis_tx.rs
+expression: operation.query
+---
+query Query($id: UInt53) {
+  epoch(id: $id) {
+    transactionBlocks(first: 1) {
+      nodes {
+        bcs
+      }
+    }
+  }
+}

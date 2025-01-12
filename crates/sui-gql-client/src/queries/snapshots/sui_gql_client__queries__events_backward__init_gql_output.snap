@@ -1,0 +1,23 @@
+---
+source: crates/sui-gql-client/src/queries/events_backward.rs
+expression: operation.query
+---
+query Query($last: Int, $before: String, $filter: EventFilter) {
+  events(before: $before, filter: $filter, last: $last) {
+    edges {
+      node {
+        timestamp
+        contents {
+          type {
+            repr
+          }
+          bcs
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      hasPreviousPage
+    }
+  }
+}

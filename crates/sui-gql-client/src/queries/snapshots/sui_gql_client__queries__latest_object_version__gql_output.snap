@@ -1,0 +1,12 @@
+---
+source: crates/sui-gql-client/src/queries/latest_object_version.rs
+expression: operation.query
+---
+query Query($objectId: SuiAddress!) {
+  checkpoint {
+    sequenceNumber
+  }
+  object(address: $objectId) {
+    version
+  }
+}

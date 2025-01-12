@@ -1,0 +1,33 @@
+---
+source: crates/sui-gql-client/src/queries/object_args.rs
+expression: operation.query
+---
+query Query($filter: ObjectFilter, $after: String, $first: Int) {
+  objects(filter: $filter, first: $first, after: $after) {
+    nodes {
+      address
+      version
+      digest
+      owner {
+        __typename
+        ... on Immutable {
+          _
+        }
+        ... on Shared {
+          __typename
+          initialSharedVersion
+        }
+        ... on Parent {
+          __typename
+        }
+        ... on AddressOwner {
+          __typename
+        }
+      }
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

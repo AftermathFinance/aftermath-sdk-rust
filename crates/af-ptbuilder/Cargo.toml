@@ -1,0 +1,38 @@
+[package]
+description = "Programmable transaction builder and macros (offline)"
+name        = "af-ptbuilder"
+version     = "3.0.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[dependencies]
+bcs           = "0.1"
+indexmap      = "2"
+serde         = { version = "1", features = ["derive"] }
+sui-sdk-types = "0.0.1"
+thiserror     = "2"
+
+af-sui-types = { version = "0.6", path = "../af-sui-types" }
+
+
+[dev-dependencies]
+eyre = "0.6"
+rand = "0.8"

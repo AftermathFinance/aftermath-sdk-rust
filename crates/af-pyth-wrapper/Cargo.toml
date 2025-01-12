@@ -1,0 +1,69 @@
+[package]
+description = "Move types for Aftermath's `PythWrapper` package that extends `AfOracle`"
+name        = "af-pyth-wrapper"
+version     = "0.16.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[features]
+graphql = [
+  "dep:af-move-type",
+  "dep:af-sui-types",
+  "dep:bcs",
+  "dep:extension-traits",
+  "dep:sui-gql-client",
+  "dep:thiserror",
+  "dep:trait-variant",
+]
+ptb = ["dep:af-ptbuilder", "dep:extension-traits"]
+
+[dependencies]
+af-oracle         = { version = "0.14", path = "../af-oracle" }
+af-sui-pkg-sdk    = { version = "0.7", path = "../af-sui-pkg-sdk" }
+sui-framework-sdk = { version = "0.9", path = "../sui-framework-sdk" }
+
+bcs              = { version = "0.1", optional = true }
+extension-traits = { version = "2", optional = true }
+thiserror        = { version = "2", optional = true }
+trait-variant    = { version = "0.1", optional = true }
+
+[dependencies.af-ptbuilder]
+optional = true
+path     = "../af-ptbuilder"
+version  = "3"
+[dependencies.af-sui-types]
+optional = true
+path     = "../af-sui-types"
+version  = "0.6"
+[dependencies.af-move-type]
+optional = true
+path     = "../af-move-type"
+version  = "0.7"
+[dependencies.sui-gql-client]
+default-features = false
+features         = ["move-type", "queries"]
+optional         = true
+path             = "../sui-gql-client"
+version          = "0.13"
+
+
+[dev-dependencies]
+af-pyth-wrapper = { path = ".", features = ["graphql", "ptb"] }

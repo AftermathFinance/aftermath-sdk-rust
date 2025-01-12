@@ -1,0 +1,9 @@
+---
+source: crates/sui-gql-client/src/queries/full_object.rs
+expression: operation.query
+---
+query Query($address: SuiAddress!, $version: UInt53) {
+  object(address: $address, version: $version) {
+    bcs
+  }
+}

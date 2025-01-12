@@ -1,0 +1,72 @@
+[package]
+description = "Sui (testnet-v1.39.1) GQL schema for the Cynic client"
+name        = "sui-gql-schema"
+version     = "0.7.1"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+
+[features]
+build = ["dep:cynic-codegen"]
+default = ["scalars"]
+scalars = [
+  "dep:af-sui-types",
+  "dep:base64",
+  "dep:chrono",
+  "dep:derive_more",
+  "dep:serde",
+  "dep:serde_json",
+  "dep:serde_with",
+]
+unstable = []
+
+
+[dependencies]
+cynic = "3"
+
+# For scalars (optional)
+af-sui-types = { version = "0.6", path = "../af-sui-types", optional = true }
+base64       = { version = "0.22", optional = true }
+chrono       = { version = "0.4", optional = true }
+serde        = { version = "1", optional = true }
+serde_json   = { version = "1", optional = true }
+serde_with   = { version = "3", optional = true }
+
+derive_more = { version = "1", features = [
+  "as_ref",
+  "deref",
+  "display",
+  "error",
+  "into",
+], optional = true }
+
+# For build (optional)
+cynic-codegen = { version = "3", features = ["rkyv"], optional = true }
+
+
+[dev-dependencies]
+color-eyre     = "0.6"
+serde_json     = "1"
+sui-gql-schema = { path = ".", features = ["scalars", "unstable"] }
+
+
+[build-dependencies]
+cynic-codegen = { version = "3", features = ["rkyv"] }

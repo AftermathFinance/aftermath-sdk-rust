@@ -1,0 +1,16 @@
+---
+source: crates/sui-gql-client/src/queries/object_content.rs
+expression: operation.query
+---
+query Query($address: SuiAddress!, $version: UInt53) {
+  object(address: $address, version: $version) {
+    asMoveObject {
+      contents {
+        type {
+          repr
+        }
+        bcs
+      }
+    }
+  }
+}

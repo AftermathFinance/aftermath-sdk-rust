@@ -1,0 +1,51 @@
+[package]
+description = "Move types for Aftermath's `AfOracle` package"
+name        = "af-oracle"
+version     = "0.14.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[features]
+graphql = ["dep:bcs", "dep:extension-traits", "dep:sui-gql-client", "dep:trait-variant"]
+
+[dependencies]
+af-move-type      = { version = "0.7", path = "../af-move-type" }
+af-sui-pkg-sdk    = { version = "0.7", path = "../af-sui-pkg-sdk" }
+af-sui-types      = { version = "0.6", path = "../af-sui-types" }
+af-utilities      = { version = "0.6", path = "../af-utilities" }
+sui-framework-sdk = { version = "0.9", path = "../sui-framework-sdk" }
+
+derive_more = { version = "1", features = ["display", "from", "is_variant", "try_into"] }
+remain      = "0.2"
+serde       = "1"
+serde_json  = "1"
+thiserror   = "2"
+
+bcs              = { version = "0.1", optional = true }
+extension-traits = { version = "2", optional = true }
+trait-variant    = { version = "0.1", optional = true }
+
+[dependencies.sui-gql-client]
+default-features = false
+features         = ["move-type", "queries"]
+optional         = true
+path             = "../sui-gql-client"
+version          = "0.13"

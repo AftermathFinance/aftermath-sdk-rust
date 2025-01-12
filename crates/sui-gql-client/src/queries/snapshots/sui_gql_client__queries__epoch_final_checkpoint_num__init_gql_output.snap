@@ -1,0 +1,13 @@
+---
+source: crates/sui-gql-client/src/queries/epoch_final_checkpoint_num.rs
+expression: operation.query
+---
+query Query($id: UInt53) {
+  epoch(id: $id) {
+    checkpoints(last: 1) {
+      nodes {
+        sequenceNumber
+      }
+    }
+  }
+}

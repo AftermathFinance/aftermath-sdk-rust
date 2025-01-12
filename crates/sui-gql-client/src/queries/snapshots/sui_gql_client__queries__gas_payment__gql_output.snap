@@ -1,0 +1,20 @@
+---
+source: crates/sui-gql-client/src/queries/gas_payment.rs
+expression: operation.query
+---
+query Query($address: SuiAddress!, $first: Int, $after: String) {
+  address(address: $address) {
+    coins(type: "0x2::sui::SUI", first: $first, after: $after) {
+      nodes {
+        address
+        version
+        digest
+        coinBalance
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+}

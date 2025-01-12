@@ -1,0 +1,19 @@
+---
+source: crates/sui-gql-client/src/queries/latest_objects_version.rs
+expression: operation.query
+---
+query Query($filter: ObjectFilter, $after: String, $first: Int) {
+  checkpoint {
+    sequenceNumber
+  }
+  objects(filter: $filter, first: $first, after: $after) {
+    nodes {
+      version
+      address
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

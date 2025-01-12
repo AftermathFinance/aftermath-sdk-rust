@@ -1,0 +1,136 @@
+[package]
+description = "Sui GraphQL RPC client by Aftermath using `cynic`"
+name        = "sui-gql-client"
+version     = "0.13.2"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[features]
+default   = ["move-type", "mutations", "queries", "reqwest"]
+move-type = ["dep:af-move-type", "dep:bcs", "queries"]
+mutations = ["dep:af-sui-types", "scalars"]
+queries   = ["dep:af-sui-types", "dep:itertools", "scalars"]
+raw       = ["dep:serde_json"]
+reqwest   = ["cynic/http-reqwest", "dep:reqwest", "raw"]
+scalars   = ["sui-gql-schema/scalars"]
+unstable  = ["sui-gql-schema/unstable"]
+
+
+[dependencies]
+sui-gql-schema = { version = "0.7", path = "../sui-gql-schema", default-features = false }
+
+bimap            = "0.6"
+clap             = { version = "4", features = ["derive"] }
+cynic            = "3"
+derive_more      = { version = "1", features = ["display"] }
+extension-traits = "2"
+serde            = "1"
+tap              = "1"
+thiserror        = "2"
+trait-variant    = "0.1"
+
+# Reqwest client (optional)
+reqwest = { version = "0.12", optional = true }
+
+# For pre-made queries (optional)
+af-sui-types = { version = "0.6", path = "../af-sui-types", optional = true }
+itertools    = { version = "0.14", optional = true }
+
+# MoveType compat (optional)
+af-move-type = { version = "0.7", path = "../af-move-type", optional = true }
+bcs          = { version = "0.1", optional = true }
+
+# Raw client (optional)
+serde_json = { version = "1", optional = true }
+
+[build-dependencies.sui-gql-schema]
+default-features = false
+features         = ["build"]
+path             = "../sui-gql-schema"
+version          = "0.7"
+
+
+[dev-dependencies]
+clap           = { version = "4", features = ["derive"] }
+color-eyre     = "0.6"
+insta          = "1"
+rand           = "0.8"
+serde_json     = "1"
+sui-gql-client = { path = ".", features = ["default", "unstable"] }
+tokio          = { version = "1", features = ["full"] }
+tokio-test     = "0.4"
+
+
+[[example]]
+name = "gql-object-content"
+path = "examples/object_content.rs"
+
+[[example]]
+name = "gql-objects-content"
+path = "examples/objects_content.rs"
+
+[[example]]
+name = "gql-object-args"
+path = "examples/object_args.rs"
+
+[[example]]
+name = "gql-object-args-and-content"
+path = "examples/object_args_and_content.rs"
+
+[[example]]
+name = "gql-owner-latest-dfs-content"
+path = "examples/owner_latest_dfs_content.rs"
+
+[[example]]
+name = "gql-owner-latest-df-content"
+path = "examples/owner_latest_df_content.rs"
+
+[[example]]
+name = "gql-genesis-tx"
+path = "examples/genesis_tx.rs"
+
+[[example]]
+name = "gql-epochs-final-checkpoint"
+path = "examples/epochs_final_checkpoint_num.rs"
+
+[[example]]
+name = "gql-packages-published-epoch"
+path = "examples/packages_published_epoch.rs"
+
+[[example]]
+name = "gql-latest-version-at-checkpoint"
+path = "examples/latest_version_at_checkpoint.rs"
+
+[[example]]
+name = "gql-events"
+path = "examples/events.rs"
+
+[[example]]
+name = "gql-events-backward"
+path = "examples/events_backward.rs"
+
+[[example]]
+name = "gql-cached"
+path = "examples/cached_client.rs"
+
+[[example]]
+name = "gql-page-limit"
+path = "examples/max_page_size.rs"

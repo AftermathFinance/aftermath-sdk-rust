@@ -1,0 +1,16 @@
+---
+source: crates/sui-gql-client/src/queries/full_objects.rs
+expression: operation.query
+---
+query Query($filter: ObjectFilter, $after: String, $first: Int) {
+  objects(filter: $filter, first: $first, after: $after) {
+    nodes {
+      address
+      bcs
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}

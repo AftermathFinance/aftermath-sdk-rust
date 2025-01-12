@@ -1,0 +1,40 @@
+[package]
+description = "Macro for generating `MoveStruct`s from Move source code"
+name        = "af-sui-pkg-sdk"
+version     = "0.7.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[dependencies]
+af-move-type = { version = "0.7", path = "../af-move-type" }
+af-sui-types = { version = "0.6", path = "../af-sui-types", features = ["u256"] }
+
+derive-new = "0.6.0"
+serde      = "1"
+tabled     = "0.16"
+
+[dev-dependencies]
+anyhow      = "1"
+derive_more = { version = "1", features = ["display"] }
+
+[[example]]
+name = "gen-move-type-display"
+path = "examples/display.rs"

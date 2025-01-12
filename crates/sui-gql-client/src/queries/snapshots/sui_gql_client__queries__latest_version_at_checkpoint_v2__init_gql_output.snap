@@ -1,0 +1,16 @@
+---
+source: crates/sui-gql-client/src/queries/latest_version_at_checkpoint_v2.rs
+expression: operation.query
+---
+query Query($checkpointNum: UInt53, $objectId: SuiAddress) {
+  checkpoint {
+    sequenceNumber
+  }
+  transactionBlocks(last: 1, filter: {beforeCheckpoint: $checkpointNum, changedObject: $objectId}) {
+    nodes {
+      effects {
+        lamportVersion
+      }
+    }
+  }
+}

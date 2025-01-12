@@ -1,0 +1,43 @@
+[package]
+description = "Move types for the Sui package at address 0x2"
+name        = "sui-framework-sdk"
+version     = "0.9.0"
+
+authors.workspace    = true
+categories.workspace = true
+edition.workspace    = true
+license.workspace    = true
+repository.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+  "-Zunstable-options",
+]
+
+[lints]
+workspace = true
+
+[dependencies]
+af-move-type    = { version = "0.7", path = "../af-move-type" }
+af-sui-pkg-sdk  = { version = "0.7", path = "../af-sui-pkg-sdk" }
+af-sui-types    = { version = "0.6", path = "../af-sui-types" }
+move-stdlib-sdk = { version = "0.8", path = "../move-stdlib-sdk" }
+
+derive-new  = "0.6"
+derive_more = { version = "1", features = ["from"] }
+hex         = "0.4"
+serde       = "1"
+serde_with  = "3"
+thiserror   = "2"
+tracing     = "0.1"
+
+
+[dev-dependencies]
+anyhow     = "1"
+tokio-test = "0.4.3"

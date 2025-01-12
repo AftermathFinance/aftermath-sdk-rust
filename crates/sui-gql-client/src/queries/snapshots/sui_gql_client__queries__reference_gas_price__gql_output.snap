@@ -1,0 +1,9 @@
+---
+source: crates/sui-gql-client/src/queries/reference_gas_price.rs
+expression: operation.query
+---
+query Query {
+  epoch {
+    referenceGasPrice
+  }
+}

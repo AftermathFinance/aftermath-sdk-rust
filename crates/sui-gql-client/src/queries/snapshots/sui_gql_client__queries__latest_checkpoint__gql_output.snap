@@ -1,0 +1,9 @@
+---
+source: crates/sui-gql-client/src/queries/latest_checkpoint.rs
+expression: operation.query
+---
+query Query {
+  checkpoint {
+    sequenceNumber
+  }
+}

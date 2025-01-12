@@ -1,0 +1,19 @@
+---
+source: crates/sui-gql-client/src/queries/owner_df_content.rs
+expression: operation.query
+---
+query Query($address: SuiAddress!, $name: DynamicFieldName!, $rootVersion: UInt53) {
+  owner(address: $address, rootVersion: $rootVersion) {
+    dynamicField(name: $name) {
+      value {
+        __typename
+        ... on MoveValue {
+          type {
+            repr
+          }
+          bcs
+        }
+      }
+    }
+  }
+}

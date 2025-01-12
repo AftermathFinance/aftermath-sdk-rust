@@ -1,0 +1,16 @@
+---
+source: crates/sui-gql-client/src/queries/packages_from_original.rs
+expression: operation.query
+---
+query Query($address: SuiAddress!, $after: String, $first: Int) {
+  packageVersions(address: $address, first: $first, after: $after) {
+    nodes {
+      address
+      version
+    }
+    pageInfo {
+      hasNextPage
+      endCursor
+    }
+  }
+}
