@@ -24,7 +24,7 @@ rustdoc-args = [
 workspace = true
 
 [features]
-fuzzing = ["dep:arbitrary", "dep:proptest"]
+fuzzing = ["dep:proptest"]
 hash    = ["sui-sdk-types/hash"]
 u256    = ["dep:primitive-types", "dep:rand", "dep:uint"]
 
@@ -48,11 +48,9 @@ rand            = { version = "0.8", optional = true }
 uint            = { version = "0.9", optional = true }
 
 # for fuzzing tests (optional)
-arbitrary = { version = "1", features = ["derive_arbitrary"], optional = true }
-proptest  = { version = "1", optional = true }
+proptest = { version = "1", optional = true }
 
 [dev-dependencies]
-arbitrary  = { version = "1", features = ["derive_arbitrary"] }
 insta      = "1"
 proptest   = "1"
 serde_json = "1"
