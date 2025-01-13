@@ -4,9 +4,6 @@
 
 use sui_framework_sdk::table::Table;
 
-#[deprecated = "Unnecessary abstraction; will be removed with the next SemVer-incompatible version"]
-pub mod config;
-
 af_sui_pkg_sdk::sui_pkg_sdk!(wormhole {
     module vaa {
         /// Container storing verified Wormhole message info. This struct also
