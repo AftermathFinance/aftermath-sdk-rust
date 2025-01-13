@@ -92,7 +92,6 @@ pub(crate) enum Data {
 // =============================================================================
 
 /// The entity that owns an object.
-// TODO: align this with `sui-sdk-types`; see inner TODOs
 #[derive(Eq, PartialEq, Debug, Clone, Deserialize, Serialize, Hash, Ord, PartialOrd)]
 pub enum Owner {
     /// Object is exclusively owned by a single address, and is mutable.
@@ -101,7 +100,6 @@ pub enum Owner {
     /// The object ID is converted to Address as SuiAddress is universal.
     ObjectOwner(ObjectId),
     /// Object is shared, can be used by any address, and is mutable.
-    // TODO: make this a newtype variant
     Shared {
         /// The version at which the object became shared
         initial_shared_version: Version,
