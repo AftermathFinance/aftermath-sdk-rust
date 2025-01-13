@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, Bytes};
-use sui_sdk_types::Version;
+use sui_sdk_types::{MovePackage, Version};
 
 use super::move_object_type::MoveObjectType;
-use super::move_package::MovePackage;
 use crate::{Address, ObjectId, TransactionDigest};
 
 // =============================================================================

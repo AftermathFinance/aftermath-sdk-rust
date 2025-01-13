@@ -6,6 +6,5 @@ pub mod effects;
 pub(crate) mod full_checkpoint_content;
 pub(crate) mod gas_coin;
 pub(crate) mod move_object_type;
-pub mod move_package;
 pub mod object;
 pub mod transaction;

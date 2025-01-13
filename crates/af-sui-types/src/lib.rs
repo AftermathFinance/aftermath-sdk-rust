@@ -56,6 +56,7 @@ pub use sui_sdk_types::{
     Jwk,
     JwkId,
     MoveCall,
+    MovePackage,
     ObjectDigest,
     ObjectId,
     ObjectIn,
@@ -74,8 +75,10 @@ pub use sui_sdk_types::{
     TransactionEventsDigest,
     TransactionExpiration,
     TransactionKind,
+    TypeOrigin,
     TypeTag,
     UnchangedSharedKind,
+    UpgradeInfo,
     UserSignature,
     Version,
 };
@@ -102,8 +105,6 @@ pub use self::sui::effects::TransactionEffectsAPI;
 pub use self::sui::full_checkpoint_content::{CheckpointData, CheckpointTransaction};
 #[doc(inline)]
 pub use self::sui::move_object_type::MoveObjectType;
-#[doc(inline)]
-pub use self::sui::move_package::{MovePackage, TypeOrigin, UpgradeInfo};
 #[doc(inline)]
 pub use self::sui::object::{MoveObject, Object, Owner};
 #[doc(inline)]
