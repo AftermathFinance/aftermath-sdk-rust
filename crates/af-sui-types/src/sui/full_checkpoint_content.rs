@@ -5,7 +5,7 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
-use sui_sdk_types::types::{CheckpointContents, Event, SignedCheckpointSummary, Transaction};
+use sui_sdk_types::{CheckpointContents, Event, SignedCheckpointSummary, Transaction};
 
 use crate::sui::transaction::_serde::SignedTransactionWithIntentMessage;
 use crate::{Object, ObjectRef, SignedTransaction, TransactionEffects, TransactionEffectsAPI as _};
@@ -90,7 +90,7 @@ impl CheckpointTransaction {
     }
 }
 
-/// Placeholder until [`sui_sdk_types::types::TransactionEvents`] exposes its contents.
+/// Placeholder until [`sui_sdk_types::TransactionEvents`] exposes its contents.
 // TODO: this is ready to be replaced
 #[derive(Eq, PartialEq, Clone, Debug, Serialize, Deserialize, Default)]
 pub struct TransactionEvents {

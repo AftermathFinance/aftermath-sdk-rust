@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use af_sui_types::{EpochId, ObjectDigest, ObjectId, ObjectRef, TransactionDigest};
 use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, IfIsHumanReadable};
-use sui_sdk_types::types::Version;
+use sui_sdk_types::Version;
 
 use super::Page;
 use crate::serde::BigInt;

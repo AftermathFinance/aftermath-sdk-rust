@@ -514,7 +514,7 @@ impl SuiClient {
         price: u64,
     ) -> Result<GasData, GetGasDataError> {
         let exclude = if let TransactionKind::ProgrammableTransaction(ptb) = tx_kind {
-            use sui_sdk_types::types::InputArgument::*;
+            use sui_sdk_types::Input::*;
 
             ptb.inputs
                 .iter()

@@ -3,7 +3,7 @@
 
 use af_sui_types::{ObjectId, TransactionDigest};
 use jsonrpsee::proc_macros::rpc;
-use sui_sdk_types::types::Version;
+use sui_sdk_types::Version;
 
 use crate::msgs::{
     Checkpoint,

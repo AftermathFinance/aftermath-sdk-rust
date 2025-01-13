@@ -1,5 +1,5 @@
 use sui_sdk_types::hash::Hasher;
-use sui_sdk_types::types::{Intent, IntentAppId, IntentScope, IntentVersion, SigningDigest};
+use sui_sdk_types::{Intent, IntentAppId, IntentScope, IntentVersion, SigningDigest};
 
 use crate::sui::transaction::ObjectArg;
 use crate::{
@@ -78,10 +78,7 @@ impl TransactionData {
     }
 }
 
-fn signing_digest<T: serde::Serialize + ?Sized>(
-    intent: Intent,
-    ty: &T,
-) -> sui_sdk_types::types::Digest {
+fn signing_digest<T: serde::Serialize + ?Sized>(intent: Intent, ty: &T) -> sui_sdk_types::Digest {
     let mut hasher = Hasher::new();
     hasher.update(intent.to_bytes());
     bcs::serialize_into(&mut hasher, ty).expect("T is BCS-compatible");

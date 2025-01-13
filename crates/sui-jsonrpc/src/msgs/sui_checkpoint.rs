@@ -4,7 +4,7 @@
 use af_sui_types::{CheckpointDigest, EpochId, GasCostSummary, TransactionDigest};
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
-use sui_sdk_types::types::{
+use sui_sdk_types::{
     CheckpointCommitment,
     CheckpointSequenceNumber,
     CheckpointTimestamp,
@@ -53,7 +53,7 @@ pub struct Checkpoint {
     /// Commitments to checkpoint state
     pub checkpoint_commitments: Vec<CheckpointCommitment>,
     /// Validator Signature
-    pub validator_signature: sui_sdk_types::types::Bls12381Signature,
+    pub validator_signature: sui_sdk_types::Bls12381Signature,
 }
 
 #[serde_as]

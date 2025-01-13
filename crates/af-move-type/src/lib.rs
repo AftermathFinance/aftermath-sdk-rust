@@ -78,7 +78,7 @@ impl From<TypeTagError> for TypeParamsError {
 #[derive(thiserror::Error, Debug)]
 pub enum ParseTypeTagError {
     #[error("Parsing TypeTag: {0}")]
-    FromStr(#[from] sui_sdk_types::types::TypeParseError),
+    FromStr(#[from] sui_sdk_types::TypeParseError),
     #[error("Converting from TypeTag: {0}")]
     TypeTag(#[from] TypeTagError),
 }
@@ -86,7 +86,7 @@ pub enum ParseTypeTagError {
 #[derive(thiserror::Error, Debug)]
 pub enum ParseStructTagError {
     #[error("Parsing StructTag: {0}")]
-    FromStr(#[from] sui_sdk_types::types::TypeParseError),
+    FromStr(#[from] sui_sdk_types::TypeParseError),
     #[error("Converting from StructTag: {0}")]
     StructTag(#[from] StructTagError),
 }

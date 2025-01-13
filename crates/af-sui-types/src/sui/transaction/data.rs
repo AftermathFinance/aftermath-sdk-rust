@@ -6,9 +6,9 @@
 
 use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::types::{
+use sui_sdk_types::{
     GasPayment,
-    InputArgument,
+    Input,
     ObjectReference,
     Transaction,
     TransactionExpiration,
@@ -206,7 +206,7 @@ pub enum ObjectArg {
     Receiving(ObjectRef),
 }
 
-impl From<ObjectArg> for InputArgument {
+impl From<ObjectArg> for Input {
     fn from(value: ObjectArg) -> Self {
         match value {
             ObjectArg::ImmOrOwnedObject((i, v, d)) => {

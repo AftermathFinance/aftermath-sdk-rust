@@ -1,5 +1,5 @@
 use af_sui_types::decode_base64_default;
-use sui_sdk_types::types::Transaction;
+use sui_sdk_types::Transaction;
 
 // epoch = 594 (testnet)
 //

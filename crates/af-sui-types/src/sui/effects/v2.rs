@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::types::{
+use sui_sdk_types::{
     EffectsAuxiliaryDataDigest,
     EpochId,
     ObjectDigest,

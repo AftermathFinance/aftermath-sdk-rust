@@ -17,7 +17,7 @@ use af_sui_types::{
 };
 use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, DisplayFromStr, IfIsHumanReadable};
-use sui_sdk_types::types::Version;
+use sui_sdk_types::Version;
 
 use super::Page;
 use crate::serde::Base64orBase58;

@@ -6,7 +6,7 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, Bytes};
-use sui_sdk_types::types::Version;
+use sui_sdk_types::Version;
 
 use crate::ObjectId;
 

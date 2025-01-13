@@ -5,7 +5,7 @@ use std::fmt;
 use std::sync::OnceLock;
 
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::types::CheckpointDigest;
+use sui_sdk_types::CheckpointDigest;
 
 use crate::encoding::Base58;
 

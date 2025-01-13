@@ -32,7 +32,7 @@ use std::borrow::Borrow;
 use std::fmt;
 
 use ref_cast::RefCast;
-use sui_sdk_types::types::Identifier;
+use sui_sdk_types::Identifier;
 
 // =============================================================================
 //  IdentStr

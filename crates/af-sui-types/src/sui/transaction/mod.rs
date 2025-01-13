@@ -18,7 +18,7 @@ pub(crate) mod _serde {
     use serde::ser::SerializeSeq as _;
     use serde::{Deserialize, Deserializer, Serialize, Serializer};
     use serde_with::{serde_as, DeserializeAs, SerializeAs};
-    use sui_sdk_types::types::{SignedTransaction, Transaction, UserSignature};
+    use sui_sdk_types::{SignedTransaction, Transaction, UserSignature};
 
     #[expect(clippy::redundant_pub_crate, reason = "wanna keep it explicit")]
     pub(crate) struct SignedTransactionWithIntentMessage;

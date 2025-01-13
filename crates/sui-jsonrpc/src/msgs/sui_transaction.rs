@@ -24,12 +24,7 @@ use enum_dispatch::enum_dispatch;
 use serde::{Deserialize, Serialize};
 use serde_with::base64::Base64;
 use serde_with::{serde_as, DisplayFromStr, IfIsHumanReadable};
-use sui_sdk_types::types::{
-    ConsensusDeterminedVersionAssignments,
-    MoveLocation,
-    UserSignature,
-    Version,
-};
+use sui_sdk_types::{ConsensusDeterminedVersionAssignments, MoveLocation, UserSignature, Version};
 use tabled::builder::Builder as TableBuilder;
 use tabled::settings::style::HorizontalLine;
 use tabled::settings::{Panel as TablePanel, Style as TableStyle};

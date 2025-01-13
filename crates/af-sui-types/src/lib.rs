@@ -30,7 +30,7 @@
 //! [`sui_sdk_types`]: https://docs.rs/sui-sdk-types/latest/sui_sdk_types/
 
 #[doc(no_inline)]
-pub use sui_sdk_types::types::{
+pub use sui_sdk_types::{
     ActiveJwk,
     Address,
     Argument,
@@ -125,13 +125,13 @@ pub use self::sui::transaction::{
 //  Aliases
 // =============================================================================
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::types::Address")]
+#[deprecated(note = "Alias to help migrating; use sui_sdk_types::Address")]
 pub type AccountAddress = Address;
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::types::UserSignature")]
+#[deprecated(note = "Alias to help migrating; use sui_sdk_types::UserSignature")]
 pub type GenericSignature = UserSignature;
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::types::ObjectId")]
+#[deprecated(note = "Alias to help migrating; use sui_sdk_types::ObjectId")]
 pub type ObjectID = ObjectId;
 
 /// Reference to a particular object.
@@ -140,20 +140,20 @@ pub type ObjectID = ObjectId;
 ///
 /// Can be created from [`ObjectReference::into_parts`].
 ///
-/// [`ObjectReference::into_parts`]: sui_sdk_types::types::ObjectReference::into_parts
+/// [`ObjectReference::into_parts`]: sui_sdk_types::ObjectReference::into_parts
 pub type ObjectRef = (ObjectId, Version, ObjectDigest);
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::types::MoveCall")]
+#[deprecated(note = "Alias to help migrating; use sui_sdk_types::MoveCall")]
 pub type ProgrammableMoveCall = MoveCall;
 
 #[deprecated(note = "Alias to help migrating; use af_sui_types::SignedTransaction")]
 pub type SenderSignedData = SignedTransaction;
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::types::Address")]
+#[deprecated(note = "Alias to help migrating; use sui_sdk_types::Address")]
 pub type SuiAddress = Address;
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::types::Version")]
-pub type VersionNumber = sui_sdk_types::types::Version;
+#[deprecated(note = "Alias to help migrating; use sui_sdk_types::Version")]
+pub type VersionNumber = sui_sdk_types::Version;
 
 // =============================================================================
 //  Constants

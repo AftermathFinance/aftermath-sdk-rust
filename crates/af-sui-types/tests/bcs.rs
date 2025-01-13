@@ -1,5 +1,5 @@
 use af_sui_types::{decode_base64_default, hex_address_bytes, Object, ObjectId};
-use sui_sdk_types::types::Transaction;
+use sui_sdk_types::Transaction;
 
 /// This showcases how to obtain a DOF's object ID from its wrapper `Field`'s BCS bytes.
 ///

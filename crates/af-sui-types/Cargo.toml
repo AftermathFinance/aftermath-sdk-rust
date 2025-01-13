@@ -38,7 +38,7 @@ ref-cast      = "1"
 serde         = "1"
 # TODO(unmaykr-aftermath): remove `hex` feature
 serde_with    = { version = "3", features = ["base64", "hex"] }
-sui-sdk-types = { version = "0.0.1", features = ["serde"] }
+sui-sdk-types = { version = "0.0.2", features = ["serde"] }
 thiserror     = "2"
 
 # TODO(unmaykr-aftermath): remove every feature except `from_str`

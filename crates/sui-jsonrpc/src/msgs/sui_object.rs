@@ -26,7 +26,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use serde_with::base64::Base64;
 use serde_with::{serde_as, DisplayFromStr};
-use sui_sdk_types::types::Version;
+use sui_sdk_types::Version;
 
 use super::{Page, SuiMoveStruct, SuiMoveValue};
 use crate::serde::BigInt;

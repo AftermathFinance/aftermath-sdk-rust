@@ -3,7 +3,7 @@
 
 //! Common interface for all transaction effect versions.
 use enum_dispatch::enum_dispatch;
-use sui_sdk_types::types::{
+use sui_sdk_types::{
     EpochId,
     ExecutionStatus,
     GasCostSummary,

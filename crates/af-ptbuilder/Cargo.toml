@@ -27,7 +27,7 @@ workspace = true
 bcs           = "0.1"
 indexmap      = "2"
 serde         = { version = "1", features = ["derive"] }
-sui-sdk-types = "0.0.1"
+sui-sdk-types = "0.0.2"
 thiserror     = "2"
 
 af-sui-types = { version = "0.6", path = "../af-sui-types" }

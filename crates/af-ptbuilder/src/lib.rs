@@ -22,7 +22,7 @@ pub use af_sui_types::TypeTag;
 use af_sui_types::{Identifier, ProgrammableTransaction};
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::types::InputArgument;
+use sui_sdk_types::Input;
 
 pub type Result<T> = ::std::result::Result<T, Error>;
 
@@ -48,14 +48,14 @@ pub enum Error {
 )]
 pub struct MismatchedObjArgKindsError {
     pub id: ObjectId,
-    pub old_value: InputArgument,
-    pub new_value: InputArgument,
+    pub old_value: Input,
+    pub new_value: Input,
 }
 
 /// Builder for a [`ProgrammableTransaction`].
 #[derive(Default)]
 pub struct ProgrammableTransactionBuilder {
-    inputs: IndexMap<BuilderArg, InputArgument>,
+    inputs: IndexMap<BuilderArg, Input>,
     commands: Vec<af_sui_types::Command>,
 }
 
@@ -95,9 +95,7 @@ impl ProgrammableTransactionBuilder {
         } else {
             BuilderArg::Pure(bytes.clone())
         };
-        let (i, _) = self
-            .inputs
-            .insert_full(key, InputArgument::Pure { value: bytes });
+        let (i, _) = self.inputs.insert_full(key, Input::Pure { value: bytes });
         Argument::Input(i as u16)
     }
 
@@ -112,19 +110,19 @@ impl ProgrammableTransactionBuilder {
 
         if let Some(old_value) = self.inputs.get(&key) {
             // Check if the key hash didn't collide with a previous pure input
-            if matches!(old_value, InputArgument::Pure { .. }) {
+            if matches!(old_value, Input::Pure { .. }) {
                 return Err(Error::ObjInvariantViolation);
             }
 
             input_arg = match (old_value, input_arg) {
                 // The only update allowed: changing the `mutable` flag for a shared object input
                 (
-                    InputArgument::Shared {
+                    Input::Shared {
                         object_id: id1,
                         initial_shared_version: v1,
                         mutable: mut1,
                     },
-                    InputArgument::Shared {
+                    Input::Shared {
                         object_id: id2,
                         initial_shared_version: v2,
                         mutable: mut2,
@@ -133,7 +131,7 @@ impl ProgrammableTransactionBuilder {
                     if id1 != &id2 {
                         return Err(Error::InvalidObjArgUpdate);
                     }
-                    InputArgument::Shared {
+                    Input::Shared {
                         object_id: id2,
                         initial_shared_version: v2,
                         mutable: *mut1 || mut2,
@@ -205,7 +203,7 @@ enum BuilderArg {
 
 /// A single command in a programmable transaction.
 ///
-/// This type is here for backwards compatibility purposes, as [`sui_sdk_types::types::Command`]
+/// This type is here for backwards compatibility purposes, as [`sui_sdk_types::Command`]
 /// has a different shape that would be incompatible with the [`ptb!`] syntax.
 ///
 /// The actual resulting [`ProgrammableTransaction`] does not contain this type.
@@ -262,7 +260,7 @@ impl From<af_sui_types::Command> for Command {
 
 impl From<Command> for af_sui_types::Command {
     fn from(value: Command) -> Self {
-        use sui_sdk_types::types::{
+        use sui_sdk_types::{
             MakeMoveVector,
             MergeCoins,
             Publish,
@@ -396,9 +394,9 @@ impl Command {
 /// # eyre::Ok(())
 /// ```
 /// Similar to struct initialization syntax. `input obj`s expect [`ObjectArg`] values and
-/// become object [`InputArgument`]s in the transaction payload. `input pure`s expect any type `T` that
+/// become object [`Input`]s in the transaction payload. `input pure`s expect any type `T` that
 /// is [`Serialize`] `+ ?Sized` (see [`ProgrammableTransactionBuilder::pure`] for the internals) and
-/// become [`InputArgument::Pure`]s in the transaction payload. Within the macro scope, both variables
+/// become [`Input::Pure`]s in the transaction payload. Within the macro scope, both variables
 /// are [`Argument::Input`]s and can be used in Move/built-in calls.
 ///
 /// ## Move calls

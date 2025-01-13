@@ -5,7 +5,7 @@ use std::borrow::Borrow;
 use std::fmt;
 
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::types::{Address, StructTag, TypeTag};
+use sui_sdk_types::{Address, StructTag, TypeTag};
 
 use super::gas_coin::{is_gas_coin, Gas};
 use crate::{

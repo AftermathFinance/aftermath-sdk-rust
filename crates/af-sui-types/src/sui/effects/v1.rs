@@ -4,7 +4,7 @@
 use std::collections::{BTreeMap, HashSet};
 
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::types::{
+use sui_sdk_types::{
     EpochId,
     ExecutionStatus,
     GasCostSummary,
