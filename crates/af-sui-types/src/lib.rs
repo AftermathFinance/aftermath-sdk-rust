@@ -122,15 +122,6 @@ pub use self::sui::transaction::{
 //  Aliases
 // =============================================================================
 
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::Address")]
-pub type AccountAddress = Address;
-
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::UserSignature")]
-pub type GenericSignature = UserSignature;
-
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::ObjectId")]
-pub type ObjectID = ObjectId;
-
 /// Reference to a particular object.
 ///
 /// Used for immutable or owned object transaction inputs (fast-path).
@@ -139,18 +130,6 @@ pub type ObjectID = ObjectId;
 ///
 /// [`ObjectReference::into_parts`]: sui_sdk_types::ObjectReference::into_parts
 pub type ObjectRef = (ObjectId, Version, ObjectDigest);
-
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::MoveCall")]
-pub type ProgrammableMoveCall = MoveCall;
-
-#[deprecated(note = "Alias to help migrating; use af_sui_types::SignedTransaction")]
-pub type SenderSignedData = SignedTransaction;
-
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::Address")]
-pub type SuiAddress = Address;
-
-#[deprecated(note = "Alias to help migrating; use sui_sdk_types::Version")]
-pub type VersionNumber = sui_sdk_types::Version;
 
 // =============================================================================
 //  Constants
