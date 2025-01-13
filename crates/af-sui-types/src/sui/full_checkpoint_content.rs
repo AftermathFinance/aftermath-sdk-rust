@@ -5,10 +5,16 @@ use std::collections::BTreeMap;
 
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
-use sui_sdk_types::{CheckpointContents, SignedCheckpointSummary, Transaction, TransactionEvents};
+use sui_sdk_types::{
+    CheckpointContents,
+    ObjectReference,
+    SignedCheckpointSummary,
+    Transaction,
+    TransactionEvents,
+};
 
 use crate::sui::transaction::_serde::SignedTransactionWithIntentMessage;
-use crate::{Object, ObjectRef, SignedTransaction, TransactionEffects, TransactionEffectsAPI as _};
+use crate::{Object, SignedTransaction, TransactionEffects, TransactionEffectsAPI as _};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct CheckpointData {
@@ -24,11 +30,11 @@ impl CheckpointData {
     }
 
     /// The object refs that are eventually deleted or wrapped in the current checkpoint
-    pub fn eventually_removed_object_refs_post_version(&self) -> Vec<ObjectRef> {
+    pub fn eventually_removed_object_refs_post_version(&self) -> Vec<ObjectReference> {
         let mut eventually_removed_object_refs = BTreeMap::new();
         for tx in self.transactions.iter() {
             for obj_ref in tx.effects.removed_object_refs_post_version() {
-                eventually_removed_object_refs.insert(obj_ref.0, obj_ref);
+                eventually_removed_object_refs.insert(*obj_ref.object_id(), obj_ref);
             }
             for obj in tx.output_objects.iter() {
                 eventually_removed_object_refs.remove(&(obj.id()));
@@ -70,8 +76,8 @@ fn live_tx_output_objects<'a>(
         for obj in tx.output_objects.iter() {
             latest_live_objects.insert(obj.id(), obj);
         }
-        for (obj_id, _, _) in tx.effects.removed_object_refs_post_version() {
-            latest_live_objects.remove(&obj_id);
+        for oref in tx.effects.removed_object_refs_post_version() {
+            latest_live_objects.remove(oref.object_id());
         }
     }
     latest_live_objects.into_values()
