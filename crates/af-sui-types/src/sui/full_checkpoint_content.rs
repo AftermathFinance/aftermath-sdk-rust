@@ -20,7 +20,6 @@ pub struct CheckpointData {
 impl CheckpointData {
     /// The latest versions of the output objects that still exist at the end of the checkpoint
     pub fn latest_live_output_objects(&self) -> Vec<&Object> {
-        #[expect(deprecated)]
         live_tx_output_objects(&self.transactions).collect()
     }
 
@@ -36,23 +35,6 @@ impl CheckpointData {
             }
         }
         eventually_removed_object_refs.into_values().collect()
-    }
-
-    #[deprecated = "Unclear semantics; the same object may appear twice"]
-    pub fn input_objects(&self) -> Vec<&Object> {
-        self.transactions
-            .iter()
-            .flat_map(|tx| &tx.input_objects)
-            .collect()
-    }
-
-    #[deprecated = "Unclear semantics; the same object may appear twice"]
-    pub fn all_objects(&self) -> Vec<&Object> {
-        self.transactions
-            .iter()
-            .flat_map(|tx| &tx.input_objects)
-            .chain(self.transactions.iter().flat_map(|tx| &tx.output_objects))
-            .collect()
     }
 }
 
@@ -73,17 +55,6 @@ pub struct CheckpointTransaction {
 }
 
 impl CheckpointTransaction {
-    /// All objects references that are inaccessible after this transactions.
-    ///
-    /// The union of all deleted, wrapped or unwrapped-then-deleted objects.
-    #[deprecated(
-        since = "0.6.0",
-        note = "Use TransactionEffectsAPI::removed_object_refs_post_version on self.effects directly"
-    )]
-    pub fn removed_object_refs_post_version(&self) -> impl Iterator<Item = ObjectRef> {
-        self.effects.removed_object_refs_post_version()
-    }
-
     /// The unsigned transaction payload.
     pub const fn transaction_data(&self) -> &Transaction {
         &self.transaction.transaction
@@ -91,8 +62,7 @@ impl CheckpointTransaction {
 }
 
 /// The latest versions of the output objects that still exist after a sequence of transactions.
-#[deprecated = "This has been moved to another crate and will only be maintained there"]
-pub fn live_tx_output_objects<'a>(
+fn live_tx_output_objects<'a>(
     transactions: impl IntoIterator<Item = &'a CheckpointTransaction>,
 ) -> impl Iterator<Item = &'a Object> {
     let mut latest_live_objects = BTreeMap::new();

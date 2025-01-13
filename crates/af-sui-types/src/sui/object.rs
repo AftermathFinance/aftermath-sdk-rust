@@ -230,24 +230,6 @@ pub enum Authenticator {
     SingleOwner(Address),
 }
 
-impl Authenticator {
-    #[deprecated = "Should be removed soon as this type will evolve and we probably won't be able \
-        to guarantee a 1:1 correspondence to an Address"]
-    #[expect(
-        clippy::missing_const_for_fn,
-        reason = "Copied from Mysten's crate + this type may be more complex in the future"
-    )]
-    pub fn as_single_owner(&self) -> &Address {
-        // NOTE: Existing callers are written assuming that only singly-owned
-        // ConsensusV2 objects exist. If additional Authenticator variants are
-        // added, do not simply panic here. Instead, change the return type of
-        // this function and update callers accordingly.
-        match self {
-            Self::SingleOwner(address) => address,
-        }
-    }
-}
-
 impl std::fmt::Display for Authenticator {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
