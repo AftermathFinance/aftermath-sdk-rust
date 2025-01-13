@@ -243,6 +243,14 @@ built_in_pkgs! {
     DEEPBOOK_ADDRESS / DEEPBOOK_PACKAGE_ID = 0xdee9;
 }
 
+const fn builtin_address(suffix: u16) -> Address {
+    let mut addr = [0u8; Address::LENGTH];
+    let [hi, lo] = suffix.to_be_bytes();
+    addr[Address::LENGTH - 2] = hi;
+    addr[Address::LENGTH - 1] = lo;
+    Address::new(addr)
+}
+
 // =============================================================================
 //  Functions
 // =============================================================================
@@ -252,10 +260,12 @@ pub use self::const_address::hex_address_bytes;
 #[doc(inline)]
 pub use self::encoding::{decode_base64_default, encode_base64_default};
 
-const fn builtin_address(suffix: u16) -> Address {
-    let mut addr = [0u8; Address::LENGTH];
-    let [hi, lo] = suffix.to_be_bytes();
-    addr[Address::LENGTH - 2] = hi;
-    addr[Address::LENGTH - 1] = lo;
-    Address::new(addr)
+/// `const`-ructor for Sui addresses.
+pub const fn address(bytes: &[u8]) -> Address {
+    Address::new(hex_address_bytes(bytes))
+}
+
+/// `const`-ructor for object IDs.
+pub const fn object_id(bytes: &[u8]) -> ObjectId {
+    ObjectId::new(hex_address_bytes(bytes))
 }
