@@ -174,6 +174,20 @@ impl Owner {
     }
 }
 
+impl From<sui_sdk_types::Owner> for Owner {
+    fn from(value: sui_sdk_types::Owner) -> Self {
+        use sui_sdk_types::Owner::*;
+        match value {
+            Address(a) => Self::AddressOwner(a),
+            Object(o) => Self::ObjectOwner(o.into()),
+            Shared(v) => Self::Shared {
+                initial_shared_version: v,
+            },
+            Immutable => Self::Immutable,
+        }
+    }
+}
+
 #[derive(thiserror::Error, Debug)]
 #[error("Expecting a single owner, shared ownership found")]
 pub struct UnexpectedOwnerTypeError;
