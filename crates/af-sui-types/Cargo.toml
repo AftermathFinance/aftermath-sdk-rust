@@ -36,20 +36,11 @@ enum_dispatch = "0.3"
 hex           = "0.4"
 ref-cast      = "1"
 serde         = "1"
-# TODO(unmaykr-aftermath): remove `hex` feature
-serde_with    = { version = "3", features = ["base64", "hex"] }
+serde_with    = { version = "3", features = ["base64"] }
 sui-sdk-types = { version = "0.0.2", features = ["serde"] }
 thiserror     = "2"
 
-# TODO(unmaykr-aftermath): remove every feature except `from_str`
-derive_more = { version = "1", features = [
-  "as_ref",
-  "deref",
-  "display",
-  "from",
-  "from_str",
-  "into",
-] }
+derive_more = { version = "1", features = ["from_str"] }
 
 # for u256 (optional)
 primitive-types = { version = "0.12", features = ["fp-conversion"], optional = true }
