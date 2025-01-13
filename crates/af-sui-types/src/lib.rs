@@ -51,24 +51,31 @@ pub use sui_sdk_types::{
     ExecutionError,
     ExecutionStatus,
     GasCostSummary,
+    IdOperation,
     Identifier,
     Jwk,
     JwkId,
     MoveCall,
     ObjectDigest,
     ObjectId,
+    ObjectIn,
+    ObjectOut,
     ProgrammableTransaction,
     ProtocolVersion,
     SignedTransaction,
     StructTag,
     Transaction,
     TransactionDigest,
+    TransactionEffects,
     TransactionEffectsDigest,
+    TransactionEffectsV1,
+    TransactionEffectsV2,
     TransactionEvents,
     TransactionEventsDigest,
     TransactionExpiration,
     TransactionKind,
     TypeTag,
+    UnchangedSharedKind,
     UserSignature,
     Version,
 };
@@ -90,17 +97,7 @@ pub use self::move_core::u256::{self, U256};
 #[doc(inline)]
 pub use self::sui::chain_identifier::ChainIdentifier;
 #[doc(inline)]
-pub use self::sui::effects::{
-    EffectsObjectChange,
-    IDOperation,
-    ObjectIn,
-    ObjectOut,
-    TransactionEffects,
-    TransactionEffectsAPI,
-    TransactionEffectsV1,
-    TransactionEffectsV2,
-    UnchangedSharedKind,
-};
+pub use self::sui::effects::TransactionEffectsAPI;
 #[doc(inline)]
 pub use self::sui::full_checkpoint_content::{CheckpointData, CheckpointTransaction};
 #[doc(inline)]

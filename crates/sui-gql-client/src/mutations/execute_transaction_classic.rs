@@ -1,4 +1,4 @@
-use af_sui_types::sui::effects::TransactionEffects;
+use af_sui_types::TransactionEffects;
 use cynic::GraphQlResponse;
 use sui_gql_schema::scalars;
 

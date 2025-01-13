@@ -2,23 +2,22 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Common interface for all transaction effect versions.
-use enum_dispatch::enum_dispatch;
 use sui_sdk_types::{
     EpochId,
     ExecutionStatus,
     GasCostSummary,
+    IdOperation,
     ObjectDigest,
     ObjectId,
     TransactionDigest,
     TransactionEventsDigest,
+    UnchangedSharedKind,
     Version,
 };
 
-use super::{IDOperation, UnchangedSharedKind};
 use crate::{ObjectRef, Owner};
 
 /// Common interface for all transaction effect versions.
-#[enum_dispatch]
 pub trait TransactionEffectsAPI {
     fn status(&self) -> &ExecutionStatus;
 
@@ -129,5 +128,5 @@ pub struct ObjectChange {
     pub input_digest: Option<ObjectDigest>,
     pub output_version: Option<Version>,
     pub output_digest: Option<ObjectDigest>,
-    pub id_operation: IDOperation,
+    pub id_operation: IdOperation,
 }
