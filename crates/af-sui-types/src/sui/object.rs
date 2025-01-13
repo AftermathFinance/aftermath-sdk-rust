@@ -128,14 +128,13 @@ impl Owner {
     ///
     /// [`AddressOwner`]: Owner::AddressOwner
     /// [`ObjectOwner`]: Owner::ObjectOwner
-    // TODO: make this return an Option
-    pub const fn get_address_owner_address(&self) -> Result<Address, UnexpectedOwnerTypeError> {
+    pub const fn get_address_owner_address(&self) -> Option<Address> {
         match self {
-            Self::AddressOwner(address) => Ok(*address),
+            Self::AddressOwner(address) => Some(*address),
             Self::Shared { .. }
             | Self::Immutable
             | Self::ObjectOwner(_)
-            | Self::ConsensusV2 { .. } => Err(UnexpectedOwnerTypeError),
+            | Self::ConsensusV2 { .. } => None,
         }
     }
 
@@ -145,14 +144,11 @@ impl Owner {
     ///
     /// [`AddressOwner`]: Owner::AddressOwner
     /// [`ObjectOwner`]: Owner::ObjectOwner
-    // TODO: make this return an Option
-    pub const fn get_owner_address(&self) -> Result<Address, UnexpectedOwnerTypeError> {
+    pub const fn get_owner_address(&self) -> Option<Address> {
         match self {
-            Self::AddressOwner(address) => Ok(*address),
-            Self::ObjectOwner(id) => Ok(*id.as_address()),
-            Self::Shared { .. } | Self::Immutable | Self::ConsensusV2 { .. } => {
-                Err(UnexpectedOwnerTypeError)
-            }
+            Self::AddressOwner(address) => Some(*address),
+            Self::ObjectOwner(id) => Some(*id.as_address()),
+            Self::Shared { .. } | Self::Immutable | Self::ConsensusV2 { .. } => None,
         }
     }
 
@@ -186,10 +182,6 @@ impl From<sui_sdk_types::Owner> for Owner {
         }
     }
 }
-
-#[derive(thiserror::Error, Debug)]
-#[error("Expecting a single owner, shared ownership found")]
-pub struct UnexpectedOwnerTypeError;
 
 impl PartialEq<ObjectId> for Owner {
     fn eq(&self, other: &ObjectId) -> bool {
