@@ -23,10 +23,6 @@ rustdoc-args = [
 [lints]
 workspace = true
 
-[features]
-# FIXME: are we even using this?
-bson = ["dep:base64", "dep:bson", "dep:hex"]
-
 [dependencies]
 af-move-type-derive = { version = "0.2", path = "../af-move-type-derive" }
 af-sui-types        = { version = "0.6", path = "../af-sui-types", features = ["u256"] }
@@ -40,8 +36,3 @@ serde_with    = "3"
 sui-sdk-types = "0.0.2"
 tabled        = "0.16"
 thiserror     = "2"
-
-# BSON serialization (optional)
-base64 = { version = "0.22", optional = true }
-bson   = { version = "2", optional = true }
-hex    = { version = "0.4", optional = true }

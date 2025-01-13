@@ -23,9 +23,6 @@ use af_sui_types::u256::U256;
 use af_sui_types::{Address, IdentStr, Identifier, ObjectId, StructTag, TypeTag};
 use serde::{Deserialize, Serialize};
 
-#[cfg(feature = "bson")]
-#[deprecated = "Unmaintained"]
-pub mod bson_serde;
 #[doc(hidden)]
 pub mod external;
 pub mod otw;
@@ -137,13 +134,6 @@ pub trait MoveType:
     /// Serialize the contents of the Move type to BCS bytes.
     fn to_bcs(&self) -> bcs::Result<Vec<u8>> {
         bcs::to_bytes(self)
-    }
-
-    #[cfg(feature = "bson")]
-    /// Serialize the contents of the Move type to BSON.
-    #[expect(deprecated)]
-    fn to_bson(&self) -> bson_serde::ser::Result<bson::Bson> {
-        bson_serde::to_move_bson(self)
     }
 
     /// Consuming version of [`to_json`](MoveType::to_json).
