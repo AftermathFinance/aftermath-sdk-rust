@@ -26,7 +26,7 @@ workspace = true
 [features]
 fuzzing = ["dep:arbitrary", "dep:proptest"]
 hash    = ["sui-sdk-types/hash"]
-u256    = ["dep:ethnum", "dep:num", "dep:primitive-types", "dep:rand", "dep:uint"]
+u256    = ["dep:primitive-types", "dep:rand", "dep:uint"]
 
 [dependencies]
 base64        = "0.22"
@@ -46,9 +46,6 @@ derive_more = { version = "1", features = ["from_str"] }
 primitive-types = { version = "0.12", features = ["fp-conversion"], optional = true }
 rand            = { version = "0.8", optional = true }
 uint            = { version = "0.9", optional = true }
-# TODO(unmaykr-aftermath): remove dependency on these 2
-ethnum = { version = "1", optional = true }
-num    = { version = "0.4", optional = true }
 
 # for fuzzing tests (optional)
 arbitrary = { version = "1", features = ["derive_arbitrary"], optional = true }

@@ -22,9 +22,6 @@ use std::ops::{
     SubAssign,
 };
 
-use ethnum::U256 as EthnumU256;
-use num::bigint::Sign;
-use num::BigInt;
 // This U256 impl was chosen for now but we are open to changing it as needed
 use primitive_types::U256 as PrimitiveU256;
 #[cfg(any(test, feature = "fuzzing"))]
@@ -488,24 +485,6 @@ impl From<u64> for U256 {
 impl From<u128> for U256 {
     fn from(n: u128) -> Self {
         U256(PrimitiveU256::from(n))
-    }
-}
-
-/// TODO: Remove conversions and migrate Prover & Move Model code from BigInt
-impl From<&U256> for BigInt {
-    fn from(n: &U256) -> Self {
-        BigInt::from_bytes_le(Sign::Plus, &n.to_le_bytes())
-    }
-}
-
-/// TODO: Remove conversions and migrate Prover & Move Model code from EthnumU256
-impl From<&U256> for EthnumU256 {
-    fn from(n: &U256) -> EthnumU256 {
-        // TODO: use better solution for conversion
-        // Currently using str because EthnumU256 can be little or big endian
-        let num_str = format!("{:X}", n.0);
-        // TODO: remove expect()
-        EthnumU256::from_str_radix(&num_str, 16).expect("Cannot convert to U256")
     }
 }
 
