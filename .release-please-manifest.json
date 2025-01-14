@@ -6,7 +6,7 @@
   "crates/move-stdlib-sdk": "0.8.0",
   "crates/sui-framework-sdk": "0.9.0",
   "crates/af-faucet": "0.10.0",
-  "crates/af-utilities": "0.6.0",
+  "crates/af-utilities": "0.6.1",
   "crates/sui-gql-schema": "0.7.1",
   "crates/sui-gql-client": "0.13.2",
   "crates/af-iperps": "0.22.0",
