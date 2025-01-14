@@ -1,7 +1,7 @@
 [package]
 description = "Sui GraphQL RPC client by Aftermath using `cynic`"
 name        = "sui-gql-client"
-version     = "0.13.3"
+version     = "0.13.4"
 
 authors.workspace    = true
 categories.workspace = true
@@ -35,7 +35,7 @@ unstable  = ["sui-gql-schema/unstable"]
 
 
 [dependencies]
-sui-gql-schema = { version = "0.7.2", path = "../sui-gql-schema", default-features = false }
+sui-gql-schema = { version = "0.7.3", path = "../sui-gql-schema", default-features = false }
 
 bimap            = "0.6"
 clap             = { version = "4", features = ["derive"] }
@@ -55,7 +55,7 @@ af-sui-types = { version = "0.6", path = "../af-sui-types", optional = true }
 itertools    = { version = "0.14", optional = true }
 
 # MoveType compat (optional)
-af-move-type = { version = "0.7.2", path = "../af-move-type", optional = true }
+af-move-type = { version = "0.7.3", path = "../af-move-type", optional = true }
 bcs          = { version = "0.1", optional = true }
 
 # Raw client (optional)
@@ -65,7 +65,7 @@ serde_json = { version = "1", optional = true }
 default-features = false
 features         = ["build"]
 path             = "../sui-gql-schema"
-version          = "0.7.2"
+version          = "0.7.3"
 
 
 [dev-dependencies]
