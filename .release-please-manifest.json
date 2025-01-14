@@ -10,7 +10,7 @@
   "crates/sui-gql-schema": "0.7.1",
   "crates/sui-gql-client": "0.13.2",
   "crates/af-iperps": "0.22.0",
-  "crates/af-keys": "0.5.1",
+  "crates/af-keys": "0.5.2",
   "crates/af-oracle": "0.14.0",
   "crates/af-ptbuilder": "3.1.0",
   "crates/af-pyth-wrapper": "0.16.0",
