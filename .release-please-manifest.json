@@ -1,6 +1,6 @@
 {
   "crates/af-move-type-derive": "0.2.0",
-  "crates/af-sui-types": "0.6.1",
+  "crates/af-sui-types": "0.6.2",
   "crates/af-move-type": "0.7.1",
   "crates/af-sui-pkg-sdk": "0.7.0",
   "crates/move-stdlib-sdk": "0.8.0",
