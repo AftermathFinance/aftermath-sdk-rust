@@ -27,19 +27,14 @@ pub(super) async fn query<C: GraphQlClient>(
             })
         });
 
-    #[expect(
-        deprecated,
-        reason = "TODO: build query from scratch with new ObjectFilter"
-    )]
-    let filter = ObjectFilter {
-        object_ids: Some(object_ids),
-        object_keys: Some(object_keys),
-        ..Default::default()
-    };
     let vars = Variables {
         after: None,
         first: page_size.map(|v| v.try_into().unwrap_or(i32::MAX)),
-        filter: Some(filter),
+        filter: Some(ObjectFilter {
+            object_ids: Some(object_ids),
+            object_keys: Some(object_keys),
+            ..Default::default()
+        }),
     };
 
     let (init, pages) = client
