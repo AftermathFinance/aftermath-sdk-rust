@@ -36,6 +36,7 @@ scalars = [
   "dep:serde_json",
   "dep:serde_with",
 ]
+unstable = []
 
 
 [dependencies]
