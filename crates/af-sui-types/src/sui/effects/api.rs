@@ -9,13 +9,13 @@ use sui_sdk_types::{
     IdOperation,
     ObjectDigest,
     ObjectId,
-    ObjectReference as ObjectRef,
-    Owner,
     TransactionDigest,
     TransactionEventsDigest,
     UnchangedSharedKind,
     Version,
 };
+
+use crate::{ObjectRef, Owner};
 
 /// Common interface for all transaction effect versions.
 pub trait TransactionEffectsAPI {
@@ -105,20 +105,18 @@ pub enum InputSharedObject {
 }
 
 impl InputSharedObject {
-    pub fn id_and_version(&self) -> (ObjectId, Version) {
+    pub const fn id_and_version(&self) -> (ObjectId, Version) {
         let oref = self.object_ref();
-        (*oref.object_id(), oref.version())
+        (oref.0, oref.1)
     }
 
-    pub fn object_ref(&self) -> ObjectRef {
+    pub const fn object_ref(&self) -> ObjectRef {
         match self {
-            Self::Mutate(oref) | Self::ReadOnly(oref) => oref.clone(),
+            Self::Mutate(oref) | Self::ReadOnly(oref) => *oref,
             Self::ReadDeleted(id, version) | Self::MutateDeleted(id, version) => {
-                ObjectRef::new(*id, *version, crate::OBJECT_DIGEST_DELETED)
+                (*id, *version, crate::OBJECT_DIGEST_DELETED)
             }
-            Self::Cancelled(id, version) => {
-                ObjectRef::new(*id, *version, crate::OBJECT_DIGEST_CANCELLED)
-            }
+            Self::Cancelled(id, version) => (*id, *version, crate::OBJECT_DIGEST_CANCELLED),
         }
     }
 }
