@@ -1,5 +1,5 @@
 [package]
-description = "Sui (testnet-v1.39.1) GQL schema for the Cynic client"
+description = "Sui GraphQL schema for the Cynic client"
 name        = "sui-gql-schema"
 version     = "0.7.3"
 

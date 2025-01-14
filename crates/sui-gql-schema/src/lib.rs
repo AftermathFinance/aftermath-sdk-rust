@@ -1,6 +1,6 @@
 #![cfg_attr(all(doc, not(doctest)), feature(doc_auto_cfg))]
 
-//! Sui's GraphQL schema to use with `cynic`.
+//! Sui's GraphQL schema to use with `cynic`. Synchronized at `testnet-v1.40.2.`
 //!
 //! Read more about schemas in <https://cynic-rs.dev/schemas> and why this crate is separate in
 //! <https://cynic-rs.dev/large-apis>.
@@ -16,6 +16,13 @@ pub mod scalars;
 pub const SCHEMA_SUI: &str = include_str!("../schemas/sui.graphql");
 
 #[cfg(feature = "build")]
+/// Register all the schemas.
+///
+/// Currently only does so for the `sui` schema, which it tries to register as the default.
+///
+/// # Panics
+///
+/// If either building the schema from the SDL or registering it as the default fails.
 pub fn register_schemas() {
     cynic_codegen::register_schema("sui")
         .from_sdl(SCHEMA_SUI)
