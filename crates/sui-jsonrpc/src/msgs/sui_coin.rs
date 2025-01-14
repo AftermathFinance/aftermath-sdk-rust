@@ -21,7 +21,6 @@ pub struct Balance {
     pub coin_object_count: usize,
     #[serde_as(as = "BigInt<u128>")]
     pub total_balance: u128,
-    // TODO: This should be removed
     #[serde_as(as = "HashMap<BigInt<u64>, BigInt<u128>>")]
     pub locked_balance: HashMap<EpochId, u128>,
 }

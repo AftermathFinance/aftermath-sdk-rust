@@ -486,7 +486,6 @@ af_sui_pkg_sdk::sui_pkg_sdk!(sui @ "0x2" {
     module url {
         /// Standard Uniform Resource Locator (URL) string.
         struct Url has store, copy, drop {
-            // TODO: validate URL format
             url: String,
         }
     }

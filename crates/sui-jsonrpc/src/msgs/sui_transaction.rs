@@ -951,7 +951,6 @@ impl Display for SuiTransactionBlockEvents {
     }
 }
 
-// TODO: this file might not be the best place for this struct.
 /// Additional rguments supplied to dev inspect beyond what is allowed in today's API.
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 #[serde(rename = "DevInspectArgs", rename_all = "camelCase")]
