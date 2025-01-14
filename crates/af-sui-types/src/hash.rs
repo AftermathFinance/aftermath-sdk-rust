@@ -2,7 +2,16 @@ use sui_sdk_types::hash::Hasher;
 use sui_sdk_types::{Intent, IntentAppId, IntentScope, IntentVersion, SigningDigest};
 
 use crate::sui::transaction::ObjectArg;
-use crate::{Digest, Object, ObjectDigest, Owner, TransactionData, TransactionDigest};
+use crate::{
+    Digest,
+    Object,
+    ObjectDigest,
+    Owner,
+    TransactionData,
+    TransactionDigest,
+    TransactionEffects,
+    TransactionEffectsDigest,
+};
 
 impl Object {
     pub fn digest(&self) -> ObjectDigest {
@@ -39,6 +48,14 @@ impl TransactionData {
         const SALT: &str = "TransactionData::";
         let digest = type_digest(SALT, self);
         TransactionDigest::new(digest.into_inner())
+    }
+}
+
+impl TransactionEffects {
+    pub fn digest(&self) -> TransactionEffectsDigest {
+        const SALT: &str = "TransactionEffects::";
+        let digest = type_digest(SALT, self);
+        TransactionEffectsDigest::new(digest.into_inner())
     }
 }
 
