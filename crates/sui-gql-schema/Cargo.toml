@@ -55,7 +55,6 @@ derive_more = { version = "1", features = [
   "deref",
   "display",
   "error",
-  "from",
   "into",
 ], optional = true }
 
