@@ -48,11 +48,11 @@ trait-variant    = { version = "0.1", optional = true }
 [dependencies.af-ptbuilder]
 optional = true
 path     = "../af-ptbuilder"
-version  = "4"
+version  = "4.0.0"
 [dependencies.af-sui-types]
 optional = true
 path     = "../af-sui-types"
-version  = "0.7"
+version  = "0.7.0"
 [dependencies.af-move-type]
 optional = true
 path     = "../af-move-type"

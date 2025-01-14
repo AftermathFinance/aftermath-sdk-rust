@@ -24,7 +24,7 @@ rustdoc-args = [
 workspace = true
 
 [dependencies]
-af-sui-types = { version = "0.7", path = "../af-sui-types", features = ["u256"] }
+af-sui-types = { version = "0.7.0", path = "../af-sui-types", features = ["u256"] }
 
 num-traits = "0.2"
 serde      = "1"

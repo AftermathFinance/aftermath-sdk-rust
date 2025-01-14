@@ -25,7 +25,7 @@ workspace = true
 
 [dependencies]
 af-sui-pkg-sdk    = { version = "0.8.0", path = "../af-sui-pkg-sdk" }
-af-sui-types      = { version = "0.7", path = "../af-sui-types" }
+af-sui-types      = { version = "0.7.0", path = "../af-sui-types" }
 sui-framework-sdk = { version = "0.10.0", path = "../sui-framework-sdk" }
 
 serde = "1"

@@ -50,7 +50,7 @@ trait-variant    = "0.1"
 reqwest = { version = "0.12", optional = true }
 
 # For pre-made queries (optional)
-af-sui-types = { version = "0.7", path = "../af-sui-types", optional = true }
+af-sui-types = { version = "0.7.0", path = "../af-sui-types", optional = true }
 itertools    = { version = "0.14", optional = true }
 
 # MoveType compat (optional)

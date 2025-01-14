@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.17.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-pyth-wrapper-v0.16.2...af-pyth-wrapper-v0.17.0) (2025-01-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **af-sui-types:** bump to 0.7.0
+
+### Miscellaneous Chores
+
+* **af-sui-types:** bump to 0.7.0 ([27e110a](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/27e110a9455d4a1b9c4d9c1a9e4e0c85728a1e96))
+
+
+### Dependencies
+
+* The following workspace dependencies were updated
+  * dependencies
+    * af-ptbuilder bumped from 4 to 4.0.0
+    * af-sui-types bumped from 0.7 to 0.7.0
+
 ## [0.16.2](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-pyth-wrapper-v0.16.1...af-pyth-wrapper-v0.16.2) (2025-01-14)
 
 

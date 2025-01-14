@@ -29,7 +29,7 @@ client-api = ["dep:extension-traits", "jsonrpsee/client-core", "jsonrpsee/macros
 default    = ["client"]
 
 [dependencies]
-af-sui-types  = { version = "0.7", path = "../af-sui-types" }
+af-sui-types  = { version = "0.7.0", path = "../af-sui-types" }
 bcs           = "0.1"
 colored       = "2"
 derive_more   = { version = "1", features = ["from"] }

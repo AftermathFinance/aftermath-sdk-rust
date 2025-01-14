@@ -26,7 +26,7 @@ workspace = true
 [dependencies]
 af-move-type    = { version = "0.8.0", path = "../af-move-type" }
 af-sui-pkg-sdk  = { version = "0.8.0", path = "../af-sui-pkg-sdk" }
-af-sui-types    = { version = "0.7", path = "../af-sui-types" }
+af-sui-types    = { version = "0.7.0", path = "../af-sui-types" }
 move-stdlib-sdk = { version = "0.9.0", path = "../move-stdlib-sdk" }
 
 derive-new  = "0.6"

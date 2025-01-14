@@ -38,7 +38,7 @@ signature     = "2"
 strum         = { version = "0.26", features = ["derive"] }
 thiserror     = "2"
 
-af-sui-types = { version = "0.7", features = ["hash"], path = "../af-sui-types" }
+af-sui-types = { version = "0.7.0", features = ["hash"], path = "../af-sui-types" }
 
 [dev-dependencies]
 tempfile = "3"

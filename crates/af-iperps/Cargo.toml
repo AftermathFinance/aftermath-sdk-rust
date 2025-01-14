@@ -40,8 +40,8 @@ graphql = [
 [dependencies]
 af-move-type      = { version = "0.8.0", path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.8.0", path = "../af-sui-pkg-sdk" }
-af-sui-types      = { version = "0.7", path = "../af-sui-types" }
-af-utilities      = { version = "0.7", path = "../af-utilities" }
+af-sui-types      = { version = "0.7.0", path = "../af-sui-types" }
+af-utilities      = { version = "0.7.0", path = "../af-utilities" }
 move-stdlib-sdk   = { version = "0.9.0", path = "../move-stdlib-sdk" }
 sui-framework-sdk = { version = "0.10.0", path = "../sui-framework-sdk" }
 

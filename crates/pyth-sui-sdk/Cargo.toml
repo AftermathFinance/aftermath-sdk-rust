@@ -30,7 +30,7 @@ ptb      = ["bytes/serde", "dep:af-ptbuilder", "dep:bytes", "dep:extension-trait
 [dependencies]
 af-move-type      = { version = "0.8.0", path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.8.0", path = "../af-sui-pkg-sdk" }
-af-sui-types      = { version = "0.7", path = "../af-sui-types" }
+af-sui-types      = { version = "0.7.0", path = "../af-sui-types" }
 sui-framework-sdk = { version = "0.10.0", path = "../sui-framework-sdk" }
 wormhole-sui-sdk  = { version = "0.10.0", path = "../wormhole-sui-sdk" }
 
@@ -45,5 +45,5 @@ extension-traits = { version = "2", optional = true }
 pyth-sdk         = { version = "0.8", optional = true }
 
 # Optional aftermath deps
-af-ptbuilder = { version = "4", optional = true, path = "../af-ptbuilder" }
-sui-jsonrpc  = { version = "0.12", path = "../sui-jsonrpc", default-features = false, optional = true }
+af-ptbuilder = { version = "4.0.0", optional = true, path = "../af-ptbuilder" }
+sui-jsonrpc  = { version = "0.12.0", path = "../sui-jsonrpc", default-features = false, optional = true }

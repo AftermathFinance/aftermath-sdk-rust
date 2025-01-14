@@ -25,7 +25,7 @@ workspace = true
 
 [dependencies]
 af-move-type-derive = { version = "0.2", path = "../af-move-type-derive" }
-af-sui-types        = { version = "0.7", path = "../af-sui-types", features = ["u256"] }
+af-sui-types        = { version = "0.7.0", path = "../af-sui-types", features = ["u256"] }
 
 bcs           = "0.1"
 derive-where  = "1"
