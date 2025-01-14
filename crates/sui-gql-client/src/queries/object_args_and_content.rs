@@ -36,6 +36,10 @@ pub async fn query<C: GraphQlClient>(
     mutable: bool,
     page_size: Option<u32>,
 ) -> Result<Vec<(ObjectArg, RawMoveStruct)>, Error<C::Error>> {
+    #[expect(
+        deprecated,
+        reason = "TODO: build query from scratch with new ObjectFilter"
+    )]
     let filter = ObjectFilter {
         object_ids: Some(object_ids.into_iter().collect()),
         type_: None,

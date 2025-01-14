@@ -31,6 +31,10 @@ pub async fn query<C: GraphQlClient>(
     mut names: BiMap<String, ObjectId>,
     page_size: Option<u32>,
 ) -> Result<BiMap<String, ObjectArg>, Error<C::Error>> {
+    #[expect(
+        deprecated,
+        reason = "TODO: build query from scratch with new ObjectFilter"
+    )]
     let filter = ObjectFilter {
         object_ids: Some(names.right_values().cloned().collect()),
         type_: None,

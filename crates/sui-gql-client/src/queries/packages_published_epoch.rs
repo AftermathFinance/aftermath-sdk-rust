@@ -8,6 +8,10 @@ pub async fn query<C: GraphQlClient>(
     client: &C,
     package_ids: Vec<ObjectId>,
 ) -> Result<impl Iterator<Item = (ObjectId, u64, u64)>, Error<C::Error>> {
+    #[expect(
+        deprecated,
+        reason = "TODO: build query from scratch with new ObjectFilter"
+    )]
     let vars = QueryVariables {
         filter: Some(ObjectFilter {
             type_: None,
