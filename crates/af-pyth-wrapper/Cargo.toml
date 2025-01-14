@@ -1,7 +1,7 @@
 [package]
 description = "Move types for Aftermath's `PythWrapper` package that extends `AfOracle`"
 name        = "af-pyth-wrapper"
-version     = "0.16.0"
+version     = "0.16.1"
 
 authors.workspace    = true
 categories.workspace = true
@@ -36,9 +36,9 @@ graphql = [
 ptb = ["dep:af-ptbuilder", "dep:extension-traits"]
 
 [dependencies]
-af-oracle         = { version = "0.14", path = "../af-oracle" }
-af-sui-pkg-sdk    = { version = "0.7", path = "../af-sui-pkg-sdk" }
-sui-framework-sdk = { version = "0.9", path = "../sui-framework-sdk" }
+af-oracle         = { version = "0.14.1", path = "../af-oracle" }
+af-sui-pkg-sdk    = { version = "0.7.1", path = "../af-sui-pkg-sdk" }
+sui-framework-sdk = { version = "0.9.1", path = "../sui-framework-sdk" }
 
 bcs              = { version = "0.1", optional = true }
 extension-traits = { version = "2", optional = true }
@@ -56,10 +56,10 @@ version  = "0.6"
 [dependencies.af-move-type]
 optional = true
 path     = "../af-move-type"
-version  = "0.7"
+version  = "0.7.2"
 [dependencies.sui-gql-client]
 default-features = false
 features         = ["move-type", "queries"]
 optional         = true
 path             = "../sui-gql-client"
-version          = "0.13"
+version          = "0.13.3"
