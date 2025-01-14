@@ -5,7 +5,7 @@ use af_sui_types::{Address as SuiAddress, ObjectId};
 use super::fragments::MoveValueRaw;
 use super::outputs::{DynamicField as OutputDf, ObjectKey, RawMoveValue};
 use super::Error;
-use crate::{missing_data, scalars, schema, GraphQlClient, GraphQlResponseExt as _};
+use crate::{missing_data, schema, GraphQlClient, GraphQlResponseExt as _};
 
 pub async fn query<C: GraphQlClient>(
     client: &C,
@@ -16,7 +16,7 @@ pub async fn query<C: GraphQlClient>(
 ) -> Result<(HashMap<RawMoveValue, OutputDf>, Option<String>), Error<C::Error>> {
     let vars = QueryVariables {
         address,
-        root_version: root_version.map(scalars::UInt53),
+        root_version,
         first,
         after,
     };
@@ -47,7 +47,7 @@ pub async fn query<C: GraphQlClient>(
         let out = match instance {
             DynamicFieldValue::MoveObject(MoveObject {
                 object_id,
-                version: scalars::UInt53(version),
+                version,
                 contents,
             }) => {
                 let struct_ = contents
@@ -87,7 +87,7 @@ fn gql_output() {
 #[derive(cynic::QueryVariables, Debug)]
 struct QueryVariables {
     address: SuiAddress,
-    root_version: Option<scalars::UInt53>,
+    root_version: Option<af_sui_types::Version>,
     after: Option<String>,
     first: Option<i32>,
 }
@@ -110,7 +110,7 @@ struct Owner {
 struct MoveObject {
     #[cynic(rename = "address")]
     object_id: ObjectId,
-    version: scalars::UInt53,
+    version: af_sui_types::Version,
     contents: Option<MoveValueRaw>,
 }
 

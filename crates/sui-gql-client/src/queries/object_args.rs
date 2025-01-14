@@ -1,7 +1,7 @@
 //! For requesting [`ObjectArg`]s from the server. Defines [`object_args!`](crate::object_args!).
-use af_sui_types::{ObjectArg, ObjectId};
+use af_sui_types::{ObjectArg, ObjectId, Version};
 pub use bimap::BiMap;
-use sui_gql_schema::scalars::{self, UInt53};
+use sui_gql_schema::scalars;
 
 use super::fragments::ObjectFilter;
 pub use super::objects_flat::Variables;
@@ -186,7 +186,7 @@ macro_rules! object_args {
 struct Object {
     #[cynic(rename = "address")]
     object_id: ObjectId,
-    version: UInt53,
+    version: Version,
     digest: Option<scalars::Digest>,
     owner: Option<ObjectOwner>,
 }
@@ -212,12 +212,10 @@ impl Object {
 
 fn build_object_arg_default(
     id: ObjectId,
-    version: UInt53,
+    version: Version,
     owner: ObjectOwner,
     digest: Option<scalars::Digest>,
 ) -> Option<ObjectArg> {
-    let version = version.0;
-
     Some(match owner {
         ObjectOwner::Immutable(_) | ObjectOwner::Parent(_) | ObjectOwner::AddressOwner(_) => {
             ObjectArg::ImmOrOwnedObject((id, version, digest?.0.into()))
@@ -227,7 +225,7 @@ fn build_object_arg_default(
             ..
         }) => ObjectArg::SharedObject {
             id,
-            initial_shared_version: initial_shared_version.0,
+            initial_shared_version,
             mutable: false,
         },
         ObjectOwner::Unknown => return None,
@@ -236,7 +234,7 @@ fn build_object_arg_default(
 
 pub(super) fn build_oarg_set_mut(
     object_id: ObjectId,
-    version: UInt53,
+    version: Version,
     owner: Option<ObjectOwner>,
     digest: Option<scalars::Digest>,
     mutable_: bool,
@@ -277,7 +275,7 @@ pub(super) struct Immutable {
 #[derive(cynic::QueryFragment, Debug)]
 pub(super) struct Shared {
     __typename: String,
-    initial_shared_version: UInt53,
+    initial_shared_version: Version,
 }
 
 #[derive(cynic::QueryFragment, Debug)]

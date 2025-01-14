@@ -407,52 +407,6 @@ pub struct TypeTag(#[serde_as(as = "DisplayFromStr")] pub af_sui_types::TypeTag)
 // =============================================================================
 
 impl_scalar!(af_sui_types::Version, schema::UInt53);
-impl_scalar!(UInt53, schema::UInt53);
-
-#[derive(
-    Clone,
-    Copy,
-    Deref,
-    Deserialize,
-    Debug,
-    Display,
-    Eq,
-    From,
-    Into,
-    Ord,
-    PartialEq,
-    PartialOrd,
-    Serialize,
-)]
-#[serde(into = "Json", try_from = "Json")]
-pub struct UInt53(pub u64);
-
-#[derive(derive_more::Error, Debug, Display)]
-pub enum FromJsonError {
-    #[display("Not a JSON number: {_0}")]
-    NotANumber(#[error(ignore)] Json),
-    #[display("Expected an unsigned integer, got: {_0}")]
-    Negative(#[error(ignore)] serde_json::Number),
-}
-
-impl TryFrom<Json> for UInt53 {
-    type Error = FromJsonError;
-    fn try_from(value: Json) -> Result<Self, Self::Error> {
-        let Json::Number(n) = value else {
-            return Err(FromJsonError::NotANumber(value));
-        };
-        let Some(n) = n.as_u64() else {
-            return Err(FromJsonError::Negative(n));
-        };
-        Ok(Self(n))
-    }
-}
-
-impl From<UInt53> for Json {
-    fn from(value: UInt53) -> Self {
-        Self::Number(value.0.into())
-    }
-}
 
 // =============================================================================
 //  Tests

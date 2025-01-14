@@ -36,7 +36,7 @@ where
 #[derive(QueryVariables, Clone, Debug)]
 struct Variables {
     address: ObjectId,
-    version: Option<scalars::UInt53>,
+    version: Option<af_sui_types::Version>,
 }
 
 #[derive(QueryFragment, Clone, Debug)]

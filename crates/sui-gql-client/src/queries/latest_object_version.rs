@@ -1,7 +1,7 @@
 use af_sui_types::ObjectId;
 
 use crate::queries::Error;
-use crate::{missing_data, scalars, schema, GraphQlClient, GraphQlResponseExt as _};
+use crate::{missing_data, schema, GraphQlClient, GraphQlResponseExt as _};
 
 pub async fn query<C>(client: &C, object_id: ObjectId) -> Result<(u64, u64), Error<C::Error>>
 where
@@ -17,12 +17,10 @@ where
     Ok((
         data.checkpoint
             .ok_or(missing_data!("Checkpoint"))?
-            .sequence_number
-            .0,
+            .sequence_number,
         data.object
             .ok_or(missing_data!("Object not found"))?
-            .version
-            .0,
+            .version,
     ))
 }
 
@@ -42,12 +40,12 @@ struct Query {
 
 #[derive(cynic::QueryFragment, Debug)]
 struct Object {
-    version: scalars::UInt53,
+    version: af_sui_types::Version,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
 struct Checkpoint {
-    sequence_number: scalars::UInt53,
+    sequence_number: af_sui_types::Version,
 }
 
 #[cfg(test)]

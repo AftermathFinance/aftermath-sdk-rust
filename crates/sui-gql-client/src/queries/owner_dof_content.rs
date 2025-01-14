@@ -17,7 +17,7 @@ pub async fn query<C: GraphQlClient>(
 ) -> Result<(ObjectKey, RawMoveStruct), Error<C::Error>> {
     let vars = QueryVariables {
         address,
-        root_version: root_version.map(scalars::UInt53),
+        root_version,
         name: DynamicFieldName {
             type_: scalars::TypeTag(df_name_type),
             bcs: scalars::Base64::new(df_name_bcs),
@@ -37,7 +37,7 @@ pub async fn query<C: GraphQlClient>(
     match df_value {
         DynamicFieldValue::MoveObject(MoveObject {
             object_id,
-            version: scalars::UInt53(version),
+            version,
             contents,
         }) => {
             let struct_ = contents
@@ -75,7 +75,7 @@ fn gql_output() {
 struct QueryVariables {
     address: SuiAddress,
     name: DynamicFieldName,
-    root_version: Option<scalars::UInt53>,
+    root_version: Option<af_sui_types::Version>,
 }
 
 #[derive(cynic::InputObject, Debug)]
@@ -116,6 +116,6 @@ enum DynamicFieldValue {
 struct MoveObject {
     #[cynic(rename = "address")]
     object_id: ObjectId,
-    version: scalars::UInt53,
+    version: af_sui_types::Version,
     contents: Option<MoveValueRaw>,
 }

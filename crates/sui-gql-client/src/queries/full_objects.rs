@@ -22,7 +22,7 @@ pub(super) async fn query<C: GraphQlClient>(
             v.map_or(Either::Left(id), |n| {
                 Either::Right(ObjectKey {
                     object_id: id,
-                    version: n.into(),
+                    version: n,
                 })
             })
         });

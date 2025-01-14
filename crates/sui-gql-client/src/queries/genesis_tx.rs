@@ -6,7 +6,7 @@ use crate::{missing_data, scalars, schema, GraphQlClient, GraphQlResponseExt as 
 
 pub async fn query<C: GraphQlClient>(client: &C) -> Result<TransactionData, Error<C::Error>> {
     let result: GraphQlResponse<Query> = client
-        .query(Variables { id: Some(0.into()) })
+        .query(Variables { id: Some(0) })
         .await
         .map_err(Error::Client)?;
     let wrapped = result
@@ -25,7 +25,7 @@ pub async fn query<C: GraphQlClient>(client: &C) -> Result<TransactionData, Erro
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
 struct Variables {
-    id: Option<scalars::UInt53>,
+    id: Option<af_sui_types::Version>,
 }
 
 #[derive(cynic::QueryFragment, Clone, Debug)]

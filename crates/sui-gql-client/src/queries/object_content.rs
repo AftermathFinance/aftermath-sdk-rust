@@ -1,5 +1,4 @@
-use af_sui_types::ObjectId;
-use sui_gql_schema::scalars::UInt53;
+use af_sui_types::{ObjectId, Version};
 
 use super::fragments::{MoveObjectContent, MoveValueRaw};
 use super::outputs::RawMoveStruct;
@@ -36,7 +35,7 @@ pub async fn query<C: GraphQlClient>(
 #[derive(cynic::QueryVariables, Debug)]
 struct Variables {
     address: ObjectId,
-    version: Option<UInt53>,
+    version: Option<Version>,
 }
 
 #[derive(cynic::QueryFragment, Clone, Debug)]

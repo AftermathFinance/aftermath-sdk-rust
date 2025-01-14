@@ -1,6 +1,5 @@
-use af_sui_types::ObjectId;
+use af_sui_types::{ObjectId, Version};
 use cynic::{QueryFragment, QueryVariables};
-use sui_gql_schema::scalars::UInt53;
 
 use crate::{schema, GraphQlClient, GraphQlErrors, GraphQlResponseExt as _};
 
@@ -43,7 +42,7 @@ pub async fn query<C: GraphQlClient>(
     let Some(mut data): Option<Query> = client
         .query(Variables {
             object_id: Some(id),
-            checkpoint_num: Some((ckpt_num + 1).into()),
+            checkpoint_num: Some(ckpt_num + 1),
         })
         .await
         .map_err(Error::Client)?
@@ -55,8 +54,7 @@ pub async fn query<C: GraphQlClient>(
     let watermark = data
         .checkpoint
         .ok_or(Error::NoLatestCheckpoint)?
-        .sequence_number
-        .0;
+        .sequence_number;
     if watermark < ckpt_num {
         return Err(Error::WatermarkTooLow(watermark));
     }
@@ -68,13 +66,12 @@ pub async fn query<C: GraphQlClient>(
         .ok_or_else(|| Error::NoTransactionBlocks { id })?
         .effects
         .ok_or(Error::MissingTxEffects)?
-        .lamport_version
-        .into())
+        .lamport_version)
 }
 
 #[derive(QueryVariables, Debug)]
 struct Variables {
-    checkpoint_num: Option<UInt53>,
+    checkpoint_num: Option<Version>,
     object_id: Option<ObjectId>,
 }
 
@@ -90,7 +87,7 @@ struct Query {
 #[derive(QueryFragment, Debug)]
 #[cynic(graphql_type = "Checkpoint")]
 struct CheckpointNumber {
-    sequence_number: UInt53,
+    sequence_number: Version,
 }
 
 #[derive(QueryFragment, Debug)]
@@ -105,7 +102,7 @@ struct TransactionBlock {
 
 #[derive(QueryFragment, Debug)]
 struct TransactionBlockEffects {
-    lamport_version: UInt53,
+    lamport_version: Version,
 }
 
 #[cfg(test)]
@@ -119,7 +116,7 @@ fn init_gql_output() {
                 .parse()
                 .unwrap(),
         ),
-        checkpoint_num: Some(54773328.into()),
+        checkpoint_num: Some(54773328),
     };
     let operation = Query::build(vars);
     insta::assert_snapshot!(operation.query);

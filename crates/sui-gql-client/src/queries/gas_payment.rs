@@ -1,6 +1,5 @@
-use af_sui_types::{Address as SuiAddress, ObjectId, ObjectRef};
+use af_sui_types::{Address as SuiAddress, ObjectId, ObjectRef, Version};
 use cynic::GraphQlResponse;
-use sui_gql_schema::scalars::UInt53;
 
 use super::fragments::PageInfoForward;
 use crate::scalars::{BigInt, Digest};
@@ -67,7 +66,7 @@ pub(super) async fn query<C: GraphQlClient>(
         {
             let digest = digest.ok_or(Error::MissingCoinDigest)?;
             let coin_balance = coin_balance.ok_or(Error::MissingCoinBalance)?.into_inner();
-            coins.push((object_id, version.0, digest.0.into()));
+            coins.push((object_id, version, digest.0.into()));
             balance += coin_balance;
             if balance >= budget {
                 return Ok(coins);
@@ -144,7 +143,7 @@ struct CoinConnection {
 struct Coin {
     #[cynic(rename = "address")]
     object_id: ObjectId,
-    version: UInt53,
+    version: Version,
     digest: Option<Digest>,
     coin_balance: Option<BigInt<u64>>,
 }

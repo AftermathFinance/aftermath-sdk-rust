@@ -1,7 +1,7 @@
+use af_sui_types::Version;
 use cynic::{GraphQlResponse, QueryFragment};
 
 use super::Error;
-use crate::scalars::UInt53;
 use crate::{missing_data, schema, GraphQlClient, GraphQlResponseExt as _};
 
 pub async fn query<C: GraphQlClient>(client: &C) -> Result<u64, Error<C::Error>> {
@@ -12,7 +12,7 @@ pub async fn query<C: GraphQlClient>(client: &C) -> Result<u64, Error<C::Error>>
         .epoch
         .ok_or_else(|| missing_data!("epoch"))?
         .epoch_id;
-    Ok(curr_epoch_id.into())
+    Ok(curr_epoch_id)
 }
 
 #[cfg(test)]
@@ -32,5 +32,5 @@ struct Query {
 
 #[derive(QueryFragment, Clone, Debug)]
 struct Epoch {
-    epoch_id: UInt53,
+    epoch_id: Version,
 }
