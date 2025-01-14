@@ -64,7 +64,6 @@ pub use sui_sdk_types::{
     Transaction,
     TransactionDigest,
     TransactionEffectsDigest,
-    TransactionEvents,
     TransactionEventsDigest,
     TransactionExpiration,
     TransactionKind,
@@ -102,7 +101,11 @@ pub use self::sui::effects::{
     UnchangedSharedKind,
 };
 #[doc(inline)]
-pub use self::sui::full_checkpoint_content::{CheckpointData, CheckpointTransaction};
+pub use self::sui::full_checkpoint_content::{
+    CheckpointData,
+    CheckpointTransaction,
+    TransactionEvents,
+};
 #[doc(inline)]
 pub use self::sui::move_object_type::MoveObjectType;
 #[doc(inline)]
