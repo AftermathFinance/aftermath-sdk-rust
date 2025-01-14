@@ -99,7 +99,8 @@ pub enum Owner {
     AddressOwner(Address),
     /// Object is exclusively owned by a single object, and is mutable.
     /// The object ID is converted to Address as SuiAddress is universal.
-    ObjectOwner(ObjectId),
+    // TODO: migrate this to contain an `ObjectId` instead
+    ObjectOwner(Address),
     /// Object is shared, can be used by any address, and is mutable.
     // TODO: make this a newtype variant
     Shared {
@@ -148,8 +149,7 @@ impl Owner {
     // TODO: make this return an Option
     pub const fn get_owner_address(&self) -> Result<Address, UnexpectedOwnerTypeError> {
         match self {
-            Self::AddressOwner(address) => Ok(*address),
-            Self::ObjectOwner(id) => Ok(*id.as_address()),
+            Self::AddressOwner(address) | Self::ObjectOwner(address) => Ok(*address),
             Self::Shared { .. } | Self::Immutable | Self::ConsensusV2 { .. } => {
                 Err(UnexpectedOwnerTypeError)
             }
@@ -178,7 +178,7 @@ impl From<sui_sdk_types::Owner> for Owner {
         use sui_sdk_types::Owner::*;
         match value {
             Address(a) => Self::AddressOwner(a),
-            Object(o) => Self::ObjectOwner(o),
+            Object(o) => Self::ObjectOwner(o.into()),
             Shared(v) => Self::Shared {
                 initial_shared_version: v,
             },
