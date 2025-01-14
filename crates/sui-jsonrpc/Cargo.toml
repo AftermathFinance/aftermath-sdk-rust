@@ -1,7 +1,7 @@
 [package]
 description = "Light-weight Sui JSON-RPC client by Aftermath Finance"
 name        = "sui-jsonrpc"
-version     = "0.11.0"
+version     = "0.11.1"
 
 authors.workspace    = true
 categories.workspace = true
@@ -29,7 +29,7 @@ client-api = ["dep:extension-traits", "jsonrpsee/client-core", "jsonrpsee/macros
 default    = ["client"]
 
 [dependencies]
-af-sui-types  = { version = "0.6", path = "../af-sui-types" }
+af-sui-types  = { version = "0.6.2", path = "../af-sui-types" }
 bcs           = "0.1"
 colored       = "2"
 derive_more   = { version = "1", features = ["from"] }

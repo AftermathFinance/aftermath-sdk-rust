@@ -1,7 +1,7 @@
 [package]
 description = "Standard for representing Move types (`MoveType`) off-chain and their type tags."
 name        = "af-move-type"
-version     = "0.7.1"
+version     = "0.7.2"
 
 authors.workspace    = true
 categories.workspace = true
@@ -28,8 +28,8 @@ workspace = true
 bson = ["dep:base64", "dep:bson", "dep:hex"]
 
 [dependencies]
-af-move-type-derive = { version = "0.2", path = "../af-move-type-derive" }
-af-sui-types        = { version = "0.6", path = "../af-sui-types", features = ["u256"] }
+af-move-type-derive = { version = "0.2.1", path = "../af-move-type-derive" }
+af-sui-types        = { version = "0.6.2", path = "../af-sui-types", features = ["u256"] }
 
 bcs           = "0.1"
 derive-where  = "1"
