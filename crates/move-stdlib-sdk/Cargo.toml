@@ -1,7 +1,7 @@
 [package]
 description = "Move types for Sui's `MoveStdLib` package at address 0x1"
 name        = "move-stdlib-sdk"
-version     = "0.8.0"
+version     = "0.8.1"
 
 authors.workspace    = true
 categories.workspace = true
@@ -24,6 +24,6 @@ rustdoc-args = [
 workspace = true
 
 [dependencies]
-af-sui-pkg-sdk = { version = "0.7", path = "../af-sui-pkg-sdk" }
+af-sui-pkg-sdk = { version = "0.7.1", path = "../af-sui-pkg-sdk" }
 
 thiserror = "2"
