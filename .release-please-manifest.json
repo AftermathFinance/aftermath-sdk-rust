@@ -13,7 +13,7 @@
   "crates/af-keys": "0.5.1",
   "crates/af-oracle": "0.14.0",
   "crates/af-ptbuilder": "3.0.0",
-  "crates/af-pyth-wrapper": "0.16.0",
+  "crates/af-pyth-wrapper": "0.16.1",
   "crates/pyth-hermes-client": "0.2.5",
   "crates/sui-jsonrpc": "0.11.0",
   "crates/wormhole-sui-sdk": "0.9.0",
