@@ -18,6 +18,8 @@ use sui_sdk_types::{
 };
 
 /// Common interface for all transaction effect versions.
+///
+/// This trait is inherited from Sui's monorepo and is here for legacy reasons.
 pub trait TransactionEffectsAPI {
     fn status(&self) -> &ExecutionStatus;
 
