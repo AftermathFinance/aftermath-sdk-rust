@@ -17,7 +17,7 @@ pub async fn query<C: GraphQlClient>(
 ) -> Result<RawMoveValue, Error<C::Error>> {
     let vars = QueryVariables {
         address,
-        root_version,
+        root_version: root_version.map(scalars::UInt53),
         name: DynamicFieldName {
             type_: scalars::TypeTag(df_name_type),
             bcs: scalars::Base64::new(df_name_bcs),
@@ -65,7 +65,7 @@ fn gql_output() {
 struct QueryVariables {
     address: SuiAddress,
     name: DynamicFieldName,
-    root_version: Option<af_sui_types::Version>,
+    root_version: Option<scalars::UInt53>,
 }
 
 #[derive(cynic::InputObject, Debug)]

@@ -1,4 +1,5 @@
-use af_sui_types::{ObjectId, Version};
+use af_sui_types::ObjectId;
+use sui_gql_schema::scalars::UInt53;
 
 use super::fragments::{ObjectFilter, PageInfoForward};
 use super::Error;
@@ -33,8 +34,8 @@ pub async fn query<C: GraphQlClient>(
             let effects = o.as_move_package?.previous_transaction_block?.effects?;
             Some((
                 o.address,
-                effects.epoch?.epoch_id,
-                effects.checkpoint?.sequence_number,
+                effects.epoch?.epoch_id.into(),
+                effects.checkpoint?.sequence_number.into(),
             ))
         }))
 }
@@ -121,10 +122,10 @@ struct TransactionBlockEffects {
 
 #[derive(cynic::QueryFragment, Debug)]
 struct Epoch {
-    epoch_id: Version,
+    epoch_id: UInt53,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
 struct Checkpoint {
-    sequence_number: Version,
+    sequence_number: UInt53,
 }

@@ -1,4 +1,5 @@
-use af_sui_types::{ObjectArg, ObjectId, Version};
+use af_sui_types::{ObjectArg, ObjectId};
+use sui_gql_schema::scalars::UInt53;
 use sui_gql_schema::{scalars, schema};
 
 use super::fragments::{MoveObjectContent, MoveValueRaw};
@@ -100,7 +101,7 @@ fn gql_output() {
 struct Object {
     #[cynic(rename = "address")]
     object_id: ObjectId,
-    version: Version,
+    version: UInt53,
     digest: Option<scalars::Digest>,
     owner: Option<ObjectOwner>,
     as_move_object: Option<MoveObjectContent<MoveValueRaw>>,

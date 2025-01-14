@@ -1,6 +1,7 @@
-use af_sui_types::{Address as SuiAddress, ObjectId, TypeTag, Version};
+use af_sui_types::{Address as SuiAddress, ObjectId, TypeTag};
 use cynic::QueryFragment;
-use sui_gql_schema::{scalars, schema};
+use sui_gql_schema::scalars::{self, UInt53};
+use sui_gql_schema::schema;
 
 // ====================================================================================================
 //  Input objects
@@ -18,7 +19,7 @@ pub struct ObjectFilter {
 #[derive(cynic::InputObject, Clone, Debug)]
 pub struct ObjectKey {
     pub object_id: ObjectId,
-    pub version: Version,
+    pub version: UInt53,
 }
 
 #[derive(cynic::InputObject, Clone, Debug)]
@@ -48,9 +49,9 @@ impl<T: af_move_type::MoveType> TryFrom<af_move_type::MoveInstance<T>> for Dynam
 pub(crate) struct TransactionBlockFilter {
     pub(crate) function: Option<String>,
     pub(crate) kind: Option<TransactionBlockKindInput>,
-    pub(crate) after_checkpoint: Option<Version>,
-    pub(crate) at_checkpoint: Option<Version>,
-    pub(crate) before_checkpoint: Option<Version>,
+    pub(crate) after_checkpoint: Option<UInt53>,
+    pub(crate) at_checkpoint: Option<UInt53>,
+    pub(crate) before_checkpoint: Option<UInt53>,
     pub(crate) affected_address: Option<SuiAddress>,
     pub(crate) sent_address: Option<SuiAddress>,
     pub(crate) input_object: Option<SuiAddress>,
