@@ -180,6 +180,7 @@ pub enum SuiObjectResponseError {
     Unknown,
     #[error("Display Error: {:?}", error)]
     DisplayError { error: String },
+    // TODO: also integrate SuiPastObjectResponse (VersionNotFound,  VersionTooHigh)
 }
 
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
