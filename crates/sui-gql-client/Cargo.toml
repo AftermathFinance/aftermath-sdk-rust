@@ -31,7 +31,6 @@ queries   = ["dep:af-sui-types", "dep:itertools", "scalars"]
 raw       = ["dep:serde_json"]
 reqwest   = ["cynic/http-reqwest", "dep:reqwest", "raw"]
 scalars   = ["sui-gql-schema/scalars"]
-unstable  = ["sui-gql-schema/unstable"]
 
 
 [dependencies]
