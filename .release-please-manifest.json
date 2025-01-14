@@ -16,6 +16,6 @@
   "crates/af-pyth-wrapper": "0.16.0",
   "crates/pyth-hermes-client": "0.2.5",
   "crates/sui-jsonrpc": "0.11.0",
-  "crates/wormhole-sui-sdk": "0.9.0",
+  "crates/wormhole-sui-sdk": "0.9.1",
   "crates/pyth-sui-sdk": "0.14.0"
 }
