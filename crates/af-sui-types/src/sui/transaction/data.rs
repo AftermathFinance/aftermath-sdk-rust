@@ -66,7 +66,6 @@ impl TransactionData {
 
     /// Deserialize a transaction from base64 bytes.
     pub fn decode_base64(
-        &self,
         value: impl AsRef<[u8]>,
     ) -> Result<Self, TransactionFromBase64Error> {
         Ok(bcs::from_bytes(&decode_base64_default(value)?)?)
