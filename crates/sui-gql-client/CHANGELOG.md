@@ -1,5 +1,13 @@
 # Changelog
 
+* The following workspace dependencies were updated
+  * dependencies
+    * sui-gql-schema bumped from 0.8.0 to 0.8.1
+    * af-sui-types bumped from 0.7.0 to 0.7.1
+    * af-move-type bumped from 0.8.0 to 0.8.1
+  * build-dependencies
+    * sui-gql-schema bumped from 0.8.0 to 0.8.1
+
 ## [0.14.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-gql-client-v0.14.0...sui-gql-client-v0.14.1) (2025-01-17)
 
 

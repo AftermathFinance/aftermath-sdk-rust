@@ -5,6 +5,13 @@
     * af-sui-pkg-sdk bumped from 0.8.0 to 0.8.1
     * move-stdlib-sdk bumped from 0.9.0 to 0.9.1
 
+* The following workspace dependencies were updated
+  * dependencies
+    * af-move-type bumped from 0.8.0 to 0.8.1
+    * af-sui-pkg-sdk bumped from 0.8.1 to 0.8.2
+    * af-sui-types bumped from 0.7.0 to 0.7.1
+    * move-stdlib-sdk bumped from 0.9.1 to 0.9.2
+
 ## [0.10.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-framework-sdk-v0.9.2...sui-framework-sdk-v0.10.0) (2025-01-14)
 
 

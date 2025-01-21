@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-sui-types-v0.7.0...af-sui-types-v0.7.1) (2025-01-21)
+
+
+### Features
+
+* **af-sui-types:** export `TransactionFromBase64Error` ([3c1640b](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/3c1640bd781d158d518572375d1855cc43b58a94))
+* **af-sui-types:** use string for `TransactionFromBase64Error::Base64` ([3043e34](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/3043e3402faa2c4503235dc3505667b6e20a8858))
+
 ## [0.7.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-sui-types-v0.6.2...af-sui-types-v0.7.0) (2025-01-14)
 
 

@@ -1,5 +1,9 @@
 # Changelog
 
+* The following workspace dependencies were updated
+  * dependencies
+    * af-sui-types bumped from 0.7.0 to 0.7.1
+
 ## [0.8.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.7.3...af-move-type-v0.8.0) (2025-01-14)
 
 

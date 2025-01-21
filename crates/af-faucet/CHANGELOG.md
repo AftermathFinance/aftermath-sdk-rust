@@ -6,6 +6,14 @@
     * move-stdlib-sdk bumped from 0.9.0 to 0.9.1
     * sui-framework-sdk bumped from 0.10.0 to 0.10.1
 
+* The following workspace dependencies were updated
+  * dependencies
+    * af-move-type bumped from 0.8.0 to 0.8.1
+    * af-sui-pkg-sdk bumped from 0.8.1 to 0.8.2
+    * af-sui-types bumped from 0.7.0 to 0.7.1
+    * move-stdlib-sdk bumped from 0.9.1 to 0.9.2
+    * sui-framework-sdk bumped from 0.10.1 to 0.10.2
+
 ## [0.11.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-faucet-v0.10.2...af-faucet-v0.11.0) (2025-01-14)
 
 
