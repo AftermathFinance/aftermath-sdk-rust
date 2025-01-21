@@ -1,7 +1,7 @@
 [package]
 description = "Move types for the `utilities` package and off-chain numerical types for reproducing calculations"
 name        = "af-utilities"
-version     = "0.7.0"
+version     = "0.7.1"
 
 authors.workspace    = true
 categories.workspace = true
@@ -24,7 +24,7 @@ rustdoc-args = [
 workspace = true
 
 [dependencies]
-af-sui-types = { version = "0.7.0", path = "../af-sui-types", features = ["u256"] }
+af-sui-types = { version = "0.7.1", path = "../af-sui-types", features = ["u256"] }
 
 num-traits = "0.2"
 serde      = "1"

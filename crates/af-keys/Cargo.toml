@@ -1,7 +1,7 @@
 [package]
 description = "Light-weight, read-only version of Sui's file-based keystore."
 name        = "af-keys"
-version     = "0.6.0"
+version     = "0.6.1"
 
 authors.workspace    = true
 categories.workspace = true
@@ -38,7 +38,7 @@ signature     = "2"
 strum         = { version = "0.26", features = ["derive"] }
 thiserror     = "2"
 
-af-sui-types = { version = "0.7.0", features = ["hash"], path = "../af-sui-types" }
+af-sui-types = { version = "0.7.1", features = ["hash"], path = "../af-sui-types" }
 
 [dev-dependencies]
 tempfile = "3"

@@ -10,6 +10,18 @@
   * dependencies
     * sui-gql-client bumped from 0.14.0 to 0.14.1
 
+* The following workspace dependencies were updated
+  * dependencies
+    * af-move-type bumped from 0.8.0 to 0.8.1
+    * af-sui-pkg-sdk bumped from 0.8.1 to 0.8.2
+    * af-sui-types bumped from 0.7.0 to 0.7.1
+    * af-utilities bumped from 0.7.0 to 0.7.1
+    * move-stdlib-sdk bumped from 0.9.1 to 0.9.2
+    * sui-framework-sdk bumped from 0.10.1 to 0.10.2
+    * sui-gql-client bumped from 0.14.1 to 0.14.2
+  * build-dependencies
+    * sui-gql-schema bumped from 0.8.0 to 0.8.1
+
 ## [0.23.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.22.2...af-iperps-v0.23.0) (2025-01-14)
 
 

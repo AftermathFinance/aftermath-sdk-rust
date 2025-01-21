@@ -1,5 +1,9 @@
 # Changelog
 
+* The following workspace dependencies were updated
+  * dependencies
+    * af-sui-types bumped from 0.7.0 to 0.7.1
+
 ## [4.1.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-ptbuilder-v4.0.0...af-ptbuilder-v4.1.0) (2025-01-17)
 
 

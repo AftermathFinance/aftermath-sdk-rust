@@ -1,7 +1,7 @@
 [package]
 description = "Programmable transaction builder and macros (offline)"
 name        = "af-ptbuilder"
-version     = "4.1.0"
+version     = "4.1.1"
 
 authors.workspace    = true
 categories.workspace = true
@@ -30,7 +30,7 @@ serde         = { version = "1", features = ["derive"] }
 sui-sdk-types = "0.0.2"
 thiserror     = "2"
 
-af-sui-types = { version = "0.7.0", path = "../af-sui-types" }
+af-sui-types = { version = "0.7.1", path = "../af-sui-types" }
 
 
 [dev-dependencies]
