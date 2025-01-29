@@ -41,7 +41,7 @@ scalars = ["sui-gql-schema/scalars"]
 
 
 [dependencies]
-graphql-extract = { version = "0.0.1", path = "../graphql-extract", optional = true }
+graphql-extract = { version = "0.0.2", path = "../graphql-extract", optional = true }
 sui-gql-schema  = { version = "0.8.1", path = "../sui-gql-schema", default-features = false }
 
 bimap            = "0.6"

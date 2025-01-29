@@ -2,7 +2,7 @@
 autotests   = false
 description = "Macro to extract data from deeply nested types representing GraphQL results"
 name        = "graphql-extract"
-version     = "0.0.1"
+version     = "0.0.2"
 
 authors.workspace    = true
 categories.workspace = true
