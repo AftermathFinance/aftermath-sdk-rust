@@ -33,7 +33,7 @@ af-sui-types      = { version = "0.7.3", path = "../af-sui-types" }
 af-utilities      = { version = "0.7.3", path = "../af-utilities" }
 sui-framework-sdk = { version = "0.10.5", path = "../sui-framework-sdk" }
 
-derive_more = { version = "1", features = ["display", "from", "is_variant", "try_into"] }
+derive_more = { version = "2", features = ["display", "from", "is_variant", "try_into"] }
 remain      = "0.2"
 serde       = "1"
 serde_json  = "1"

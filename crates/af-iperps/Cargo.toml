@@ -47,7 +47,7 @@ move-stdlib-sdk   = { version = "0.9.5", path = "../move-stdlib-sdk" }
 sui-framework-sdk = { version = "0.10.5", path = "../sui-framework-sdk" }
 
 clap        = { version = "4", features = ["derive"] }
-derive_more = { version = "1", features = ["display", "from", "is_variant", "try_into"] }
+derive_more = { version = "2", features = ["display", "from", "is_variant", "try_into"] }
 remain      = "0.2"
 serde       = "1"
 thiserror   = "2"

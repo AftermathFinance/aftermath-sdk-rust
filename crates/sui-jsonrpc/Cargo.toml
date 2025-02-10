@@ -32,7 +32,7 @@ default    = ["client"]
 af-sui-types  = { version = "0.7.3", path = "../af-sui-types" }
 bcs           = "0.1"
 colored       = "3"
-derive_more   = { version = "1", features = ["from"] }
+derive_more   = { version = "2", features = ["from"] }
 enum_dispatch = "0.3"
 itertools     = "0.14"
 json_to_table = "0.6"

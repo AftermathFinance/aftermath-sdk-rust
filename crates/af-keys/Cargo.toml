@@ -25,7 +25,7 @@ workspace = true
 
 [dependencies]
 bcs           = "0.1"
-derive_more   = { version = "1", features = ["as_ref", "from"] }
+derive_more   = { version = "2", features = ["as_ref", "from"] }
 enum_dispatch = "0.3"
 eyre          = "0.6"
 fastcrypto    = ">=0.1,<0.1.9"

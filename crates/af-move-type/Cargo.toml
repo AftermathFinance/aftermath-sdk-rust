@@ -29,7 +29,7 @@ af-sui-types        = { version = "0.7.3", path = "../af-sui-types", features = 
 
 bcs           = "0.1"
 derive-where  = "1"
-derive_more   = { version = "1", features = ["deref", "deref_mut", "from", "into"] }
+derive_more   = { version = "2", features = ["deref", "deref_mut", "from", "into"] }
 serde         = "1"
 serde_json    = "1"
 serde_with    = "3"
