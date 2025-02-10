@@ -30,7 +30,7 @@ af-sui-types    = { version = "0.7.3", path = "../af-sui-types" }
 move-stdlib-sdk = { version = "0.9.5", path = "../move-stdlib-sdk" }
 
 derive-new  = "0.7"
-derive_more = { version = "1", features = ["from"] }
+derive_more = { version = "2", features = ["from"] }
 hex         = "0.4"
 serde       = "1"
 serde_with  = "3"

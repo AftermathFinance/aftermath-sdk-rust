@@ -47,7 +47,7 @@ sui-gql-schema  = { version = "0.8.4", path = "../sui-gql-schema", default-featu
 bimap            = "0.6"
 clap             = { version = "4", features = ["derive"] }
 cynic            = "3"
-derive_more      = { version = "1", features = ["display"] }
+derive_more      = { version = "2", features = ["display"] }
 extension-traits = "2"
 serde            = "1"
 tap              = "1"
