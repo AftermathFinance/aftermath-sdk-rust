@@ -30,7 +30,7 @@ af-sui-types = { version = "0.7.3", path = "../af-sui-types", features = ["u256"
 
 derive-new = "0.7.0"
 serde      = "1"
-tabled     = "0.16"
+tabled     = "0.18"
 
 [dev-dependencies]
 anyhow      = "1"
