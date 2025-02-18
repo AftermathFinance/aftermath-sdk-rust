@@ -44,7 +44,7 @@ derive_more = { version = "2", features = ["from_str"] }
 
 # for u256 (optional)
 primitive-types = { version = "0.12", features = ["fp-conversion"], optional = true }
-rand            = { version = "0.8", optional = true }
+rand            = { version = "0.9", optional = true }
 uint            = { version = "0.9", optional = true }
 
 # for fuzzing tests (optional)
