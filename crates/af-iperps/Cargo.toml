@@ -43,7 +43,7 @@ af-move-type      = { version = "0.8.7", path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.8.9", path = "../af-sui-pkg-sdk" }
 af-sui-types      = { version = "0.7.6", path = "../af-sui-types" }
 af-utilities      = { version = "0.8.2", path = "../af-utilities" }
-move-stdlib-sdk   = { version = "0.9.7", path = "../move-stdlib-sdk" }
+move-stdlib-sdk   = { version = "0.9.8", path = "../move-stdlib-sdk" }
 sui-framework-sdk = { version = "0.10.9", path = "../sui-framework-sdk" }
 
 clap        = { version = "4", features = ["derive"] }

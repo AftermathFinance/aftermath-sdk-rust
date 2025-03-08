@@ -32,7 +32,7 @@ af-move-type      = { version = "0.8.7", path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.8.9", path = "../af-sui-pkg-sdk" }
 af-sui-types      = { version = "0.7.6", path = "../af-sui-types" }
 sui-framework-sdk = { version = "0.10.9", path = "../sui-framework-sdk" }
-wormhole-sui-sdk  = { version = "0.10.8", path = "../wormhole-sui-sdk" }
+wormhole-sui-sdk  = { version = "0.10.9", path = "../wormhole-sui-sdk" }
 
 bcs       = "0.1"
 hex       = "0.4.3"
