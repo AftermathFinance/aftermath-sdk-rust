@@ -27,7 +27,7 @@ workspace = true
 af-move-type    = { version = "0.8.7", path = "../af-move-type" }
 af-sui-pkg-sdk  = { version = "0.8.9", path = "../af-sui-pkg-sdk" }
 af-sui-types    = { version = "0.7.6", path = "../af-sui-types" }
-move-stdlib-sdk = { version = "0.9.7", path = "../move-stdlib-sdk" }
+move-stdlib-sdk = { version = "0.9.8", path = "../move-stdlib-sdk" }
 
 derive-new  = "0.7"
 derive_more = { version = "2", features = ["from"] }
