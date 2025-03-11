@@ -74,14 +74,12 @@ sui_pkg_sdk!(perpetuals {
         /// The user needs to share such details with the 3rd party only.
         struct StopOrderTicket<!phantom T> has key {
             id: UID,
-            /// Save user address. This allow only the user to cancel the ticket eventually.
-            user_address: address,
-            /// Timestamp after which the order cannot be placed anymore
-            expire_timestamp: u64,
+            /// Account id for user
+            account_id: u64,
             /// Vector containing the blake2b hash obtained by the offchain
             /// application of blake2b on the following parameters:
             /// - clearing_house_id: ID
-            /// - account_id: u64
+            /// - expire_timestamp: u64
             /// - is_limit_order: `true` if limit order, `false` if market order
             /// - stop_index_price: u256
             /// - ge_stop_index_price: `true` means the order can be placed when
@@ -90,6 +88,7 @@ sui_pkg_sdk!(perpetuals {
             /// - size: u64
             /// - price: u64 (can be set at random value if `is_limit_order` is false)
             /// - order_type: u64 (can be set at random value if `is_limit_order` is false)
+            /// - reduce_only: bool
             /// - salt: vector<u8>
             encrypted_details: vector<u8>
         }
@@ -179,9 +178,9 @@ sui_pkg_sdk!(perpetuals {
             quote_filled_bid: IFixed,
             base_posted_ask: IFixed,
             base_posted_bid: IFixed,
-            /// This would be the `mark_price` used in the eventuality the session contains a liquidation.
-            /// Set at 0 in case there is no liquidation in the session.
-            mark_price: IFixed,
+            base_liquidated: IFixed,
+            quote_liquidated: IFixed,
+            is_liqee_long: bool,
             bad_debt: IFixed
         }
     }
@@ -326,32 +325,30 @@ sui_pkg_sdk!(perpetuals {
             mkt_funding_rate_short: IFixed
         }
 
+        struct FilledMakerOrders has copy, drop {
+            events: vector<FilledMakerOrder>
+        }
+
         struct FilledMakerOrder has copy, drop {
             ch_id: ID,
             maker_account_id: u64,
-            maker_collateral: IFixed,
-            collateral_change_usd: IFixed,
+            taker_account_id: u64,
             order_id: u128,
-            maker_size: u64,
-            maker_final_size: u64,
-            maker_base_amount: IFixed,
-            maker_quote_amount: IFixed,
-            maker_pending_asks_quantity: IFixed,
-            maker_pending_bids_quantity: IFixed,
+            filled_size: u64,
+            remaining_size: u64,
+            pnl: IFixed,
+            fees: IFixed,
         }
 
         struct FilledTakerOrder has copy, drop {
             ch_id: ID,
             taker_account_id: u64,
-            taker_collateral: IFixed,
-            collateral_change_usd: IFixed,
+            taker_pnl: IFixed,
+            taker_fees: IFixed,
             base_asset_delta_ask: IFixed,
             quote_asset_delta_ask: IFixed,
             base_asset_delta_bid: IFixed,
             quote_asset_delta_bid: IFixed,
-            taker_base_amount: IFixed,
-            taker_quote_amount: IFixed,
-            liquidated_volume: IFixed,
         }
 
         struct OrderbookPostReceipt has copy, drop {
@@ -391,13 +388,24 @@ sui_pkg_sdk!(perpetuals {
             liqee_account_id: u64,
             liqor_account_id: u64,
             is_liqee_long: bool,
-            size_liquidated: u64,
-            mark_price: IFixed,
-            liqee_collateral_change_usd: IFixed,
-            liqee_collateral: IFixed,
-            liqee_base_amount: IFixed,
-            liqee_quote_amount: IFixed,
+            base_liquidated: IFixed,
+            quote_liquidated: IFixed,
+            liqee_pnl: IFixed,
+            liquidation_fees: IFixed,
+            force_cancel_fees: IFixed,
+            insurance_fund_fees: IFixed,
             bad_debt: IFixed
+        }
+
+        struct PerfomedLiquidation has copy, drop {
+            ch_id: ID,
+            liqee_account_id: u64,
+            liqor_account_id: u64,
+            is_liqee_long: bool,
+            base_liquidated: IFixed,
+            quote_liquidated: IFixed,
+            liqor_pnl: IFixed,
+            liqor_fees: IFixed,
         }
 
         struct UpdatedCumFundings has copy, drop {
@@ -414,15 +422,16 @@ sui_pkg_sdk!(perpetuals {
         }
 
         struct CreatedStopOrderTicket has copy, drop {
+            ticket_id: ID,
             account_id: u64,
             recipient: address,
             encrypted_details: vector<u8>
         }
 
         struct DeletedStopOrderTicket has copy, drop {
-            id: ID,
-            user_address: address,
-            processed: bool
+            ticket_id: ID,
+            account_id: u64,
+            executed: bool
         }
 
         struct CreatedMarginRatiosProposal has copy, drop {
@@ -579,6 +588,14 @@ sui_pkg_sdk!(perpetuals {
             account_id: u64,
             collateral: u64,
             subaccount_collateral_after: u64
+        }
+
+        struct CreatedMarketPositionSubAccount has copy, drop {
+            ch_id: ID,
+            subaccount_id: ID,
+            account_id: u64,
+            mkt_funding_rate_long: IFixed,
+            mkt_funding_rate_short: IFixed
         }
 
         struct AllocatedCollateralSubAccount has copy, drop {
