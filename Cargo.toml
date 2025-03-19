@@ -18,3 +18,7 @@ unwrap_used         = "warn"
 # https://github.com/eyre-rs/color-eyre?tab=readme-ov-file#improving-perf-on-debug-builds
 [profile.dev.package.backtrace]
 opt-level = 3
+
+[patch.crates-io.sui-sdk-types]
+branch = "transaction-kind-patch"
+git    = "https://github.com/unmaykr-aftermath/sui-rust-sdk.git"
