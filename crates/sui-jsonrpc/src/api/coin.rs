@@ -1,7 +1,7 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
-use af_sui_types::{Address as SuiAddress, ObjectId};
+use af_sui_types::Address as SuiAddress;
 use jsonrpsee::proc_macros::rpc;
 
 use crate::msgs::{Balance, CoinPage, SuiCoinMetadata, Supply};
@@ -14,7 +14,7 @@ pub trait CoinReadApi {
         &self,
         owner: SuiAddress,
         coin_type: Option<String>,
-        cursor: Option<ObjectId>,
+        cursor: Option<String>,
         limit: Option<usize>,
     ) -> RpcResult<CoinPage>;
 
@@ -23,7 +23,7 @@ pub trait CoinReadApi {
     async fn get_all_coins(
         &self,
         owner: SuiAddress,
-        cursor: Option<ObjectId>,
+        cursor: Option<String>,
         limit: Option<usize>,
     ) -> RpcResult<CoinPage>;
 
