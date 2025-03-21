@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-pyth-wrapper-v0.19.0...af-pyth-wrapper-v0.19.1)
+
+### ⚙️ Miscellaneous Tasks
+
+- *(graphql-extract)* Release v0.0.7 - ([4ad0f9c](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/4ad0f9c3efddb947fad1e81463b64afd95f4be7d))
+
+
 ## [0.18.4](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-pyth-wrapper-v0.18.3...af-pyth-wrapper-v0.18.4)
 
 ### ⚙️ Miscellaneous Tasks
