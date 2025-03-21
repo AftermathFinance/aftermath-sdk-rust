@@ -13,14 +13,6 @@ pub fn af_iperps::account::Account<T>::move_instance(self, address: sui_sdk_type
 pub fn af_iperps::account::Account<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::account::AccountTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::account::Account<T>
 pub fn af_iperps::account::Account<T>::new(id: sui_framework_sdk::object::UID, account_id: u64, collateral: sui_framework_sdk::balance::Balance<T>) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::DepositedCollateral<af_move_type::otw::Otw>
-pub fn af_iperps::events::DepositedCollateral<af_move_type::otw::Otw>::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::WithdrewCollateral<af_move_type::otw::Otw>
-pub fn af_iperps::events::WithdrewCollateral<af_move_type::otw::Otw>::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::account::Account<T>
 pub fn af_iperps::account::Account<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::HasKey for af_iperps::account::Account<T>
@@ -58,15 +50,14 @@ impl<T: af_move_type::MoveType> core::str::traits::FromStr for af_iperps::accoun
 pub type af_iperps::account::AccountTypeTag<T>::Err = af_move_type::ParseStructTagError
 pub fn af_iperps::account::AccountTypeTag<T>::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::account::StopOrderTicket<T: af_move_type::MoveType>
+pub af_iperps::account::StopOrderTicket::account_id: u64
 pub af_iperps::account::StopOrderTicket::encrypted_details: af_move_type::vector::MoveVec<u8>
-pub af_iperps::account::StopOrderTicket::expire_timestamp: u64
 pub af_iperps::account::StopOrderTicket::id: sui_framework_sdk::object::UID
-pub af_iperps::account::StopOrderTicket::user_address: sui_sdk_types::address::Address
 impl<T: af_move_type::MoveType> af_iperps::account::StopOrderTicket<T>
 pub fn af_iperps::account::StopOrderTicket<T>::move_instance(self, address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::account::StopOrderTicket<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::account::StopOrderTicketTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::account::StopOrderTicket<T>
-pub fn af_iperps::account::StopOrderTicket<T>::new(id: sui_framework_sdk::object::UID, user_address: sui_sdk_types::address::Address, expire_timestamp: u64, encrypted_details: af_move_type::vector::MoveVec<u8>) -> Self
+pub fn af_iperps::account::StopOrderTicket<T>::new(id: sui_framework_sdk::object::UID, account_id: u64, encrypted_details: af_move_type::vector::MoveVec<u8>) -> Self
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::account::StopOrderTicket<T>
 pub fn af_iperps::account::StopOrderTicket<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::HasKey for af_iperps::account::StopOrderTicket<T>
@@ -161,36 +152,6 @@ pub fn af_iperps::clearing_house::ClearingHouse<T>::move_instance(self, address:
 pub fn af_iperps::clearing_house::ClearingHouse<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::clearing_house::ClearingHouseTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::clearing_house::ClearingHouse<T>
 pub fn af_iperps::clearing_house::ClearingHouse<T>::new(id: sui_framework_sdk::object::UID, version: u64, market_params: af_iperps::market::MarketParams, market_state: af_iperps::market::MarketState) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedBaseOracleTolerance
-pub fn af_iperps::events::UpdatedBaseOracleTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedCollateralOracleTolerance
-pub fn af_iperps::events::UpdatedCollateralOracleTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedCumFundings
-pub fn af_iperps::events::UpdatedCumFundings::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFees
-pub fn af_iperps::events::UpdatedFees::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFunding
-pub fn af_iperps::events::UpdatedFunding::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFundingParameters
-pub fn af_iperps::events::UpdatedFundingParameters::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedLiquidationTolerance
-pub fn af_iperps::events::UpdatedLiquidationTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMarginRatios
-pub fn af_iperps::events::UpdatedMarginRatios::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMaxPendingOrders
-pub fn af_iperps::events::UpdatedMaxPendingOrders::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMinOrderUsdValue
-pub fn af_iperps::events::UpdatedMinOrderUsdValue::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedOpenInterestAndFeesAccrued
-pub fn af_iperps::events::UpdatedOpenInterestAndFeesAccrued::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedPremiumTwap
-pub fn af_iperps::events::UpdatedPremiumTwap::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedSpreadTwap
-pub fn af_iperps::events::UpdatedSpreadTwap::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedSpreadTwapParameters
-pub fn af_iperps::events::UpdatedSpreadTwapParameters::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::WithdrewFees
-pub fn af_iperps::events::WithdrewFees::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::clearing_house::ClearingHouse<T>
 pub fn af_iperps::clearing_house::ClearingHouse<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_iperps::math::OrderBookUnits for af_iperps::clearing_house::ClearingHouse<T>
@@ -412,16 +373,18 @@ pub struct af_iperps::clearing_house::SessionSummary
 pub af_iperps::clearing_house::SessionSummary::bad_debt: af_utilities::types::ifixed::IFixed
 pub af_iperps::clearing_house::SessionSummary::base_filled_ask: af_utilities::types::ifixed::IFixed
 pub af_iperps::clearing_house::SessionSummary::base_filled_bid: af_utilities::types::ifixed::IFixed
+pub af_iperps::clearing_house::SessionSummary::base_liquidated: af_utilities::types::ifixed::IFixed
 pub af_iperps::clearing_house::SessionSummary::base_posted_ask: af_utilities::types::ifixed::IFixed
 pub af_iperps::clearing_house::SessionSummary::base_posted_bid: af_utilities::types::ifixed::IFixed
-pub af_iperps::clearing_house::SessionSummary::mark_price: af_utilities::types::ifixed::IFixed
+pub af_iperps::clearing_house::SessionSummary::is_liqee_long: bool
 pub af_iperps::clearing_house::SessionSummary::quote_filled_ask: af_utilities::types::ifixed::IFixed
 pub af_iperps::clearing_house::SessionSummary::quote_filled_bid: af_utilities::types::ifixed::IFixed
+pub af_iperps::clearing_house::SessionSummary::quote_liquidated: af_utilities::types::ifixed::IFixed
 impl af_iperps::clearing_house::SessionSummary
 pub fn af_iperps::clearing_house::SessionSummary::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::clearing_house::SessionSummary::type_(address: sui_sdk_types::address::Address) -> af_iperps::clearing_house::SessionSummaryTypeTag
 impl af_iperps::clearing_house::SessionSummary
-pub fn af_iperps::clearing_house::SessionSummary::new(base_filled_ask: af_utilities::types::ifixed::IFixed, base_filled_bid: af_utilities::types::ifixed::IFixed, quote_filled_ask: af_utilities::types::ifixed::IFixed, quote_filled_bid: af_utilities::types::ifixed::IFixed, base_posted_ask: af_utilities::types::ifixed::IFixed, base_posted_bid: af_utilities::types::ifixed::IFixed, mark_price: af_utilities::types::ifixed::IFixed, bad_debt: af_utilities::types::ifixed::IFixed) -> Self
+pub fn af_iperps::clearing_house::SessionSummary::new(base_filled_ask: af_utilities::types::ifixed::IFixed, base_filled_bid: af_utilities::types::ifixed::IFixed, quote_filled_ask: af_utilities::types::ifixed::IFixed, quote_filled_bid: af_utilities::types::ifixed::IFixed, base_posted_ask: af_utilities::types::ifixed::IFixed, base_posted_bid: af_utilities::types::ifixed::IFixed, base_liquidated: af_utilities::types::ifixed::IFixed, quote_liquidated: af_utilities::types::ifixed::IFixed, is_liqee_long: bool, bad_debt: af_utilities::types::ifixed::IFixed) -> Self
 impl af_move_type::MoveStruct for af_iperps::clearing_house::SessionSummary
 pub type af_iperps::clearing_house::SessionSummary::StructTag = af_iperps::clearing_house::SessionSummaryTypeTag
 impl af_move_type::MoveType for af_iperps::clearing_house::SessionSummary
@@ -464,16 +427,6 @@ pub fn af_iperps::clearing_house::Vault<T>::move_instance(self, address: sui_sdk
 pub fn af_iperps::clearing_house::Vault<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::clearing_house::VaultTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::clearing_house::Vault<T>
 pub fn af_iperps::clearing_house::Vault<T>::new(collateral_balance: sui_framework_sdk::balance::Balance<T>, insurance_fund_balance: sui_framework_sdk::balance::Balance<T>, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::DonatedToInsuranceFund
-pub fn af_iperps::events::DonatedToInsuranceFund::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::WithdrewFees
-pub fn af_iperps::events::WithdrewFees::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::WithdrewInsuranceFund
-pub fn af_iperps::events::WithdrewInsuranceFund::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::clearing_house::Vault<T>
 pub fn af_iperps::clearing_house::Vault<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::clearing_house::Vault<T>
@@ -562,74 +515,6 @@ pub mod af_iperps::event_ext
 pub mod af_iperps::event_ext::apply
 pub trait af_iperps::event_ext::apply::Apply<T>
 pub fn af_iperps::event_ext::apply::Apply::apply(&self, target: &mut T)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::DepositedCollateral<af_move_type::otw::Otw>
-pub fn af_iperps::events::DepositedCollateral<af_move_type::otw::Otw>::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::WithdrewCollateral<af_move_type::otw::Otw>
-pub fn af_iperps::events::WithdrewCollateral<af_move_type::otw::Otw>::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedBaseOracleTolerance
-pub fn af_iperps::events::UpdatedBaseOracleTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedCollateralOracleTolerance
-pub fn af_iperps::events::UpdatedCollateralOracleTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedCumFundings
-pub fn af_iperps::events::UpdatedCumFundings::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFees
-pub fn af_iperps::events::UpdatedFees::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFunding
-pub fn af_iperps::events::UpdatedFunding::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFundingParameters
-pub fn af_iperps::events::UpdatedFundingParameters::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedLiquidationTolerance
-pub fn af_iperps::events::UpdatedLiquidationTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMarginRatios
-pub fn af_iperps::events::UpdatedMarginRatios::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMaxPendingOrders
-pub fn af_iperps::events::UpdatedMaxPendingOrders::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMinOrderUsdValue
-pub fn af_iperps::events::UpdatedMinOrderUsdValue::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedOpenInterestAndFeesAccrued
-pub fn af_iperps::events::UpdatedOpenInterestAndFeesAccrued::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedPremiumTwap
-pub fn af_iperps::events::UpdatedPremiumTwap::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedSpreadTwap
-pub fn af_iperps::events::UpdatedSpreadTwap::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedSpreadTwapParameters
-pub fn af_iperps::events::UpdatedSpreadTwapParameters::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::WithdrewFees
-pub fn af_iperps::events::WithdrewFees::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::DonatedToInsuranceFund
-pub fn af_iperps::events::DonatedToInsuranceFund::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::WithdrewFees
-pub fn af_iperps::events::WithdrewFees::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::WithdrewInsuranceFund
-pub fn af_iperps::events::WithdrewInsuranceFund::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AcceptedPositionFeesProposal
-pub fn af_iperps::events::AcceptedPositionFeesProposal::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::CanceledOrders
-pub fn af_iperps::events::CanceledOrders::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledMakerOrder
-pub fn af_iperps::events::FilledMakerOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledTakerOrder
-pub fn af_iperps::events::FilledTakerOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::LiquidatedPosition
-pub fn af_iperps::events::LiquidatedPosition::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::PostedOrder
-pub fn af_iperps::events::PostedOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::ResettedPositionFees
-pub fn af_iperps::events::ResettedPositionFees::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::SettledFunding
-pub fn af_iperps::events::SettledFunding::apply(&self, target: &mut af_iperps::position::Position)
 impl<T: af_iperps::event_ext::apply::Orderbook> af_iperps::event_ext::apply::Apply<T> for af_iperps::events::CanceledOrder
 pub fn af_iperps::events::CanceledOrder::apply(&self, target: &mut T)
 impl<T: af_iperps::event_ext::apply::Orderbook> af_iperps::event_ext::apply::Apply<T> for af_iperps::events::FilledMakerOrder
@@ -712,8 +597,6 @@ pub fn af_iperps::events::AcceptedPositionFeesProposal::move_instance(self, addr
 pub fn af_iperps::events::AcceptedPositionFeesProposal::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::AcceptedPositionFeesProposalTypeTag
 impl af_iperps::events::AcceptedPositionFeesProposal
 pub fn af_iperps::events::AcceptedPositionFeesProposal::new(ch_id: sui_framework_sdk::object::ID, account_id: u64, maker_fee: af_utilities::types::ifixed::IFixed, taker_fee: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AcceptedPositionFeesProposal
-pub fn af_iperps::events::AcceptedPositionFeesProposal::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::AcceptedPositionFeesProposal
 pub type af_iperps::events::AcceptedPositionFeesProposal::StructTag = af_iperps::events::AcceptedPositionFeesProposalTypeTag
 impl af_move_type::MoveType for af_iperps::events::AcceptedPositionFeesProposal
@@ -759,12 +642,6 @@ pub fn af_iperps::events::AllocatedCollateral::move_instance(self, address: sui_
 pub fn af_iperps::events::AllocatedCollateral::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::AllocatedCollateralTypeTag
 impl af_iperps::events::AllocatedCollateral
 pub fn af_iperps::events::AllocatedCollateral::new(ch_id: sui_framework_sdk::object::ID, account_id: u64, collateral: u64, account_collateral_after: u64, position_collateral_after: af_utilities::types::ifixed::IFixed, vault_balance_after: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::AllocatedCollateral
 pub type af_iperps::events::AllocatedCollateral::StructTag = af_iperps::events::AllocatedCollateralTypeTag
 impl af_move_type::MoveType for af_iperps::events::AllocatedCollateral
@@ -900,8 +777,6 @@ pub fn af_iperps::events::CanceledOrders::move_instance(self, address: sui_sdk_t
 pub fn af_iperps::events::CanceledOrders::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::CanceledOrdersTypeTag
 impl af_iperps::events::CanceledOrders
 pub fn af_iperps::events::CanceledOrders::new(ch_id: sui_framework_sdk::object::ID, account_id: u64, asks_quantity: af_utilities::types::ifixed::IFixed, bids_quantity: af_utilities::types::ifixed::IFixed, pending_orders: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::CanceledOrders
-pub fn af_iperps::events::CanceledOrders::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::CanceledOrders
 pub type af_iperps::events::CanceledOrders::StructTag = af_iperps::events::CanceledOrdersTypeTag
 impl af_move_type::MoveType for af_iperps::events::CanceledOrders
@@ -1078,6 +953,50 @@ pub fn af_iperps::events::CreatedMarginRatiosProposalTypeTag::fmt(&self, f: &mut
 impl core::str::traits::FromStr for af_iperps::events::CreatedMarginRatiosProposalTypeTag
 pub type af_iperps::events::CreatedMarginRatiosProposalTypeTag::Err = af_move_type::ParseStructTagError
 pub fn af_iperps::events::CreatedMarginRatiosProposalTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
+pub struct af_iperps::events::CreatedMarketPositionSubAccount
+pub af_iperps::events::CreatedMarketPositionSubAccount::account_id: u64
+pub af_iperps::events::CreatedMarketPositionSubAccount::ch_id: sui_framework_sdk::object::ID
+pub af_iperps::events::CreatedMarketPositionSubAccount::mkt_funding_rate_long: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::CreatedMarketPositionSubAccount::mkt_funding_rate_short: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::CreatedMarketPositionSubAccount::subaccount_id: sui_framework_sdk::object::ID
+impl af_iperps::events::CreatedMarketPositionSubAccount
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+impl af_iperps::events::CreatedMarketPositionSubAccount
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::new(ch_id: sui_framework_sdk::object::ID, subaccount_id: sui_framework_sdk::object::ID, account_id: u64, mkt_funding_rate_long: af_utilities::types::ifixed::IFixed, mkt_funding_rate_short: af_utilities::types::ifixed::IFixed) -> Self
+impl af_move_type::MoveStruct for af_iperps::events::CreatedMarketPositionSubAccount
+pub type af_iperps::events::CreatedMarketPositionSubAccount::StructTag = af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+impl af_move_type::MoveType for af_iperps::events::CreatedMarketPositionSubAccount
+pub type af_iperps::events::CreatedMarketPositionSubAccount::TypeTag = af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+impl af_move_type::StaticModule for af_iperps::events::CreatedMarketPositionSubAccount
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::module() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticName for af_iperps::events::CreatedMarketPositionSubAccount
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::name() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticTypeParams for af_iperps::events::CreatedMarketPositionSubAccount
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
+impl core::fmt::Display for af_iperps::events::CreatedMarketPositionSubAccount
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl tabled::tabled::Tabled for af_iperps::events::CreatedMarketPositionSubAccount
+pub const af_iperps::events::CreatedMarketPositionSubAccount::LENGTH: usize
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
+pub fn af_iperps::events::CreatedMarketPositionSubAccount::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
+pub struct af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+pub af_iperps::events::CreatedMarketPositionSubAccountTypeTag::address: sui_sdk_types::address::Address
+impl core::convert::From<af_iperps::events::CreatedMarketPositionSubAccountTypeTag> for sui_sdk_types::type_tag::StructTag
+pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::events::CreatedMarketPositionSubAccountTypeTag) -> Self
+impl core::convert::From<af_iperps::events::CreatedMarketPositionSubAccountTypeTag> for sui_sdk_types::type_tag::TypeTag
+pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::events::CreatedMarketPositionSubAccountTypeTag) -> Self
+impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+pub type af_iperps::events::CreatedMarketPositionSubAccountTypeTag::Error = af_move_type::StructTagError
+pub fn af_iperps::events::CreatedMarketPositionSubAccountTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
+impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+pub type af_iperps::events::CreatedMarketPositionSubAccountTypeTag::Error = af_move_type::TypeTagError
+pub fn af_iperps::events::CreatedMarketPositionSubAccountTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
+impl core::fmt::Display for af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+pub fn af_iperps::events::CreatedMarketPositionSubAccountTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::str::traits::FromStr for af_iperps::events::CreatedMarketPositionSubAccountTypeTag
+pub type af_iperps::events::CreatedMarketPositionSubAccountTypeTag::Err = af_move_type::ParseStructTagError
+pub fn af_iperps::events::CreatedMarketPositionSubAccountTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::CreatedOrderbook
 pub af_iperps::events::CreatedOrderbook::branch_max: u64
 pub af_iperps::events::CreatedOrderbook::branch_min: u64
@@ -1213,11 +1132,12 @@ pub struct af_iperps::events::CreatedStopOrderTicket
 pub af_iperps::events::CreatedStopOrderTicket::account_id: u64
 pub af_iperps::events::CreatedStopOrderTicket::encrypted_details: af_move_type::vector::MoveVec<u8>
 pub af_iperps::events::CreatedStopOrderTicket::recipient: sui_sdk_types::address::Address
+pub af_iperps::events::CreatedStopOrderTicket::ticket_id: sui_framework_sdk::object::ID
 impl af_iperps::events::CreatedStopOrderTicket
 pub fn af_iperps::events::CreatedStopOrderTicket::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::CreatedStopOrderTicket::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::CreatedStopOrderTicketTypeTag
 impl af_iperps::events::CreatedStopOrderTicket
-pub fn af_iperps::events::CreatedStopOrderTicket::new(account_id: u64, recipient: sui_sdk_types::address::Address, encrypted_details: af_move_type::vector::MoveVec<u8>) -> Self
+pub fn af_iperps::events::CreatedStopOrderTicket::new(ticket_id: sui_framework_sdk::object::ID, account_id: u64, recipient: sui_sdk_types::address::Address, encrypted_details: af_move_type::vector::MoveVec<u8>) -> Self
 impl af_move_type::MoveStruct for af_iperps::events::CreatedStopOrderTicket
 pub type af_iperps::events::CreatedStopOrderTicket::StructTag = af_iperps::events::CreatedStopOrderTicketTypeTag
 impl af_move_type::MoveType for af_iperps::events::CreatedStopOrderTicket
@@ -1305,12 +1225,6 @@ pub fn af_iperps::events::DeallocatedCollateral::move_instance(self, address: su
 pub fn af_iperps::events::DeallocatedCollateral::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::DeallocatedCollateralTypeTag
 impl af_iperps::events::DeallocatedCollateral
 pub fn af_iperps::events::DeallocatedCollateral::new(ch_id: sui_framework_sdk::object::ID, account_id: u64, collateral: u64, account_collateral_after: u64, position_collateral_after: af_utilities::types::ifixed::IFixed, vault_balance_after: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::DeallocatedCollateral
 pub type af_iperps::events::DeallocatedCollateral::StructTag = af_iperps::events::DeallocatedCollateralTypeTag
 impl af_move_type::MoveType for af_iperps::events::DeallocatedCollateral
@@ -1476,14 +1390,14 @@ impl core::str::traits::FromStr for af_iperps::events::DeletedPositionFeesPropos
 pub type af_iperps::events::DeletedPositionFeesProposalTypeTag::Err = af_move_type::ParseStructTagError
 pub fn af_iperps::events::DeletedPositionFeesProposalTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::DeletedStopOrderTicket
-pub af_iperps::events::DeletedStopOrderTicket::id: sui_framework_sdk::object::ID
-pub af_iperps::events::DeletedStopOrderTicket::processed: bool
-pub af_iperps::events::DeletedStopOrderTicket::user_address: sui_sdk_types::address::Address
+pub af_iperps::events::DeletedStopOrderTicket::account_id: u64
+pub af_iperps::events::DeletedStopOrderTicket::executed: bool
+pub af_iperps::events::DeletedStopOrderTicket::ticket_id: sui_framework_sdk::object::ID
 impl af_iperps::events::DeletedStopOrderTicket
 pub fn af_iperps::events::DeletedStopOrderTicket::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::DeletedStopOrderTicket::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::DeletedStopOrderTicketTypeTag
 impl af_iperps::events::DeletedStopOrderTicket
-pub fn af_iperps::events::DeletedStopOrderTicket::new(id: sui_framework_sdk::object::ID, user_address: sui_sdk_types::address::Address, processed: bool) -> Self
+pub fn af_iperps::events::DeletedStopOrderTicket::new(ticket_id: sui_framework_sdk::object::ID, account_id: u64, executed: bool) -> Self
 impl af_move_type::MoveStruct for af_iperps::events::DeletedStopOrderTicket
 pub type af_iperps::events::DeletedStopOrderTicket::StructTag = af_iperps::events::DeletedStopOrderTicketTypeTag
 impl af_move_type::MoveType for af_iperps::events::DeletedStopOrderTicket
@@ -1567,8 +1481,6 @@ pub fn af_iperps::events::DepositedCollateral<T>::move_instance(self, address: s
 pub fn af_iperps::events::DepositedCollateral<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::events::DepositedCollateralTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::events::DepositedCollateral<T>
 pub fn af_iperps::events::DepositedCollateral<T>::new(account_id: u64, collateral: u64, account_collateral_after: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::DepositedCollateral<af_move_type::otw::Otw>
-pub fn af_iperps::events::DepositedCollateral<af_move_type::otw::Otw>::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::events::DepositedCollateral<T>
 pub fn af_iperps::events::DepositedCollateral<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::events::DepositedCollateral<T>
@@ -1655,8 +1567,6 @@ pub fn af_iperps::events::DonatedToInsuranceFund::move_instance(self, address: s
 pub fn af_iperps::events::DonatedToInsuranceFund::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::DonatedToInsuranceFundTypeTag
 impl af_iperps::events::DonatedToInsuranceFund
 pub fn af_iperps::events::DonatedToInsuranceFund::new(sender: sui_sdk_types::address::Address, ch_id: sui_framework_sdk::object::ID, new_balance: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::DonatedToInsuranceFund
-pub fn af_iperps::events::DonatedToInsuranceFund::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::DonatedToInsuranceFund
 pub type af_iperps::events::DonatedToInsuranceFund::StructTag = af_iperps::events::DonatedToInsuranceFundTypeTag
 impl af_move_type::MoveType for af_iperps::events::DonatedToInsuranceFund
@@ -1692,23 +1602,18 @@ pub type af_iperps::events::DonatedToInsuranceFundTypeTag::Err = af_move_type::P
 pub fn af_iperps::events::DonatedToInsuranceFundTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::FilledMakerOrder
 pub af_iperps::events::FilledMakerOrder::ch_id: sui_framework_sdk::object::ID
-pub af_iperps::events::FilledMakerOrder::collateral_change_usd: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::FilledMakerOrder::fees: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::FilledMakerOrder::filled_size: u64
 pub af_iperps::events::FilledMakerOrder::maker_account_id: u64
-pub af_iperps::events::FilledMakerOrder::maker_base_amount: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledMakerOrder::maker_collateral: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledMakerOrder::maker_final_size: u64
-pub af_iperps::events::FilledMakerOrder::maker_pending_asks_quantity: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledMakerOrder::maker_pending_bids_quantity: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledMakerOrder::maker_quote_amount: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledMakerOrder::maker_size: u64
 pub af_iperps::events::FilledMakerOrder::order_id: u128
+pub af_iperps::events::FilledMakerOrder::pnl: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::FilledMakerOrder::remaining_size: u64
+pub af_iperps::events::FilledMakerOrder::taker_account_id: u64
 impl af_iperps::events::FilledMakerOrder
 pub fn af_iperps::events::FilledMakerOrder::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::FilledMakerOrder::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::FilledMakerOrderTypeTag
 impl af_iperps::events::FilledMakerOrder
-pub fn af_iperps::events::FilledMakerOrder::new(ch_id: sui_framework_sdk::object::ID, maker_account_id: u64, maker_collateral: af_utilities::types::ifixed::IFixed, collateral_change_usd: af_utilities::types::ifixed::IFixed, order_id: u128, maker_size: u64, maker_final_size: u64, maker_base_amount: af_utilities::types::ifixed::IFixed, maker_quote_amount: af_utilities::types::ifixed::IFixed, maker_pending_asks_quantity: af_utilities::types::ifixed::IFixed, maker_pending_bids_quantity: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledMakerOrder
-pub fn af_iperps::events::FilledMakerOrder::apply(&self, target: &mut af_iperps::position::Position)
+pub fn af_iperps::events::FilledMakerOrder::new(ch_id: sui_framework_sdk::object::ID, maker_account_id: u64, taker_account_id: u64, order_id: u128, filled_size: u64, remaining_size: u64, pnl: af_utilities::types::ifixed::IFixed, fees: af_utilities::types::ifixed::IFixed) -> Self
 impl af_move_type::MoveStruct for af_iperps::events::FilledMakerOrder
 pub type af_iperps::events::FilledMakerOrder::StructTag = af_iperps::events::FilledMakerOrderTypeTag
 impl af_move_type::MoveType for af_iperps::events::FilledMakerOrder
@@ -1744,25 +1649,60 @@ pub fn af_iperps::events::FilledMakerOrderTypeTag::fmt(&self, f: &mut core::fmt:
 impl core::str::traits::FromStr for af_iperps::events::FilledMakerOrderTypeTag
 pub type af_iperps::events::FilledMakerOrderTypeTag::Err = af_move_type::ParseStructTagError
 pub fn af_iperps::events::FilledMakerOrderTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
+pub struct af_iperps::events::FilledMakerOrders
+pub af_iperps::events::FilledMakerOrders::events: af_move_type::vector::MoveVec<af_iperps::events::FilledMakerOrder>
+impl af_iperps::events::FilledMakerOrders
+pub fn af_iperps::events::FilledMakerOrders::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
+pub fn af_iperps::events::FilledMakerOrders::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::FilledMakerOrdersTypeTag
+impl af_iperps::events::FilledMakerOrders
+pub fn af_iperps::events::FilledMakerOrders::new(events: af_move_type::vector::MoveVec<af_iperps::events::FilledMakerOrder>) -> Self
+impl af_move_type::MoveStruct for af_iperps::events::FilledMakerOrders
+pub type af_iperps::events::FilledMakerOrders::StructTag = af_iperps::events::FilledMakerOrdersTypeTag
+impl af_move_type::MoveType for af_iperps::events::FilledMakerOrders
+pub type af_iperps::events::FilledMakerOrders::TypeTag = af_iperps::events::FilledMakerOrdersTypeTag
+impl af_move_type::StaticModule for af_iperps::events::FilledMakerOrders
+pub fn af_iperps::events::FilledMakerOrders::module() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticName for af_iperps::events::FilledMakerOrders
+pub fn af_iperps::events::FilledMakerOrders::name() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticTypeParams for af_iperps::events::FilledMakerOrders
+pub fn af_iperps::events::FilledMakerOrders::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
+impl core::fmt::Display for af_iperps::events::FilledMakerOrders
+pub fn af_iperps::events::FilledMakerOrders::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl tabled::tabled::Tabled for af_iperps::events::FilledMakerOrders
+pub const af_iperps::events::FilledMakerOrders::LENGTH: usize
+pub fn af_iperps::events::FilledMakerOrders::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
+pub fn af_iperps::events::FilledMakerOrders::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
+pub struct af_iperps::events::FilledMakerOrdersTypeTag
+pub af_iperps::events::FilledMakerOrdersTypeTag::address: sui_sdk_types::address::Address
+impl core::convert::From<af_iperps::events::FilledMakerOrdersTypeTag> for sui_sdk_types::type_tag::StructTag
+pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::events::FilledMakerOrdersTypeTag) -> Self
+impl core::convert::From<af_iperps::events::FilledMakerOrdersTypeTag> for sui_sdk_types::type_tag::TypeTag
+pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::events::FilledMakerOrdersTypeTag) -> Self
+impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::events::FilledMakerOrdersTypeTag
+pub type af_iperps::events::FilledMakerOrdersTypeTag::Error = af_move_type::StructTagError
+pub fn af_iperps::events::FilledMakerOrdersTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
+impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::events::FilledMakerOrdersTypeTag
+pub type af_iperps::events::FilledMakerOrdersTypeTag::Error = af_move_type::TypeTagError
+pub fn af_iperps::events::FilledMakerOrdersTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
+impl core::fmt::Display for af_iperps::events::FilledMakerOrdersTypeTag
+pub fn af_iperps::events::FilledMakerOrdersTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::str::traits::FromStr for af_iperps::events::FilledMakerOrdersTypeTag
+pub type af_iperps::events::FilledMakerOrdersTypeTag::Err = af_move_type::ParseStructTagError
+pub fn af_iperps::events::FilledMakerOrdersTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::FilledTakerOrder
 pub af_iperps::events::FilledTakerOrder::base_asset_delta_ask: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::FilledTakerOrder::base_asset_delta_bid: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::FilledTakerOrder::ch_id: sui_framework_sdk::object::ID
-pub af_iperps::events::FilledTakerOrder::collateral_change_usd: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledTakerOrder::liquidated_volume: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::FilledTakerOrder::quote_asset_delta_ask: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::FilledTakerOrder::quote_asset_delta_bid: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::FilledTakerOrder::taker_account_id: u64
-pub af_iperps::events::FilledTakerOrder::taker_base_amount: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledTakerOrder::taker_collateral: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::FilledTakerOrder::taker_quote_amount: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::FilledTakerOrder::taker_fees: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::FilledTakerOrder::taker_pnl: af_utilities::types::ifixed::IFixed
 impl af_iperps::events::FilledTakerOrder
 pub fn af_iperps::events::FilledTakerOrder::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::FilledTakerOrder::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::FilledTakerOrderTypeTag
 impl af_iperps::events::FilledTakerOrder
-pub fn af_iperps::events::FilledTakerOrder::new(ch_id: sui_framework_sdk::object::ID, taker_account_id: u64, taker_collateral: af_utilities::types::ifixed::IFixed, collateral_change_usd: af_utilities::types::ifixed::IFixed, base_asset_delta_ask: af_utilities::types::ifixed::IFixed, quote_asset_delta_ask: af_utilities::types::ifixed::IFixed, base_asset_delta_bid: af_utilities::types::ifixed::IFixed, quote_asset_delta_bid: af_utilities::types::ifixed::IFixed, taker_base_amount: af_utilities::types::ifixed::IFixed, taker_quote_amount: af_utilities::types::ifixed::IFixed, liquidated_volume: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledTakerOrder
-pub fn af_iperps::events::FilledTakerOrder::apply(&self, target: &mut af_iperps::position::Position)
+pub fn af_iperps::events::FilledTakerOrder::new(ch_id: sui_framework_sdk::object::ID, taker_account_id: u64, taker_pnl: af_utilities::types::ifixed::IFixed, taker_fees: af_utilities::types::ifixed::IFixed, base_asset_delta_ask: af_utilities::types::ifixed::IFixed, quote_asset_delta_ask: af_utilities::types::ifixed::IFixed, base_asset_delta_bid: af_utilities::types::ifixed::IFixed, quote_asset_delta_bid: af_utilities::types::ifixed::IFixed) -> Self
 impl af_move_type::MoveStruct for af_iperps::events::FilledTakerOrder
 pub type af_iperps::events::FilledTakerOrder::StructTag = af_iperps::events::FilledTakerOrderTypeTag
 impl af_move_type::MoveType for af_iperps::events::FilledTakerOrder
@@ -1798,23 +1738,21 @@ pub type af_iperps::events::FilledTakerOrderTypeTag::Err = af_move_type::ParseSt
 pub fn af_iperps::events::FilledTakerOrderTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::LiquidatedPosition
 pub af_iperps::events::LiquidatedPosition::bad_debt: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::LiquidatedPosition::base_liquidated: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::LiquidatedPosition::ch_id: sui_framework_sdk::object::ID
+pub af_iperps::events::LiquidatedPosition::force_cancel_fees: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::LiquidatedPosition::insurance_fund_fees: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::LiquidatedPosition::is_liqee_long: bool
 pub af_iperps::events::LiquidatedPosition::liqee_account_id: u64
-pub af_iperps::events::LiquidatedPosition::liqee_base_amount: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::LiquidatedPosition::liqee_collateral: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::LiquidatedPosition::liqee_collateral_change_usd: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::LiquidatedPosition::liqee_quote_amount: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::LiquidatedPosition::liqee_pnl: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::LiquidatedPosition::liqor_account_id: u64
-pub af_iperps::events::LiquidatedPosition::mark_price: af_utilities::types::ifixed::IFixed
-pub af_iperps::events::LiquidatedPosition::size_liquidated: u64
+pub af_iperps::events::LiquidatedPosition::liquidation_fees: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::LiquidatedPosition::quote_liquidated: af_utilities::types::ifixed::IFixed
 impl af_iperps::events::LiquidatedPosition
 pub fn af_iperps::events::LiquidatedPosition::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::LiquidatedPosition::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::LiquidatedPositionTypeTag
 impl af_iperps::events::LiquidatedPosition
-pub fn af_iperps::events::LiquidatedPosition::new(ch_id: sui_framework_sdk::object::ID, liqee_account_id: u64, liqor_account_id: u64, is_liqee_long: bool, size_liquidated: u64, mark_price: af_utilities::types::ifixed::IFixed, liqee_collateral_change_usd: af_utilities::types::ifixed::IFixed, liqee_collateral: af_utilities::types::ifixed::IFixed, liqee_base_amount: af_utilities::types::ifixed::IFixed, liqee_quote_amount: af_utilities::types::ifixed::IFixed, bad_debt: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::LiquidatedPosition
-pub fn af_iperps::events::LiquidatedPosition::apply(&self, target: &mut af_iperps::position::Position)
+pub fn af_iperps::events::LiquidatedPosition::new(ch_id: sui_framework_sdk::object::ID, liqee_account_id: u64, liqor_account_id: u64, is_liqee_long: bool, base_liquidated: af_utilities::types::ifixed::IFixed, quote_liquidated: af_utilities::types::ifixed::IFixed, liqee_pnl: af_utilities::types::ifixed::IFixed, liquidation_fees: af_utilities::types::ifixed::IFixed, force_cancel_fees: af_utilities::types::ifixed::IFixed, insurance_fund_fees: af_utilities::types::ifixed::IFixed, bad_debt: af_utilities::types::ifixed::IFixed) -> Self
 impl af_move_type::MoveStruct for af_iperps::events::LiquidatedPosition
 pub type af_iperps::events::LiquidatedPosition::StructTag = af_iperps::events::LiquidatedPositionTypeTag
 impl af_move_type::MoveType for af_iperps::events::LiquidatedPosition
@@ -1893,6 +1831,53 @@ pub fn af_iperps::events::OrderbookPostReceiptTypeTag::fmt(&self, f: &mut core::
 impl core::str::traits::FromStr for af_iperps::events::OrderbookPostReceiptTypeTag
 pub type af_iperps::events::OrderbookPostReceiptTypeTag::Err = af_move_type::ParseStructTagError
 pub fn af_iperps::events::OrderbookPostReceiptTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
+pub struct af_iperps::events::PerfomedLiquidation
+pub af_iperps::events::PerfomedLiquidation::base_liquidated: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::PerfomedLiquidation::ch_id: sui_framework_sdk::object::ID
+pub af_iperps::events::PerfomedLiquidation::is_liqee_long: bool
+pub af_iperps::events::PerfomedLiquidation::liqee_account_id: u64
+pub af_iperps::events::PerfomedLiquidation::liqor_account_id: u64
+pub af_iperps::events::PerfomedLiquidation::liqor_fees: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::PerfomedLiquidation::liqor_pnl: af_utilities::types::ifixed::IFixed
+pub af_iperps::events::PerfomedLiquidation::quote_liquidated: af_utilities::types::ifixed::IFixed
+impl af_iperps::events::PerfomedLiquidation
+pub fn af_iperps::events::PerfomedLiquidation::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
+pub fn af_iperps::events::PerfomedLiquidation::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::PerfomedLiquidationTypeTag
+impl af_iperps::events::PerfomedLiquidation
+pub fn af_iperps::events::PerfomedLiquidation::new(ch_id: sui_framework_sdk::object::ID, liqee_account_id: u64, liqor_account_id: u64, is_liqee_long: bool, base_liquidated: af_utilities::types::ifixed::IFixed, quote_liquidated: af_utilities::types::ifixed::IFixed, liqor_pnl: af_utilities::types::ifixed::IFixed, liqor_fees: af_utilities::types::ifixed::IFixed) -> Self
+impl af_move_type::MoveStruct for af_iperps::events::PerfomedLiquidation
+pub type af_iperps::events::PerfomedLiquidation::StructTag = af_iperps::events::PerfomedLiquidationTypeTag
+impl af_move_type::MoveType for af_iperps::events::PerfomedLiquidation
+pub type af_iperps::events::PerfomedLiquidation::TypeTag = af_iperps::events::PerfomedLiquidationTypeTag
+impl af_move_type::StaticModule for af_iperps::events::PerfomedLiquidation
+pub fn af_iperps::events::PerfomedLiquidation::module() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticName for af_iperps::events::PerfomedLiquidation
+pub fn af_iperps::events::PerfomedLiquidation::name() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticTypeParams for af_iperps::events::PerfomedLiquidation
+pub fn af_iperps::events::PerfomedLiquidation::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
+impl core::fmt::Display for af_iperps::events::PerfomedLiquidation
+pub fn af_iperps::events::PerfomedLiquidation::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl tabled::tabled::Tabled for af_iperps::events::PerfomedLiquidation
+pub const af_iperps::events::PerfomedLiquidation::LENGTH: usize
+pub fn af_iperps::events::PerfomedLiquidation::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
+pub fn af_iperps::events::PerfomedLiquidation::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
+pub struct af_iperps::events::PerfomedLiquidationTypeTag
+pub af_iperps::events::PerfomedLiquidationTypeTag::address: sui_sdk_types::address::Address
+impl core::convert::From<af_iperps::events::PerfomedLiquidationTypeTag> for sui_sdk_types::type_tag::StructTag
+pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::events::PerfomedLiquidationTypeTag) -> Self
+impl core::convert::From<af_iperps::events::PerfomedLiquidationTypeTag> for sui_sdk_types::type_tag::TypeTag
+pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::events::PerfomedLiquidationTypeTag) -> Self
+impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::events::PerfomedLiquidationTypeTag
+pub type af_iperps::events::PerfomedLiquidationTypeTag::Error = af_move_type::StructTagError
+pub fn af_iperps::events::PerfomedLiquidationTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
+impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::events::PerfomedLiquidationTypeTag
+pub type af_iperps::events::PerfomedLiquidationTypeTag::Error = af_move_type::TypeTagError
+pub fn af_iperps::events::PerfomedLiquidationTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
+impl core::fmt::Display for af_iperps::events::PerfomedLiquidationTypeTag
+pub fn af_iperps::events::PerfomedLiquidationTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::str::traits::FromStr for af_iperps::events::PerfomedLiquidationTypeTag
+pub type af_iperps::events::PerfomedLiquidationTypeTag::Err = af_move_type::ParseStructTagError
+pub fn af_iperps::events::PerfomedLiquidationTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::PostedOrder
 pub af_iperps::events::PostedOrder::account_id: u64
 pub af_iperps::events::PostedOrder::ch_id: sui_framework_sdk::object::ID
@@ -1906,8 +1891,6 @@ pub fn af_iperps::events::PostedOrder::move_instance(self, address: sui_sdk_type
 pub fn af_iperps::events::PostedOrder::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::PostedOrderTypeTag
 impl af_iperps::events::PostedOrder
 pub fn af_iperps::events::PostedOrder::new(ch_id: sui_framework_sdk::object::ID, account_id: u64, posted_base_ask: u64, posted_base_bid: u64, pending_asks: af_utilities::types::ifixed::IFixed, pending_bids: af_utilities::types::ifixed::IFixed, pending_orders: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::PostedOrder
-pub fn af_iperps::events::PostedOrder::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::PostedOrder
 pub type af_iperps::events::PostedOrder::StructTag = af_iperps::events::PostedOrderTypeTag
 impl af_move_type::MoveType for af_iperps::events::PostedOrder
@@ -2122,8 +2105,6 @@ pub fn af_iperps::events::ResettedPositionFees::move_instance(self, address: sui
 pub fn af_iperps::events::ResettedPositionFees::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::ResettedPositionFeesTypeTag
 impl af_iperps::events::ResettedPositionFees
 pub fn af_iperps::events::ResettedPositionFees::new(ch_id: sui_framework_sdk::object::ID, account_id: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::ResettedPositionFees
-pub fn af_iperps::events::ResettedPositionFees::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::ResettedPositionFees
 pub type af_iperps::events::ResettedPositionFees::StructTag = af_iperps::events::ResettedPositionFeesTypeTag
 impl af_move_type::MoveType for af_iperps::events::ResettedPositionFees
@@ -2211,8 +2192,6 @@ pub fn af_iperps::events::SettledFunding::move_instance(self, address: sui_sdk_t
 pub fn af_iperps::events::SettledFunding::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::SettledFundingTypeTag
 impl af_iperps::events::SettledFunding
 pub fn af_iperps::events::SettledFunding::new(ch_id: sui_framework_sdk::object::ID, account_id: u64, collateral_change_usd: af_utilities::types::ifixed::IFixed, collateral_after: af_utilities::types::ifixed::IFixed, mkt_funding_rate_long: af_utilities::types::ifixed::IFixed, mkt_funding_rate_short: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::SettledFunding
-pub fn af_iperps::events::SettledFunding::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::events::SettledFunding
 pub type af_iperps::events::SettledFunding::StructTag = af_iperps::events::SettledFundingTypeTag
 impl af_move_type::MoveType for af_iperps::events::SettledFunding
@@ -2254,8 +2233,6 @@ pub fn af_iperps::events::UpdatedBaseOracleTolerance::move_instance(self, addres
 pub fn af_iperps::events::UpdatedBaseOracleTolerance::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedBaseOracleToleranceTypeTag
 impl af_iperps::events::UpdatedBaseOracleTolerance
 pub fn af_iperps::events::UpdatedBaseOracleTolerance::new(ch_id: sui_framework_sdk::object::ID, oracle_tolerance: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedBaseOracleTolerance
-pub fn af_iperps::events::UpdatedBaseOracleTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedBaseOracleTolerance
 pub type af_iperps::events::UpdatedBaseOracleTolerance::StructTag = af_iperps::events::UpdatedBaseOracleToleranceTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedBaseOracleTolerance
@@ -2338,8 +2315,6 @@ pub fn af_iperps::events::UpdatedCollateralOracleTolerance::move_instance(self, 
 pub fn af_iperps::events::UpdatedCollateralOracleTolerance::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedCollateralOracleToleranceTypeTag
 impl af_iperps::events::UpdatedCollateralOracleTolerance
 pub fn af_iperps::events::UpdatedCollateralOracleTolerance::new(ch_id: sui_framework_sdk::object::ID, oracle_tolerance: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedCollateralOracleTolerance
-pub fn af_iperps::events::UpdatedCollateralOracleTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedCollateralOracleTolerance
 pub type af_iperps::events::UpdatedCollateralOracleTolerance::StructTag = af_iperps::events::UpdatedCollateralOracleToleranceTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedCollateralOracleTolerance
@@ -2382,8 +2357,6 @@ pub fn af_iperps::events::UpdatedCumFundings::move_instance(self, address: sui_s
 pub fn af_iperps::events::UpdatedCumFundings::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedCumFundingsTypeTag
 impl af_iperps::events::UpdatedCumFundings
 pub fn af_iperps::events::UpdatedCumFundings::new(ch_id: sui_framework_sdk::object::ID, cum_funding_rate_long: af_utilities::types::ifixed::IFixed, cum_funding_rate_short: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedCumFundings
-pub fn af_iperps::events::UpdatedCumFundings::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedCumFundings
 pub type af_iperps::events::UpdatedCumFundings::StructTag = af_iperps::events::UpdatedCumFundingsTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedCumFundings
@@ -2429,8 +2402,6 @@ pub fn af_iperps::events::UpdatedFees::move_instance(self, address: sui_sdk_type
 pub fn af_iperps::events::UpdatedFees::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedFeesTypeTag
 impl af_iperps::events::UpdatedFees
 pub fn af_iperps::events::UpdatedFees::new(ch_id: sui_framework_sdk::object::ID, maker_fee: af_utilities::types::ifixed::IFixed, taker_fee: af_utilities::types::ifixed::IFixed, liquidation_fee: af_utilities::types::ifixed::IFixed, force_cancel_fee: af_utilities::types::ifixed::IFixed, insurance_fund_fee: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFees
-pub fn af_iperps::events::UpdatedFees::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedFees
 pub type af_iperps::events::UpdatedFees::StructTag = af_iperps::events::UpdatedFeesTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedFees
@@ -2474,8 +2445,6 @@ pub fn af_iperps::events::UpdatedFunding::move_instance(self, address: sui_sdk_t
 pub fn af_iperps::events::UpdatedFunding::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedFundingTypeTag
 impl af_iperps::events::UpdatedFunding
 pub fn af_iperps::events::UpdatedFunding::new(ch_id: sui_framework_sdk::object::ID, cum_funding_rate_long: af_utilities::types::ifixed::IFixed, cum_funding_rate_short: af_utilities::types::ifixed::IFixed, funding_last_upd_ms: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFunding
-pub fn af_iperps::events::UpdatedFunding::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedFunding
 pub type af_iperps::events::UpdatedFunding::StructTag = af_iperps::events::UpdatedFundingTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedFunding
@@ -2503,8 +2472,6 @@ pub fn af_iperps::events::UpdatedFundingParameters::move_instance(self, address:
 pub fn af_iperps::events::UpdatedFundingParameters::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedFundingParametersTypeTag
 impl af_iperps::events::UpdatedFundingParameters
 pub fn af_iperps::events::UpdatedFundingParameters::new(ch_id: sui_framework_sdk::object::ID, funding_frequency_ms: u64, funding_period_ms: u64, premium_twap_frequency_ms: u64, premium_twap_period_ms: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedFundingParameters
-pub fn af_iperps::events::UpdatedFundingParameters::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedFundingParameters
 pub type af_iperps::events::UpdatedFundingParameters::StructTag = af_iperps::events::UpdatedFundingParametersTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedFundingParameters
@@ -2563,8 +2530,6 @@ pub fn af_iperps::events::UpdatedLiquidationTolerance::move_instance(self, addre
 pub fn af_iperps::events::UpdatedLiquidationTolerance::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedLiquidationToleranceTypeTag
 impl af_iperps::events::UpdatedLiquidationTolerance
 pub fn af_iperps::events::UpdatedLiquidationTolerance::new(ch_id: sui_framework_sdk::object::ID, liquidation_tolerance: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedLiquidationTolerance
-pub fn af_iperps::events::UpdatedLiquidationTolerance::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedLiquidationTolerance
 pub type af_iperps::events::UpdatedLiquidationTolerance::StructTag = af_iperps::events::UpdatedLiquidationToleranceTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedLiquidationTolerance
@@ -2607,8 +2572,6 @@ pub fn af_iperps::events::UpdatedMarginRatios::move_instance(self, address: sui_
 pub fn af_iperps::events::UpdatedMarginRatios::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedMarginRatiosTypeTag
 impl af_iperps::events::UpdatedMarginRatios
 pub fn af_iperps::events::UpdatedMarginRatios::new(ch_id: sui_framework_sdk::object::ID, margin_ratio_initial: af_utilities::types::ifixed::IFixed, margin_ratio_maintenance: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMarginRatios
-pub fn af_iperps::events::UpdatedMarginRatios::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedMarginRatios
 pub type af_iperps::events::UpdatedMarginRatios::StructTag = af_iperps::events::UpdatedMarginRatiosTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedMarginRatios
@@ -2650,8 +2613,6 @@ pub fn af_iperps::events::UpdatedMaxPendingOrders::move_instance(self, address: 
 pub fn af_iperps::events::UpdatedMaxPendingOrders::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedMaxPendingOrdersTypeTag
 impl af_iperps::events::UpdatedMaxPendingOrders
 pub fn af_iperps::events::UpdatedMaxPendingOrders::new(ch_id: sui_framework_sdk::object::ID, max_pending_orders: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMaxPendingOrders
-pub fn af_iperps::events::UpdatedMaxPendingOrders::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedMaxPendingOrders
 pub type af_iperps::events::UpdatedMaxPendingOrders::StructTag = af_iperps::events::UpdatedMaxPendingOrdersTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedMaxPendingOrders
@@ -2693,8 +2654,6 @@ pub fn af_iperps::events::UpdatedMinOrderUsdValue::move_instance(self, address: 
 pub fn af_iperps::events::UpdatedMinOrderUsdValue::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedMinOrderUsdValueTypeTag
 impl af_iperps::events::UpdatedMinOrderUsdValue
 pub fn af_iperps::events::UpdatedMinOrderUsdValue::new(ch_id: sui_framework_sdk::object::ID, min_order_usd_value: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedMinOrderUsdValue
-pub fn af_iperps::events::UpdatedMinOrderUsdValue::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedMinOrderUsdValue
 pub type af_iperps::events::UpdatedMinOrderUsdValue::StructTag = af_iperps::events::UpdatedMinOrderUsdValueTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedMinOrderUsdValue
@@ -2737,8 +2696,6 @@ pub fn af_iperps::events::UpdatedOpenInterestAndFeesAccrued::move_instance(self,
 pub fn af_iperps::events::UpdatedOpenInterestAndFeesAccrued::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedOpenInterestAndFeesAccruedTypeTag
 impl af_iperps::events::UpdatedOpenInterestAndFeesAccrued
 pub fn af_iperps::events::UpdatedOpenInterestAndFeesAccrued::new(ch_id: sui_framework_sdk::object::ID, open_interest: af_utilities::types::ifixed::IFixed, fees_accrued: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedOpenInterestAndFeesAccrued
-pub fn af_iperps::events::UpdatedOpenInterestAndFeesAccrued::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedOpenInterestAndFeesAccrued
 pub type af_iperps::events::UpdatedOpenInterestAndFeesAccrued::StructTag = af_iperps::events::UpdatedOpenInterestAndFeesAccruedTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedOpenInterestAndFeesAccrued
@@ -2783,8 +2740,6 @@ pub fn af_iperps::events::UpdatedPremiumTwap::move_instance(self, address: sui_s
 pub fn af_iperps::events::UpdatedPremiumTwap::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedPremiumTwapTypeTag
 impl af_iperps::events::UpdatedPremiumTwap
 pub fn af_iperps::events::UpdatedPremiumTwap::new(ch_id: sui_framework_sdk::object::ID, book_price: af_utilities::types::ifixed::IFixed, index_price: af_utilities::types::ifixed::IFixed, premium_twap: af_utilities::types::ifixed::IFixed, premium_twap_last_upd_ms: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedPremiumTwap
-pub fn af_iperps::events::UpdatedPremiumTwap::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedPremiumTwap
 pub type af_iperps::events::UpdatedPremiumTwap::StructTag = af_iperps::events::UpdatedPremiumTwapTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedPremiumTwap
@@ -2829,8 +2784,6 @@ pub fn af_iperps::events::UpdatedSpreadTwap::move_instance(self, address: sui_sd
 pub fn af_iperps::events::UpdatedSpreadTwap::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedSpreadTwapTypeTag
 impl af_iperps::events::UpdatedSpreadTwap
 pub fn af_iperps::events::UpdatedSpreadTwap::new(ch_id: sui_framework_sdk::object::ID, book_price: af_utilities::types::ifixed::IFixed, index_price: af_utilities::types::ifixed::IFixed, spread_twap: af_utilities::types::ifixed::IFixed, spread_twap_last_upd_ms: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedSpreadTwap
-pub fn af_iperps::events::UpdatedSpreadTwap::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedSpreadTwap
 pub type af_iperps::events::UpdatedSpreadTwap::StructTag = af_iperps::events::UpdatedSpreadTwapTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedSpreadTwap
@@ -2856,8 +2809,6 @@ pub fn af_iperps::events::UpdatedSpreadTwapParameters::move_instance(self, addre
 pub fn af_iperps::events::UpdatedSpreadTwapParameters::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::UpdatedSpreadTwapParametersTypeTag
 impl af_iperps::events::UpdatedSpreadTwapParameters
 pub fn af_iperps::events::UpdatedSpreadTwapParameters::new(ch_id: sui_framework_sdk::object::ID, spread_twap_frequency_ms: u64, spread_twap_period_ms: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::UpdatedSpreadTwapParameters
-pub fn af_iperps::events::UpdatedSpreadTwapParameters::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::UpdatedSpreadTwapParameters
 pub type af_iperps::events::UpdatedSpreadTwapParameters::StructTag = af_iperps::events::UpdatedSpreadTwapParametersTypeTag
 impl af_move_type::MoveType for af_iperps::events::UpdatedSpreadTwapParameters
@@ -2917,8 +2868,6 @@ pub fn af_iperps::events::WithdrewCollateral<T>::move_instance(self, address: su
 pub fn af_iperps::events::WithdrewCollateral<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::events::WithdrewCollateralTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::events::WithdrewCollateral<T>
 pub fn af_iperps::events::WithdrewCollateral<T>::new(account_id: u64, collateral: u64, account_collateral_after: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::account::Account<af_move_type::otw::Otw>> for af_iperps::events::WithdrewCollateral<af_move_type::otw::Otw>
-pub fn af_iperps::events::WithdrewCollateral<af_move_type::otw::Otw>::apply(&self, target: &mut af_iperps::account::Account<af_move_type::otw::Otw>)
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::events::WithdrewCollateral<T>
 pub fn af_iperps::events::WithdrewCollateral<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::events::WithdrewCollateral<T>
@@ -3006,10 +2955,6 @@ pub fn af_iperps::events::WithdrewFees::move_instance(self, address: sui_sdk_typ
 pub fn af_iperps::events::WithdrewFees::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::WithdrewFeesTypeTag
 impl af_iperps::events::WithdrewFees
 pub fn af_iperps::events::WithdrewFees::new(sender: sui_sdk_types::address::Address, ch_id: sui_framework_sdk::object::ID, amount: u64, vault_balance_after: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>> for af_iperps::events::WithdrewFees
-pub fn af_iperps::events::WithdrewFees::apply(&self, target: &mut af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>)
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::WithdrewFees
-pub fn af_iperps::events::WithdrewFees::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::WithdrewFees
 pub type af_iperps::events::WithdrewFees::StructTag = af_iperps::events::WithdrewFeesTypeTag
 impl af_move_type::MoveType for af_iperps::events::WithdrewFees
@@ -3053,8 +2998,6 @@ pub fn af_iperps::events::WithdrewInsuranceFund::move_instance(self, address: su
 pub fn af_iperps::events::WithdrewInsuranceFund::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::WithdrewInsuranceFundTypeTag
 impl af_iperps::events::WithdrewInsuranceFund
 pub fn af_iperps::events::WithdrewInsuranceFund::new(sender: sui_sdk_types::address::Address, ch_id: sui_framework_sdk::object::ID, amount: u64, insurance_fund_balance_after: u64) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::clearing_house::Vault<af_move_type::otw::Otw>> for af_iperps::events::WithdrewInsuranceFund
-pub fn af_iperps::events::WithdrewInsuranceFund::apply(&self, target: &mut af_iperps::clearing_house::Vault<af_move_type::otw::Otw>)
 impl af_move_type::MoveStruct for af_iperps::events::WithdrewInsuranceFund
 pub type af_iperps::events::WithdrewInsuranceFund::StructTag = af_iperps::events::WithdrewInsuranceFundTypeTag
 impl af_move_type::MoveType for af_iperps::events::WithdrewInsuranceFund
@@ -4038,26 +3981,6 @@ pub fn af_iperps::position::Position::move_instance(self, address: sui_sdk_types
 pub fn af_iperps::position::Position::type_(address: sui_sdk_types::address::Address) -> af_iperps::position::PositionTypeTag
 impl af_iperps::position::Position
 pub fn af_iperps::position::Position::new(collateral: af_utilities::types::ifixed::IFixed, base_asset_amount: af_utilities::types::ifixed::IFixed, quote_asset_notional_amount: af_utilities::types::ifixed::IFixed, cum_funding_rate_long: af_utilities::types::ifixed::IFixed, cum_funding_rate_short: af_utilities::types::ifixed::IFixed, asks_quantity: af_utilities::types::ifixed::IFixed, bids_quantity: af_utilities::types::ifixed::IFixed, pending_orders: u64, maker_fee: af_utilities::types::ifixed::IFixed, taker_fee: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AcceptedPositionFeesProposal
-pub fn af_iperps::events::AcceptedPositionFeesProposal::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::CanceledOrders
-pub fn af_iperps::events::CanceledOrders::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledMakerOrder
-pub fn af_iperps::events::FilledMakerOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledTakerOrder
-pub fn af_iperps::events::FilledTakerOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::LiquidatedPosition
-pub fn af_iperps::events::LiquidatedPosition::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::PostedOrder
-pub fn af_iperps::events::PostedOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::ResettedPositionFees
-pub fn af_iperps::events::ResettedPositionFees::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::SettledFunding
-pub fn af_iperps::events::SettledFunding::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::position::Position
 pub type af_iperps::position::Position::StructTag = af_iperps::position::PositionTypeTag
 impl af_move_type::MoveType for af_iperps::position::Position
@@ -4397,26 +4320,6 @@ pub fn af_iperps::position::Position::move_instance(self, address: sui_sdk_types
 pub fn af_iperps::position::Position::type_(address: sui_sdk_types::address::Address) -> af_iperps::position::PositionTypeTag
 impl af_iperps::position::Position
 pub fn af_iperps::position::Position::new(collateral: af_utilities::types::ifixed::IFixed, base_asset_amount: af_utilities::types::ifixed::IFixed, quote_asset_notional_amount: af_utilities::types::ifixed::IFixed, cum_funding_rate_long: af_utilities::types::ifixed::IFixed, cum_funding_rate_short: af_utilities::types::ifixed::IFixed, asks_quantity: af_utilities::types::ifixed::IFixed, bids_quantity: af_utilities::types::ifixed::IFixed, pending_orders: u64, maker_fee: af_utilities::types::ifixed::IFixed, taker_fee: af_utilities::types::ifixed::IFixed) -> Self
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AcceptedPositionFeesProposal
-pub fn af_iperps::events::AcceptedPositionFeesProposal::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::AllocatedCollateral
-pub fn af_iperps::events::AllocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::CanceledOrders
-pub fn af_iperps::events::CanceledOrders::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::DeallocatedCollateral
-pub fn af_iperps::events::DeallocatedCollateral::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledMakerOrder
-pub fn af_iperps::events::FilledMakerOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::FilledTakerOrder
-pub fn af_iperps::events::FilledTakerOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::LiquidatedPosition
-pub fn af_iperps::events::LiquidatedPosition::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::PostedOrder
-pub fn af_iperps::events::PostedOrder::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::ResettedPositionFees
-pub fn af_iperps::events::ResettedPositionFees::apply(&self, target: &mut af_iperps::position::Position)
-impl af_iperps::event_ext::apply::Apply<af_iperps::position::Position> for af_iperps::events::SettledFunding
-pub fn af_iperps::events::SettledFunding::apply(&self, target: &mut af_iperps::position::Position)
 impl af_move_type::MoveStruct for af_iperps::position::Position
 pub type af_iperps::position::Position::StructTag = af_iperps::position::PositionTypeTag
 impl af_move_type::MoveType for af_iperps::position::Position
