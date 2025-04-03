@@ -39,11 +39,9 @@ pub type Vault = self::clearing_house::Vault<Otw>;
 pub type VaultTypeTag = self::clearing_house::VaultTypeTag<Otw>;
 
 /// Package IDs of the perpetuals contract versions published on testnet, in order of its versions.
-pub const TESTNET_PACKAGE_VERSIONS: &[ObjectId] = &[
-    object_id(b"0x9725155a70cf2d2241b8cc2fa8376809689312cabb4acaa5ca5ba47eaf4d611f"),
-    object_id(b"0x47ca16287406c6178717f5fda829bc403ee9b3589b1ac81d70e447dc4c017e80"),
-    object_id(b"0x7c995f9c0c0553c0f3bfac7cf3c8b85716f0ca522305586bd0168ca20aeed277"),
-];
+pub const TESTNET_PACKAGE_VERSIONS: &[ObjectId] = &[object_id(
+    b"0x1fc71972750d0d81567183a8500befef94d7699aac76edffcca253fe541367fd",
+)];
 
 sui_pkg_sdk!(perpetuals {
     module account {
