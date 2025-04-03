@@ -28,7 +28,7 @@ workspace = true
 bcs           = "0.1"
 indexmap      = "2"
 serde         = { version = "1", features = ["derive"] }
-sui-sdk-types = "0.0.3"
+sui-sdk-types = "0.0.4"
 thiserror     = "2"
 
 af-sui-types = { version = "0.8.3", path = "../af-sui-types" }
@@ -41,7 +41,7 @@ proptest      = "1"
 rand          = "0.9"
 serde_json    = "1"
 serde_with    = "3"
-sui-sdk-types = { version = "0.0.3", features = ["proptest"] }
+sui-sdk-types = { version = "0.0.4", features = ["proptest"] }
 test-strategy = "0.4"
 
 

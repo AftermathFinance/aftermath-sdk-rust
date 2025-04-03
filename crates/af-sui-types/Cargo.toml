@@ -38,7 +38,7 @@ hex           = "0.4"
 ref-cast      = "1"
 serde         = "1"
 serde_with    = { version = "3", features = ["base64"] }
-sui-sdk-types = { version = "0.0.3", features = ["serde"] }
+sui-sdk-types = { version = "0.0.4", features = ["serde"] }
 thiserror     = "2"
 
 derive_more = { version = "2", features = ["from_str"] }
