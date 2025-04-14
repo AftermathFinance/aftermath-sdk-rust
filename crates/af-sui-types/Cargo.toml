@@ -30,14 +30,14 @@ hash    = ["sui-sdk-types/hash"]
 u256    = ["dep:primitive-types", "dep:rand", "dep:uint"]
 
 [dependencies]
-base64        = "0.22"
+base64ct      = { version = "1", features = ["alloc"] }
 bcs           = "0.1"
 bs58          = "0.5"
 enum_dispatch = "0.3"
 hex           = "0.4"
 ref-cast      = "1"
 serde         = "1"
-serde_with    = { version = "3", features = ["base64"] }
+serde_with    = "3"
 sui-sdk-types = { version = "0.0.3", features = ["serde"] }
 thiserror     = "2"
 

@@ -30,12 +30,12 @@ build = ["dep:cynic-codegen"]
 default = ["scalars"]
 scalars = [
   "dep:af-sui-types",
-  "dep:base64",
   "dep:chrono",
   "dep:derive_more",
   "dep:serde",
   "dep:serde_json",
   "dep:serde_with",
+  "serde_with/base64",
 ]
 
 
@@ -44,7 +44,6 @@ cynic = "3"
 
 # For scalars (optional)
 af-sui-types = { version = "0.8.7", path = "../af-sui-types", optional = true }
-base64       = { version = "0.22", optional = true }
 chrono       = { version = "0.4", optional = true }
 serde        = { version = "1", optional = true }
 serde_json   = { version = "1", optional = true }
