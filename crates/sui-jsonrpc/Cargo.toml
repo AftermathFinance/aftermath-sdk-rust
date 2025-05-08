@@ -59,7 +59,7 @@ extension-traits = { version = "2", optional = true }
 futures-core     = { version = "0.3", optional = true }
 futures-util     = { version = "0.3", optional = true }
 http             = { version = "1", optional = true }
-jsonrpsee        = { version = "0.24", optional = true }
+jsonrpsee        = { version = "0.25", optional = true }
 
 [dev-dependencies]
 color-eyre = "0.6"
