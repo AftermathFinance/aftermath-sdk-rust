@@ -6,6 +6,8 @@ use serde_json::Value as Json;
 use crate::RawClient;
 
 /// GraphQL client for Sui using [reqwest] as a backend.
+///
+/// This owns the inner HTTP client and endpoint string.
 #[derive(Clone, Debug)]
 pub struct ReqwestClient {
     client: reqwest::Client,
@@ -36,12 +38,40 @@ impl RawClient for ReqwestClient {
     where
         Vars: Serialize + Send,
     {
-        let http_result = self
-            .client
-            .post(&self.endpoint)
-            .json(&operation)
-            .send()
-            .await;
+        self.client
+            .graphql(&self.endpoint)
+            .run_graphql_raw(operation)
+            .await
+    }
+}
+
+#[extension_traits::extension(pub trait ReqwestExt)]
+impl reqwest::Client {
+    fn graphql<'a>(&'a self, endpoint: &'a str) -> ReqwestClientRef<'a> {
+        ReqwestClientRef {
+            inner: self,
+            endpoint,
+        }
+    }
+}
+
+/// GraphQL client for Sui using [reqwest] as a backend.
+pub struct ReqwestClientRef<'a> {
+    inner: &'a reqwest::Client,
+    endpoint: &'a str,
+}
+
+impl RawClient for ReqwestClientRef<'_> {
+    type Error = CynicReqwestError;
+
+    async fn run_graphql_raw<Query, Vars>(
+        &self,
+        operation: Operation<Query, Vars>,
+    ) -> Result<Json, Self::Error>
+    where
+        Vars: Serialize + Send,
+    {
+        let http_result = self.inner.post(self.endpoint).json(&operation).send().await;
         deser_gql(http_result).await
     }
 }
