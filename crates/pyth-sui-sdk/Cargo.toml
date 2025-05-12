@@ -39,7 +39,7 @@ af-utilities   = { version = "0.9", public = true, optional = true }
 bcs            = { version = "0.1", public = true }
 bytes          = { version = "1", public = true, optional = true }
 hex            = { version = "0.4.3", public = true }
-jsonrpsee-core = { version = "0.24", public = true, optional = true }
+jsonrpsee-core = { version = "0.25", public = true, optional = true }
 pyth-sdk       = { version = "0.8", public = true, optional = true }
 sui-jsonrpc    = { version = "0.15.3", public = true, default-features = false, optional = true, path = "../sui-jsonrpc" }
 sui-sdk-types  = { version = "0.0.3", public = true }
