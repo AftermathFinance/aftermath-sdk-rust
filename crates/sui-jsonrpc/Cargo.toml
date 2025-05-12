@@ -50,7 +50,7 @@ default = ["client"]
 af-sui-types          = { version = "0.8.8", public = true, path = "../af-sui-types" }
 futures-core          = { version = "0.3", public = true, optional = true }
 jsonrpsee-core        = { version = "0.24", public = true, optional = true }
-jsonrpsee-http-client = { version = "0.24", public = true, optional = true }
+jsonrpsee-http-client = { version = "0.25", public = true, optional = true }
 jsonrpsee-types       = { version = "0.24", public = true, optional = true }
 serde                 = { version = "1", public = true }
 serde_json            = { version = "1", public = true }
