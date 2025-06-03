@@ -65,8 +65,6 @@ module perpetuals::errors {
     const InvalidSubAccountUser: u64 = 13;
     /// The parent `Account` trying to delete the subaccount is not the correct one.
     const WrongParentForSubAccount: u64 = 14;
-    /// Raised when trying to delete a subaccount still containing collateral.
-    const SubAccountContainsCollateral: u64 = 15;
     /// Raised when trying to call a function with the wrong package's version
     const WrongVersion: u64 = 16;
     /// Raised when trying to have a session composed by only `start_session` and `end_session`
@@ -85,8 +83,6 @@ module perpetuals::errors {
     const NotReduceOnlyStopOrder: u64 = 23;
     /// Stop order gas cost provided is not enough
     const NotEnoughGasForStopOrder: u64 = 24;
-    /// Stop order collateral to allocate provided is not enough
-    const NotEnoughCollateralToAllocateForStopOrder: u64 = 25;
     /// Invalid account trying to perform an action on a StopOrderTicket
     const InvalidAccountForStopOrder: u64 = 26;
     /// Invalid executor trying to execute the StopOrderTicket
@@ -97,6 +93,12 @@ module perpetuals::errors {
     /// Raised when a position's would get a base amount higher than the
     /// allowed percentage of open interest
     const MaxOpenInterestPositionPercentSurpassed: u64 = 29;
+    /// Raised processing a session that requires a collateral allocation,
+    /// but not enough collateral is available in the account or subaccount
+    const NotEnoughCollateralToAllocateForSession: u64 = 30;
+    /// Raised processing a session that requires a collateral allocation
+    /// and a wrong account or subaccount is being used to fund it
+    const WrongAccountIdForAllocation: u64 = 31;
 
     // Market ---------------------------------------------------------------
 
@@ -145,6 +147,12 @@ module perpetuals::errors {
     const PositionAlreadyExists: u64 = 2007;
     /// Cannot compute deallocate amount for a target MR < IMR.
     const DeallocateTargetMrTooLow: u64 = 2008;
+    /// Raised when trying to set a position's IMR lower than market's IMR or higher than 1
+    const InvalidPositionIMR: u64 = 2009;
+    /// Invalid stop order type
+    const InvalidStopOrderType: u64 = 2010;
+    /// Invalid position' status for placing a SLTP order
+    const InvalidPositionForSLTP: u64 = 2011;
 
     // Orderbook & OrderedMap -------------------------------------------------------
 

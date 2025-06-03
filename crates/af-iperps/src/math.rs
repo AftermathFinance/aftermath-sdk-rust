@@ -360,6 +360,7 @@ mod tests {
                 pending_orders: 0,
                 maker_fee: 1.into(),
                 taker_fee: 1.into(),
+                initial_margin_ratio: 1.into(),
             }
         }
 
@@ -375,6 +376,7 @@ mod tests {
                 pending_orders: 0,
                 maker_fee: 1.into(),
                 taker_fee: 1.into(),
+                initial_margin_ratio: 1.into(),
             }
         }
     }

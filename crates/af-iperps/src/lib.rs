@@ -20,8 +20,8 @@ pub mod graphql;
 pub mod math;
 pub mod order_helpers;
 pub mod order_id;
-#[cfg(feature = "slo")]
-pub mod slo;
+#[cfg(feature = "stop-orders")]
+pub mod stop_order_helpers;
 
 pub use self::market::{MarketParams, MarketState};
 pub use self::orderbook::Order;
@@ -103,7 +103,6 @@ sui_pkg_sdk!(perpetuals {
         struct Vault<!phantom T> has store {
             collateral_balance: Balance<T>,
             insurance_fund_balance: Balance<T>,
-            scaling_factor: IFixed
         }
 
         /// Stores the proposed parameters for updating margin ratios
@@ -168,38 +167,46 @@ sui_pkg_sdk!(perpetuals {
         /// only if the index price respects certain conditions, like being above or
         /// below a certain price.
         ///
-        /// Only the `Account` owner can mint this object and can decide who can be
+        /// Only the `SubAccount` owner can mint this object and can decide who can be
         /// the executor of the ticket. This allows users to run their
         /// own stop orders bots eventually, but it's mainly used to allow 3rd parties
         /// to offer such a service (the user is required to trust such 3rd party).
         /// The object is shared and the 3rd party is set as `executor`. The ticket
-        /// can be destroyed in any moment only by the user.
+        /// can be destroyed in any moment only by the user or by the executor.
         /// The user needs to trust the 3rd party for liveness of the service offered.
         ///
         /// The order details are encrypted offchain and the result is stored in the ticket.
         /// The user needs to share such details with the 3rd party only to allow for execution.
         struct StopOrderTicket<!phantom T> has key {
             id: UID,
-            /// Address that is allowed to execute the order on behalf of the user.
-            executor: address,
+            /// Addresses allowed to execute the order on behalf of the user.
+            executors: vector<address>,
             /// Gas coin that must be provided by the user to cover for one stop order cost.
             /// This amount of gas is going to be sent to the executor of the order.
             gas: Balance<SUI>,
-            /// Amount of collateral the user can decide to allocate to place this order.
-            /// It can be 0.
-            collateral_to_allocate: Balance<T>,
-            /// User account or subaccount object id that created this stop order.
-            ///
-            /// This is used to know where to transfer collateral to **if** a `margin_ratio`
-            /// is set in `encrypted_details` **and** placing the order requires
-            /// de-allocating collateral to maintain that target `margin_ratio`.
-            obj_id: ID,
             /// User account id
             account_id: u64,
-            /// Vector containing the blake2b hash obtained by the offchain
-            /// application of blake2b on the following parameters:
+            /// Value to indentify the stop order type. Available values can be found in the
+            /// constants module.
+            stop_order_type: u64,
+            /// Vector containing the blake2b hash obtained from offchain on the stop order parameters.
+            /// Depending on the stop order type value, a different set of parameters is expected to be used.
+            ///
+            /// Parameters encoded for a SLTP stop order (stop_order_type code 0):
             /// - clearing_house_id: ID
-            /// - expire_timestamp: u64
+            /// - expire_timestamp: Option<u64>
+            /// - is_limit_order: `true` if limit order, `false` if market order
+            /// - stop_index_price: u256
+            /// - is_stop_loss: `true` if stop loss order, `false` if take profit order
+            /// - position_is_ask: `true` if position is short, `false` if position is long
+            /// - size: u64
+            /// - price: u64 (can be set at random value if `is_limit_order` is false)
+            /// - order_type: u64 (can be set at random value if `is_limit_order` is false)
+            /// - salt: vector<u8>
+            ///
+            /// Parameters encoded for a Standalone stop order (stop_order_type code 1):
+            /// - clearing_house_id: ID
+            /// - expire_timestamp: Option<u64>
             /// - is_limit_order: `true` if limit order, `false` if market order
             /// - stop_index_price: u256
             /// - ge_stop_index_price: `true` means the order can be placed when
@@ -209,20 +216,36 @@ sui_pkg_sdk!(perpetuals {
             /// - price: u64 (can be set at random value if `is_limit_order` is false)
             /// - order_type: u64 (can be set at random value if `is_limit_order` is false)
             /// - reduce_only: bool
-            /// - margin_ratio: Option<u256>
             /// - salt: vector<u8>
             encrypted_details: vector<u8>
         }
     }
 
     module subaccount {
-        /// The SubAccount object represents an `Account` object with limited access to
-        /// protocol's features. Being a shared object, it can only be used by the address
-        /// specified in the `user` field.
+        /// The SubAccount object represents a shared version of the `Account` object
+        /// with limited access to protocol's features. Being a shared object, it can
+        /// only be used by the addresses specified in the `users` field.
+        /// Only the parent Account can withdraw Coin from a subaccount. The parent account is
+        /// required to specify a Sui address that will be able to use the subaccount on its behalf
+        /// and can change this address at any moment.
+        ///
+        /// Subaccounts are used for trading and depositing, without running into race conditions, i.e.,
+        /// concurrent transactions using the same subaccount can be created and submitted (unlike
+        /// accounts).
+        ///
+        /// The created subaccount will share the primary's account_id. That means it has access to the
+        /// same positions of the primary.
+        ///
+        /// The subaccount's users are then able to:
+        /// - deposit collateral into the subaccount
+        /// - allocate collateral from subaccount to a clearing house
+        /// - use session to trade and liquidate on clearing house
+        /// - cancel pending orders
+        /// - deallocate from a clearing house to a subaccount
         struct SubAccount<!phantom T> has key, store {
             id: UID,
-            /// Address able to make calls using this `SubAccount`
-            user: address,
+            /// Addresses able to make calls using this `SubAccount`
+            users: vector<address>,
             /// Numerical value associated to the parent account
             account_id: u64,
             /// Balance available to be allocated to markets.
@@ -252,21 +275,6 @@ sui_pkg_sdk!(perpetuals {
         struct WithdrewCollateral<!phantom T> has copy, drop {
             account_id: u64,
             subaccount_id: Option<ID>,
-            collateral: u64,
-        }
-
-        struct TransferredDeallocatedCollateral<!phantom T> has copy, drop {
-            ch_id: ID,
-            /// Can be the `Account` or `SubAccount` object id
-            obj_id: ID,
-            account_id: u64,
-            collateral: u64,
-        }
-
-        struct ReceivedCollateral<!phantom T> has copy, drop {
-            /// Can be the `Account` or `SubAccount` object id
-            obj_id: ID,
-            account_id: u64,
             collateral: u64,
         }
 
@@ -419,7 +427,7 @@ sui_pkg_sdk!(perpetuals {
             bad_debt: IFixed
         }
 
-        struct PerfomedLiquidation has copy, drop {
+        struct PerformedLiquidation has copy, drop {
             ch_id: ID,
             liqee_account_id: u64,
             liqor_account_id: u64,
@@ -444,53 +452,48 @@ sui_pkg_sdk!(perpetuals {
             mkt_funding_rate_short: IFixed,
         }
 
+        struct SetPositionInitialMarginRatio has copy, drop {
+            ch_id: ID,
+            account_id: u64,
+            initial_margin_ratio: IFixed,
+        }
+
         struct CreatedStopOrderTicket<!phantom T> has copy, drop {
             ticket_id: ID,
-            obj_id: ID,
             account_id: u64,
-            executor: address,
+            subaccount_id: Option<ID>,
+            executors: vector<address>,
             gas: u64,
-            collateral_to_allocate: u64,
+            stop_order_type: u64,
             encrypted_details: vector<u8>
         }
 
         struct ExecutedStopOrderTicket<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
+            executor: address
         }
 
         struct DeletedStopOrderTicket<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
             subaccount_id: Option<ID>,
+            executor: address
         }
 
         struct EditedStopOrderTicketDetails<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
             subaccount_id: Option<ID>,
+            stop_order_type: u64,
             encrypted_details: vector<u8>
         }
 
-        struct EditedStopOrderTicketExecutor<!phantom T> has copy, drop {
+        struct EditedStopOrderTicketExecutors<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
             subaccount_id: Option<ID>,
-            executor: address
-        }
-
-        struct AddedStopOrderTicketCollateral<!phantom T> has copy, drop {
-            ticket_id: ID,
-            account_id: u64,
-            subaccount_id: Option<ID>,
-            collateral_to_allocate: u64
-        }
-
-        struct RemovedStopOrderTicketCollateral<!phantom T> has copy, drop {
-            ticket_id: ID,
-            account_id: u64,
-            subaccount_id: Option<ID>,
-            collateral_to_remove: u64
+            executors: vector<address>
         }
 
         struct CreatedMarginRatiosProposal has copy, drop {
@@ -635,18 +638,13 @@ sui_pkg_sdk!(perpetuals {
 
         struct CreatedSubAccount has copy, drop {
             subaccount_id: ID,
-            user: address,
+            users: vector<address>,
             account_id: u64
         }
 
-        struct SetSubAccountUser has copy, drop {
+        struct SetSubAccountUsers has copy, drop {
             subaccount_id: ID,
-            user: address,
-            account_id: u64
-        }
-
-        struct DeletedSubAccount has copy, drop {
-            subaccount_id: ID,
+            users: vector<address>,
             account_id: u64
         }
     }
@@ -759,6 +757,8 @@ sui_pkg_sdk!(perpetuals {
             max_open_interest_threshold: IFixed,
             /// Max open interest percentage a position can have relative to total market's open interest
             max_open_interest_position_percent: IFixed,
+            /// Scaling factor to use to convert collateral units to ifixed values and viceversa
+            scaling_factor: IFixed
         }
 
         /// The state of a perpetuals market.
@@ -925,6 +925,11 @@ sui_pkg_sdk!(perpetuals {
             maker_fee: IFixed,
             /// Custom taker fee for this position, set at default value of 100%
             taker_fee: IFixed,
+            /// Initial Margin Ratio set by user for the position. Must always be less
+            /// or equal than market's IMR. Used as a desired reference margin ratio when
+            /// managing collateral in the position during all the actions. Can be changed
+            /// by the user at any moment (between the allowed limits).
+            initial_margin_ratio: IFixed
         }
     }
 

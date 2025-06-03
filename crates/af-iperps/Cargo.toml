@@ -37,7 +37,7 @@ graphql = [
     "sui-gql-client/queries",
     "sui-gql-schema/build",
 ]
-slo = ["dep:bcs", "dep:fastcrypto"]
+stop-orders = ["dep:bcs", "dep:fastcrypto"]
 
 [dependencies]
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
@@ -70,7 +70,7 @@ enum-as-inner   = { version = "0.6", optional = true }
 futures         = { version = "0.3", optional = true }
 graphql-extract = { version = "0.0.8", path = "../graphql-extract", optional = true }
 
-# SLO
+# Stop Orders
 bcs        = { version = "0.1", optional = true }
 fastcrypto = { version = "0.1", optional = true }
 
@@ -79,7 +79,7 @@ default-features = false
 features         = ["build"]
 optional         = true
 path             = "../sui-gql-schema"
-version = "0.10.8"
+version          = "0.10.8"
 
 
 [dev-dependencies]
