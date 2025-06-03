@@ -887,7 +887,7 @@ pub enum SuiPastObjectResponseError {
     ObjectDeleted { object_ref: ObjectRef },
 }
 
-#[rustversion::attr(nightly, expect(clippy::large_enum_variant))]
+#[rustversion::attr(stable, expect(clippy::large_enum_variant))]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 #[serde(tag = "status", content = "details", rename = "ObjectRead")]
 pub enum SuiPastObjectResponse {

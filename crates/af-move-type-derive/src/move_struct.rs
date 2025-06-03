@@ -15,7 +15,7 @@ struct MoveAttributes {
     nameless: bool,
 }
 
-#[rustversion::attr(nightly, expect(clippy::obfuscated_if_else))]
+#[rustversion::attr(stable, expect(clippy::obfuscated_if_else))]
 pub fn impl_move_struct(item: TokenStream) -> deluxe::Result<TokenStream> {
     // parse
     let mut ast: DeriveInput = syn::parse2(item)?;

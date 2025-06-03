@@ -319,25 +319,11 @@ impl SuiClient {
     }
 
     /// Returns a list of RPC methods supported by the node the client is connected to.
-    #[rustversion::attr(
-        stable,
-        expect(
-            clippy::missing_const_for_fn,
-            reason = "Not changing the public API right now"
-        )
-    )]
     pub fn available_rpc_methods(&self) -> &Vec<String> {
         &self.info.rpc_methods
     }
 
     /// Returns a list of streaming/subscription APIs supported by the node the client is connected to.
-    #[rustversion::attr(
-        stable,
-        expect(
-            clippy::missing_const_for_fn,
-            reason = "Not changing the public API right now"
-        )
-    )]
     pub fn available_subscriptions(&self) -> &Vec<String> {
         &self.info.subscriptions
     }
@@ -346,13 +332,6 @@ impl SuiClient {
     ///
     /// The format of this string is `<major>.<minor>.<patch>`, e.g., `1.6.0`,
     /// and it is retrieved from the OpenRPC specification via the discover service method.
-    #[rustversion::attr(
-        stable,
-        expect(
-            clippy::missing_const_for_fn,
-            reason = "Not changing the public API right now"
-        )
-    )]
     pub fn api_version(&self) -> &str {
         &self.info.version
     }
@@ -371,25 +350,11 @@ impl SuiClient {
     }
 
     /// Returns a reference to the underlying http client.
-    #[rustversion::attr(
-        stable,
-        expect(
-            clippy::missing_const_for_fn,
-            reason = "Not changing the public API right now"
-        )
-    )]
     pub fn http(&self) -> &HttpClient {
         &self.http
     }
 
     /// Returns a reference to the underlying WebSocket client, if any.
-    #[rustversion::attr(
-        stable,
-        expect(
-            clippy::missing_const_for_fn,
-            reason = "Not changing the public API right now"
-        )
-    )]
     pub fn ws(&self) -> Option<&WsClient> {
         (*self.ws).as_ref()
     }
