@@ -61,7 +61,7 @@ colored       = "3"
 derive_more   = { version = "2", features = ["from"] }
 enum_dispatch = "0.3"
 itertools     = "0.14"
-json_to_table = "0.6"
+json_to_table = "0.12"
 regex         = "1"
 serde_with    = "3"
 tabled        = "0.12"
