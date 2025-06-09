@@ -39,5 +39,5 @@ derive_more   = { version = "2", features = ["deref", "deref_mut", "from", "into
 serde         = "1"
 serde_with    = "3"
 sui-sdk-types = "0.0.4"
-tabled        = "0.16"
+tabled        = "0.20"
 thiserror     = "2"
