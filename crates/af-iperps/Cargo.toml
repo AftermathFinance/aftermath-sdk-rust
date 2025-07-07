@@ -89,7 +89,7 @@ af-ptbuilder     = { path = "../af-ptbuilder" }
 af-sui-types     = { path = "../af-sui-types", features = ["hash"] }
 clap             = { version = "4", features = ["derive"] }
 color-eyre       = "0.6"
-indicatif        = "0.17"
+indicatif        = "0.18"
 insta            = "1"
 nonempty         = "0.11"
 proptest         = "1"
