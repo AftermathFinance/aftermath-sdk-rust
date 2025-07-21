@@ -91,7 +91,7 @@ clap             = { version = "4", features = ["derive"] }
 color-eyre       = "0.6"
 indicatif        = "0.17"
 insta            = "1"
-nonempty         = "0.11"
+nonempty         = "0.12"
 proptest         = "1"
 public-api       = "0.47.0"
 reqwest          = "0.12"
