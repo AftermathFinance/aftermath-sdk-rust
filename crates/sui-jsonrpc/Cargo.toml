@@ -51,7 +51,7 @@ af-sui-types          = { version = "0.13.0", public = true, path = "../af-sui-t
 futures-core          = { version = "0.3", public = true, optional = true }
 jsonrpsee-core        = { version = "0.25", public = true, optional = true }
 jsonrpsee-http-client = { version = "0.25", public = true, optional = true }
-jsonrpsee-types       = { version = "0.25", public = true, optional = true }
+jsonrpsee-types       = { version = "0.26", public = true, optional = true }
 serde                 = { version = "1", public = true }
 serde_json            = { version = "1", public = true }
 sui-sdk-types         = { version = "0.0.6", public = true }
