@@ -71,7 +71,7 @@ async-stream     = { version = "0.3", optional = true }
 extension-traits = { version = "2", optional = true }
 futures-util     = { version = "0.3", optional = true }
 http             = { version = "1", optional = true }
-jsonrpsee        = { version = "0.25", optional = true }
+jsonrpsee        = { version = "0.26", optional = true }
 rustversion      = "1"
 
 [dev-dependencies]
