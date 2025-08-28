@@ -34,14 +34,14 @@ pub const TESTNET_PACKAGE_VERSIONS: &[ObjectId] = &[object_id(
 
 // Convenient aliases since these types will never exist onchain with a type argument other than an
 // OTW.
+pub type AccountCap = self::account::AccountCap<Otw>;
+pub type AccountCapTypeTag = self::account::AccountCapTypeTag<Otw>;
 pub type Account = self::account::Account<Otw>;
 pub type AccountTypeTag = self::account::AccountTypeTag<Otw>;
 pub type StopOrderTicket = self::stop_orders::StopOrderTicket<Otw>;
 pub type StopOrderTicketTypetag = self::stop_orders::StopOrderTicketTypeTag<Otw>;
 pub type ClearingHouse = self::clearing_house::ClearingHouse<Otw>;
 pub type ClearingHouseTypeTag = self::clearing_house::ClearingHouseTypeTag<Otw>;
-pub type SubAccount = self::subaccount::SubAccount<Otw>;
-pub type SubAccountTypeTag = self::subaccount::SubAccountTypeTag<Otw>;
 pub type Vault = self::clearing_house::Vault<Otw>;
 pub type VaultTypeTag = self::clearing_house::VaultTypeTag<Otw>;
 
@@ -60,6 +60,15 @@ pub type BidsMapDofWrapper = Field<Wrapper<keys::BidsMap>, ID>;
 
 sui_pkg_sdk!(perpetuals {
     module account {
+        /// The AccountCap is used to check ownership of `Account` with the same `account_id`.
+        struct AccountCap<!phantom T> has key, store {
+            id: UID,
+            // Account object id
+            account_obj_id: ID,
+            /// Numerical value associated to the account
+            account_id: u64,
+        }
+
         /// The Account object saves the collateral available to be used in clearing houses.
         struct Account<!phantom T> has key, store {
             id: UID,
@@ -67,6 +76,12 @@ sui_pkg_sdk!(perpetuals {
             account_id: u64,
             /// Balance available to be allocated to markets.
             collateral: Balance<T>,
+        }
+
+        struct IntegratorConfig has store {
+            /// Max **additional** taker fee the user is willing
+            /// to pay for integrator-submitted orders.
+            max_taker_fee: IFixed
         }
     }
 
@@ -123,6 +138,17 @@ sui_pkg_sdk!(perpetuals {
             taker_fee: IFixed,
         }
 
+        /// Structure that stores the amount of fees collected by an integrator
+        struct IntegratorVault has store {
+            /// Amount of fees collected by this integrator, in collateral units
+            fees: IFixed,
+        }
+
+        struct IntegratorInfo has copy, drop {
+            integrator_address: address,
+            taker_fee: u256,
+        }
+
         /// Used by clearing house to check margin when placing an order
         struct SessionHotPotato<!phantom T> {
             clearing_house: ClearingHouse<T>,
@@ -131,22 +157,16 @@ sui_pkg_sdk!(perpetuals {
             timestamp_ms: u64,
             collateral_price: IFixed,
             index_price: IFixed,
+            gas_price: u64,
             margin_before: IFixed,
             min_margin_before: IFixed,
             position_base_before: IFixed,
             total_open_interest: IFixed,
             total_fees: IFixed,
             maker_events: vector<events::FilledMakerOrder>,
-            liquidation_receipt: Option<LiquidationReceipt>,
+            liqee_account_id: Option<u64>,
+            liquidator_fees: IFixed,
             session_summary: SessionSummary
-        }
-
-        struct LiquidationReceipt has drop, store {
-            liqee_account_id: u64,
-            size_to_liquidate: u64,
-            base_ask_cancel: u64,
-            base_bid_cancel: u64,
-            pending_orders: u64
         }
 
         struct SessionSummary has drop {
@@ -170,7 +190,7 @@ sui_pkg_sdk!(perpetuals {
         /// only if the index price respects certain conditions, like being above or
         /// below a certain price.
         ///
-        /// Only the `SubAccount` owner can mint this object and can decide who can be
+        /// Only the `Account` owner can mint this object and can decide who can be
         /// the executor of the ticket. This allows users to run their
         /// own stop orders bots eventually, but it's mainly used to allow 3rd parties
         /// to offer such a service (the user is required to trust such 3rd party).
@@ -224,67 +244,32 @@ sui_pkg_sdk!(perpetuals {
         }
     }
 
-    module subaccount {
-        /// The SubAccount object represents a shared version of the `Account` object
-        /// with limited access to protocol's features. Being a shared object, it can
-        /// only be used by the addresses specified in the `users` field.
-        /// Only the parent Account can withdraw Coin from a subaccount. The parent account is
-        /// required to specify a Sui address that will be able to use the subaccount on its behalf
-        /// and can change this address at any moment.
-        ///
-        /// Subaccounts are used for trading and depositing, without running into race conditions, i.e.,
-        /// concurrent transactions using the same subaccount can be created and submitted (unlike
-        /// accounts).
-        ///
-        /// The created subaccount will share the primary's account_id. That means it has access to the
-        /// same positions of the primary.
-        ///
-        /// The subaccount's users are then able to:
-        /// - deposit collateral into the subaccount
-        /// - allocate collateral from subaccount to a clearing house
-        /// - use session to trade and liquidate on clearing house
-        /// - cancel pending orders
-        /// - deallocate from a clearing house to a subaccount
-        struct SubAccount<!phantom T> has key, store {
-            id: UID,
-            /// Addresses able to make calls using this `SubAccount`
-            users: vector<address>,
-            /// Numerical value associated to the parent account
-            account_id: u64,
-            /// Balance available to be allocated to markets.
-            collateral: Balance<T>,
-        }
-    }
-
     module events {
         struct CreatedAccount<!phantom T> has copy, drop {
+            account_obj_id: ID,
             user: address,
             account_id: u64
         }
 
         struct DepositedCollateral<!phantom T> has copy, drop {
             account_id: u64,
-            subaccount_id: Option<ID>,
             collateral: u64,
         }
 
         struct AllocatedCollateral has copy, drop {
             ch_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             collateral: u64,
         }
 
         struct WithdrewCollateral<!phantom T> has copy, drop {
             account_id: u64,
-            subaccount_id: Option<ID>,
             collateral: u64,
         }
 
         struct DeallocatedCollateral has copy, drop {
             ch_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             collateral: u64,
         }
 
@@ -339,6 +324,23 @@ sui_pkg_sdk!(perpetuals {
             scaling_factor: IFixed
         }
 
+        struct AddedIntegratorConfig<!phantom T> has copy, drop {
+            account_id: u64,
+            integrator_address: address,
+            max_taker_fee: IFixed
+        }
+
+        struct RemovedIntegratorConfig<!phantom T> has copy, drop {
+            account_id: u64,
+            integrator_address: address,
+        }
+
+        struct PaidIntegratorFees<!phantom T> has copy, drop {
+            account_id: u64,
+            integrator_address: address,
+            fees: IFixed
+        }
+
         struct UpdatedClearingHouseVersion has copy, drop {
             ch_id: ID,
             version: u64
@@ -358,6 +360,14 @@ sui_pkg_sdk!(perpetuals {
             index_price: IFixed,
             spread_twap: IFixed,
             spread_twap_last_upd_ms: u64,
+        }
+
+        struct UpdatedGasPriceTwap has copy, drop {
+            ch_id: ID,
+            gas_price: IFixed,
+            mean: IFixed,
+            variance: IFixed,
+            gas_price_last_upd_ms: u64
         }
 
         struct UpdatedFunding has copy, drop {
@@ -453,7 +463,6 @@ sui_pkg_sdk!(perpetuals {
         struct CreatedPosition has copy, drop {
             ch_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             mkt_funding_rate_long: IFixed,
             mkt_funding_rate_short: IFixed,
         }
@@ -467,7 +476,6 @@ sui_pkg_sdk!(perpetuals {
         struct CreatedStopOrderTicket<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             executors: vector<address>,
             gas: u64,
             stop_order_type: u64,
@@ -483,14 +491,12 @@ sui_pkg_sdk!(perpetuals {
         struct DeletedStopOrderTicket<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             executor: address
         }
 
         struct EditedStopOrderTicketDetails<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             stop_order_type: u64,
             encrypted_details: vector<u8>
         }
@@ -498,7 +504,6 @@ sui_pkg_sdk!(perpetuals {
         struct EditedStopOrderTicketExecutors<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
-            subaccount_id: Option<ID>,
             executors: vector<address>
         }
 
@@ -581,11 +586,6 @@ sui_pkg_sdk!(perpetuals {
             min_order_usd_value: IFixed,
         }
 
-        struct UpdatedLiquidationTolerance has copy, drop {
-            ch_id: ID,
-            liquidation_tolerance: u64,
-        }
-
         struct UpdatedBaseOracleTolerance has copy, drop {
             ch_id: ID,
             oracle_tolerance: u64,
@@ -641,18 +641,6 @@ sui_pkg_sdk!(perpetuals {
             open_interest: IFixed,
             fees_accrued: IFixed
         }
-
-        struct CreatedSubAccount has copy, drop {
-            subaccount_id: ID,
-            users: vector<address>,
-            account_id: u64
-        }
-
-        struct SetSubAccountUsers has copy, drop {
-            subaccount_id: ID,
-            users: vector<address>,
-            account_id: u64
-        }
     }
 
     module keys {
@@ -666,6 +654,16 @@ sui_pkg_sdk!(perpetuals {
 
         /// Key type for accessing a `Config` saved in registry.
         struct RegistryConfig has copy, drop, store {}
+
+        /// Key type for accessing integrator configs for an account.
+        struct IntegratorConfig has copy, drop, store {
+            integrator_address: address,
+        }
+
+        /// Key type for accessing integrator's collected fees.
+        struct IntegratorVault has copy, drop, store {
+            integrator_address: address,
+        }
 
         /// Key type for accessing market params in clearing house.
         struct Orderbook has copy, drop, store {}
@@ -728,6 +726,8 @@ sui_pkg_sdk!(perpetuals {
             spread_twap_frequency_ms: u64,
             /// The reference time span used for weighting the TWAP updates for spread.
             spread_twap_period_ms: u64,
+            /// The reference time span used for weighting the TWAP updates for gas price.
+            gas_price_twap_period_ms: u64,
             /// Proportion of volume charged as fees from makers upon processing
             /// fill events.
             maker_fee: IFixed,
@@ -747,9 +747,6 @@ sui_pkg_sdk!(perpetuals {
             lot_size: u64,
             /// Number of quote units exchanged per tick
             tick_size: u64,
-            /// Number of lots in a position that a liquidator may buy in excess of what would be
-            /// strictly required to bring the liqee's account back to IMR.
-            liquidation_tolerance: u64,
             /// Maximum number of pending orders that a position can have.
             max_pending_orders: u64,
             /// Timestamp tolerance for base oracle price
@@ -764,7 +761,13 @@ sui_pkg_sdk!(perpetuals {
             /// Max open interest percentage a position can have relative to total market's open interest
             max_open_interest_position_percent: IFixed,
             /// Scaling factor to use to convert collateral units to ifixed values and viceversa
-            scaling_factor: IFixed
+            scaling_factor: IFixed,
+            /// Additional taker fee to apply in case the gas price set for the transaction violates
+            /// the z-score constraint
+            gas_price_taker_fee: IFixed,
+            /// Z-Score threshold level used to determine if to apply `gas_price_taker_fee` to the
+            /// executed order
+            z_score_threshold: IFixed,
         }
 
         /// The state of a perpetuals market.
@@ -787,6 +790,16 @@ sui_pkg_sdk!(perpetuals {
             spread_twap: IFixed,
             /// The timestamp (millisec) of `spread_twap` last update.
             spread_twap_last_upd_ms: u64,
+            /// Gas price TWAP mean.
+            /// It is used to calculate the penalty to add to taker fees based on the Z-score of the current gas price
+            /// relative to the smoothed mean and variance.
+            gas_price_mean: IFixed,
+            /// Gas price TWAP variance.
+            /// It is used to calculate the penalty to add to taker fees based on the Z-score of the current gas price
+            /// relative to the smoothed mean and variance.
+            gas_price_variance: IFixed,
+            /// The timestamp (millisec) of the last update of `gas_price_mean` and `gas_price_variance`.
+            gas_price_last_upd_ms: u64,
             /// Open interest (in base tokens) as a fixed-point number. Counts the
             /// total size of contracts as the sum of all long positions.
             open_interest: IFixed,
@@ -1016,30 +1029,30 @@ impl self::ordered_map::Map<Order> {
     }
 }
 
-// #[cfg(test)]
-// mod tests {
-//     /// Taken from
-//     /// <https://github.com/cargo-public-api/cargo-public-api?tab=readme-ov-file#-as-a-ci-check>
-//     #[test]
-//     fn public_api() {
-//         // Install a compatible nightly toolchain if it is missing
-//         rustup_toolchain::install(public_api::MINIMUM_NIGHTLY_RUST_VERSION).unwrap();
+#[cfg(test)]
+mod tests {
+    /// Taken from
+    /// <https://github.com/cargo-public-api/cargo-public-api?tab=readme-ov-file#-as-a-ci-check>
+    #[test]
+    fn public_api() {
+        // Install a compatible nightly toolchain if it is missing
+        rustup_toolchain::install(public_api::MINIMUM_NIGHTLY_RUST_VERSION).unwrap();
 
-//         // Build rustdoc JSON
-//         let rustdoc_json = rustdoc_json::Builder::default()
-//             .toolchain(public_api::MINIMUM_NIGHTLY_RUST_VERSION)
-//             .build()
-//             .unwrap();
+        // Build rustdoc JSON
+        let rustdoc_json = rustdoc_json::Builder::default()
+            .toolchain(public_api::MINIMUM_NIGHTLY_RUST_VERSION)
+            .build()
+            .unwrap();
 
-//         // Derive the public API from the rustdoc JSON
-//         let public_api = public_api::Builder::from_rustdoc_json(rustdoc_json)
-//             .omit_blanket_impls(true)
-//             .omit_auto_trait_impls(true)
-//             .omit_auto_derived_impls(true)
-//             .build()
-//             .unwrap();
+        // Derive the public API from the rustdoc JSON
+        let public_api = public_api::Builder::from_rustdoc_json(rustdoc_json)
+            .omit_blanket_impls(true)
+            .omit_auto_trait_impls(true)
+            .omit_auto_derived_impls(true)
+            .build()
+            .unwrap();
 
-//         // Assert that the public API looks correct
-//         insta::assert_snapshot!(public_api);
-//     }
-// }
+        // Assert that the public API looks correct
+        insta::assert_snapshot!(public_api);
+    }
+}

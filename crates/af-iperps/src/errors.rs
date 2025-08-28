@@ -64,10 +64,11 @@ module perpetuals::errors {
     const InvalidBasePriceFeedStorage: u64 = 11;
     /// Same liquidator and liqee account ids
     const SelfLiquidation: u64 = 12;
-    /// User trying to access the subaccount is not the one specified by parent
-    const InvalidSubAccountUser: u64 = 13;
-    /// The parent `Account` trying to delete the subaccount is not the correct one.
-    const WrongParentForSubAccount: u64 = 14;
+    /// User trying to access the account used the wrong account cap
+    const InvalidAccountCap: u64 = 13;
+    /// Raised when passing an integrator taker fee that is greater than
+    /// the `max_integrator_taker_fee` set by the user in its account
+    const InvalidIntegratorTakerFee: u64 = 14;
     /// Raised when trying to call a function with the wrong package's version
     const WrongVersion: u64 = 16;
     /// Raised when trying to have a session composed by only `start_session` and `end_session`
@@ -97,11 +98,22 @@ module perpetuals::errors {
     /// allowed percentage of open interest
     const MaxOpenInterestPositionPercentSurpassed: u64 = 29;
     /// Raised processing a session that requires a collateral allocation,
-    /// but not enough collateral is available in the account or subaccount
+    /// but not enough collateral is available in the account
     const NotEnoughCollateralToAllocateForSession: u64 = 30;
     /// Raised processing a session that requires a collateral allocation
-    /// and a wrong account or subaccount is being used to fund it
+    /// and a wrong account is being used to fund it
     const WrongAccountIdForAllocation: u64 = 31;
+    /// Raised when trying to create an integrator vault for an address
+    /// that already has one
+    const IntegratorVaultAlreadyExists: u64 = 32;
+    /// Raised when trying to access an integrator vault that does not exist
+    const IntegratorVaultDoesNotExist: u64 = 33;
+    /// Raised when trying to place an order passing a `size` that is not a multiple
+    /// of market's lot size
+    const SizeNotMultipleOfLotSize: u64 = 34;
+    /// Raised when trying to place an order passing a `price` that is not a multiple
+    /// of market's tick size
+    const PriceNotMultipleOfTickSize: u64 = 35;
 
     // Market ---------------------------------------------------------------
 
