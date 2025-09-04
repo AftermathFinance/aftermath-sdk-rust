@@ -653,6 +653,94 @@ sui_pkg_sdk!(perpetuals {
             users: vector<address>,
             account_id: u64
         }
+
+        struct CreateVault has copy, drop {
+            vault_id: ID,
+            owner_cap_id: ID,
+            vault_admin: address,
+            lock_period: u64,
+        }
+
+        struct UpdateVaultVersion has copy, drop {
+            vault_id: ID,
+            version: u64
+        }
+
+        struct UpdateOwnerFeeRate has copy, drop {
+            vault_id: ID,
+            owner_fee_rate: u256
+        }
+
+        struct UpdateLockPeriod has copy, drop {
+            vault_id: ID,
+            lock_period: u64
+        }
+
+        struct UpdateForceWithdrawDelay has copy, drop {
+            vault_id: ID,
+            force_withdraw_delay: u64
+        }
+
+        struct VaultDepositIntoPerpetuals<!phantom C> has copy, drop {
+            vault_id: ID,
+            clearing_house_id: ID,
+            account_id: u64,
+            amount: u64
+        }
+
+        struct VaultWithdrawFromPerpetuals<!phantom C> has copy, drop {
+            vault_id: ID,
+            clearing_house_id: ID,
+            account_id: u64,
+            amount: u64
+        }
+
+        struct VaultPlaceMarketOrder has copy, drop {
+            vault_id: ID,
+            clearing_house_id: ID,
+            side: bool,
+            size: u64,
+        }
+
+        struct VaultPlaceLimitOrder has copy, drop {
+            vault_id: ID,
+            clearing_house_id: ID,
+            side: bool,
+            size: u64,
+            price: u64,
+            order_type: u64
+        }
+
+        struct VaultCancelOrders has copy, drop {
+            vault_id: ID,
+            account_id: u64,
+            clearing_house_id: ID,
+            order_ids: vector<u128>
+        }
+
+        struct VaultLiquidate has copy, drop {
+            vault_id: ID,
+            clearing_house_id: ID,
+            liqee_account_id: u64,
+            size_to_liquidate: u64,
+            cancel_order_ids: vector<u128>
+        }
+
+        struct VaultWithdrawFees has copy, drop {
+            vault_id: ID,
+            recipient: address,
+            amount_to_withdraw: u64
+        }
+
+        struct MaxMarketsUpdated has copy, drop {
+            vault_id: ID,
+            new_max_markets: u64,
+        }
+
+        struct MaxPendingOrdersUpdated has copy, drop {
+            vault_id: ID,
+            new_max_pending_orders: u64,
+        }
     }
 
     module keys {
