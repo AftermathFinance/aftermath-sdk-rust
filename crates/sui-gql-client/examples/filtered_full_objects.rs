@@ -9,7 +9,7 @@ use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
+    #[arg(long, default_value = "https://server-7.aftermath.finance/graphql/v2")]
     rpc: String,
 
     /// Only the summary of query time and number of objects.
@@ -22,9 +22,9 @@ async fn main() -> Result<()> {
     color_eyre::install()?;
     let Args { rpc, summary } = Args::parse();
     let client = ReqwestClient::new(reqwest::Client::default(), rpc.to_owned());
-    let owner = Some("0x62ddcde37c6321d8f4bf174c35aeff6bc50cdf490e74f6e6c66d74ca2fe9ac4e".parse()?);
+    let owner = None;
     let type_ = Some(
-        "0x9f992cc2430a1f442ca7a5ca7638169f5d5c00e0ebc3977a65e9ac6e497fe5ef::staked_wal".into(),
+        "0x1164da999906ab20f4a82be965bdd5e505367edaf55e94e5dc7b29228bf5d88a::account::AccountCap<0x457049371f5b5dc2bda857bb804ca6e93c5a3cae1636d0cd17bb6b6070d19458::usdc::USDC>".into(),
     );
 
     tokio::pin!(
@@ -41,6 +41,7 @@ async fn main() -> Result<()> {
         } else {
             println!("Object ID: {:?}", obj.object_id());
             println!("Object: {obj:?}");
+            println!("Object Owner: {:?}", obj.owner());
         }
     }
     spinner.finish_using_style();

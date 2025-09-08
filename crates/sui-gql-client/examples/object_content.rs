@@ -12,8 +12,8 @@ async fn main() -> Result<()> {
         SUI_GRAPHQL_SERVER_URL.to_owned(),
     );
     let result = client
-        .object_content(
-            "0xe4a1c0bfc53a7c2941a433a9a681c942327278b402878e0c45280eecd098c3d1".parse()?,
+        .full_object(
+            "0xa8f4b35457e5ecfa77d448858ad9ae9330541785046726473e84da69f9557339".parse()?,
             None,
         )
         .await?;

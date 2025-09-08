@@ -84,7 +84,7 @@ bcs = { version = "0.1", optional = true }
 default-features = false
 features         = ["build"]
 path             = "../sui-gql-schema"
-version = "0.11.3"
+version          = "0.11.3"
 
 
 [dev-dependencies]
@@ -100,7 +100,7 @@ tokio      = { version = "1", features = ["full"] }
 tokio-test = "0.4"
 
 af-sui-types   = { path = "../af-sui-types" }
-sui-gql-schema = { path = "../sui-gql-schema", features = ["scalars"] }
+sui-gql-schema = { path = "../sui-gql-schema", features = ["build", "scalars"] }
 
 
 [[example]]
