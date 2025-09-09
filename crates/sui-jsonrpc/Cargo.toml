@@ -54,7 +54,7 @@ jsonrpsee-http-client = { version = "0.25", public = true, optional = true }
 jsonrpsee-types       = { version = "0.25", public = true, optional = true }
 serde                 = { version = "1", public = true }
 serde_json            = { version = "1", public = true }
-sui-sdk-types         = { version = "0.0.6", public = true }
+sui-sdk-types         = { version = "0.0.7", public = true }
 
 bcs           = "0.1"
 colored       = "3"
