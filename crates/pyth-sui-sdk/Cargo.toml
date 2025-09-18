@@ -42,7 +42,7 @@ hex            = { version = "0.4", public = true }
 jsonrpsee-core = { version = "0.25", public = true, optional = true }
 pyth-sdk       = { version = "0.8", public = true, optional = true }
 sui-jsonrpc    = { version = "0.20.0", public = true, default-features = false, optional = true, path = "../sui-jsonrpc" }
-sui-sdk-types  = { version = "0.0.6", public = true }
+sui-sdk-types  = { version = "0.0.7", public = true }
 
 af-move-type      = { version = "0.13.0", path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.10.3", path = "../af-sui-pkg-sdk" }
