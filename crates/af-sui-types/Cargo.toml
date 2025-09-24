@@ -50,7 +50,7 @@ thiserror     = "2"
 derive_more = { version = "2", features = ["from_str"] }
 
 # for u256
-primitive-types = { version = "0.13", features = ["fp-conversion"], optional = true }
+primitive-types = { version = "0.14", features = ["fp-conversion"], optional = true }
 uint            = { version = "0.10", optional = true }
 
 [dev-dependencies]
