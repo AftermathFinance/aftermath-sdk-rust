@@ -38,6 +38,6 @@ derive-where  = "1"
 derive_more   = { version = "2", features = ["deref", "deref_mut", "from", "into"] }
 serde         = "1"
 serde_with    = "3"
-sui-sdk-types = { version = "0.0.6", public = true }
+sui-sdk-types = { version = "0.0.7", public = true }
 tabled        = "0.16"
 thiserror     = "2"

@@ -35,7 +35,7 @@ af-ptbuilder      = { version = "8.0.1", public = true, optional = true, path = 
 af-sui-pkg-sdk    = { version = "0.10.3", public = true, path = "../af-sui-pkg-sdk" }
 move-stdlib-sdk   = { version = "0.11.3", public = true, path = "../move-stdlib-sdk" }
 sui-framework-sdk = { version = "0.12.3", public = true, path = "../sui-framework-sdk" }
-sui-sdk-types     = { version = "0.0.6", public = true }
+sui-sdk-types     = { version = "0.0.7", public = true }
 
 af-move-type = { version = "0.13.0", path = "../af-move-type" }
 af-sui-types = { version = "0.13.0", path = "../af-sui-types" }

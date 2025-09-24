@@ -45,7 +45,7 @@ af-ptbuilder      = { version = "8.0.1", public = true, optional = true, path = 
 af-sui-pkg-sdk    = { version = "0.10.3", public = true, path = "../af-sui-pkg-sdk" }
 sui-framework-sdk = { version = "0.12.3", public = true, path = "../sui-framework-sdk" }
 sui-gql-client    = { version = "0.20.3", public = true, default-features = false, optional = true, path = "../sui-gql-client" }
-sui-sdk-types     = { version = "0.0.6", public = true }
+sui-sdk-types     = { version = "0.0.7", public = true }
 
 bcs              = { version = "0.1", optional = true }
 extension-traits = { version = "2", optional = true }
