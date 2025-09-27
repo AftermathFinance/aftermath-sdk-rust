@@ -1,7 +1,7 @@
 [package]
 description = "Move types for `AftermathFaucet` used in development"
 name        = "af-faucet"
-version     = "0.13.3"
+version     = "0.13.4"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -28,5 +28,5 @@ workspace = true
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-sui-pkg-sdk    = { version = "0.10.3", public = true, path = "../af-sui-pkg-sdk" }
-sui-framework-sdk = { version = "0.12.3", public = true, path = "../sui-framework-sdk" }
+af-sui-pkg-sdk    = { version = "0.10.4", public = true, path = "../af-sui-pkg-sdk" }
+sui-framework-sdk = { version = "0.12.4", public = true, path = "../sui-framework-sdk" }

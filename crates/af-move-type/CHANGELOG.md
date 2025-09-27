@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.13.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.13.0...af-move-type-v0.13.1)
+
+### ⛰️ Features
+
+- Update sui-sdk-types version - ([afd8709](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/afd8709c1b3da95dd9280ca028d018e7eb5f5333))
+
+
 ## [0.12.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.11.0...af-move-type-v0.12.0)
 
 ### ⛰️ Features

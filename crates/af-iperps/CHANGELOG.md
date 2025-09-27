@@ -48,6 +48,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.35.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.35.0...af-iperps-v0.35.1)
+
+### ⛰️ Features
+
+- Update sui-sdk-types version - ([afd8709](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/afd8709c1b3da95dd9280ca028d018e7eb5f5333))
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix clippy warnings - ([32ac795](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/32ac795944585afff61d97f62efc325ba1ac7c83))
+
+
 ## [0.35.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.34.0...af-iperps-v0.35.0)
 
 ### 🐛 Bug Fixes

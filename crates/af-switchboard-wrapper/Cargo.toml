@@ -1,7 +1,7 @@
 [package]
 description = "Move types for Aftermath's `SwitchboardWrapper` package that extends `AfOracle`"
 name        = "af-switchboard-wrapper"
-version     = "0.0.27"
+version     = "0.0.28"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -41,10 +41,10 @@ ptb = ["dep:af-ptbuilder", "dep:extension-traits"]
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-ptbuilder      = { version = "8.0.1", public = true, optional = true, path = "../af-ptbuilder" }
-af-sui-pkg-sdk    = { version = "0.10.3", public = true, path = "../af-sui-pkg-sdk" }
-sui-framework-sdk = { version = "0.12.3", public = true, path = "../sui-framework-sdk" }
-sui-gql-client    = { version = "0.20.3", public = true, default-features = false, optional = true, path = "../sui-gql-client" }
+af-ptbuilder      = { version = "8.1.0", public = true, optional = true, path = "../af-ptbuilder" }
+af-sui-pkg-sdk    = { version = "0.10.4", public = true, path = "../af-sui-pkg-sdk" }
+sui-framework-sdk = { version = "0.12.4", public = true, path = "../sui-framework-sdk" }
+sui-gql-client    = { version = "0.20.4", public = true, default-features = false, optional = true, path = "../sui-gql-client" }
 sui-sdk-types     = { version = "0.0.7", public = true }
 
 bcs              = { version = "0.1", optional = true }
@@ -52,5 +52,5 @@ extension-traits = { version = "2", optional = true }
 thiserror        = { version = "2", optional = true }
 trait-variant    = { version = "0.1", optional = true }
 
-af-move-type = { version = "0.13.0", optional = true, path = "../af-move-type" }
-af-sui-types = { version = "0.13.0", optional = true, path = "../af-sui-types" }
+af-move-type = { version = "0.13.1", optional = true, path = "../af-move-type" }
+af-sui-types = { version = "0.13.1", optional = true, path = "../af-sui-types" }

@@ -37,6 +37,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.21.5](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-oracle-v0.21.4...af-oracle-v0.21.5)
+
+### ⛰️ Features
+
+- Update sui-sdk-types version - ([afd8709](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/afd8709c1b3da95dd9280ca028d018e7eb5f5333))
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix clippy warnings - ([32ac795](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/32ac795944585afff61d97f62efc325ba1ac7c83))
+
+
 ## [0.21.4](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-oracle-v0.21.3...af-oracle-v0.21.4)
 
 ### ⚙️ Miscellaneous Tasks

@@ -30,6 +30,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.20.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-jsonrpc-v0.20.0...sui-jsonrpc-v0.20.1)
+
+### ⛰️ Features
+
+- Remove af-sui-types dependency from sui-jsonrpc - ([3836c49](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/3836c497a50e3139bd7512c53c2d5038f7e78738))
+- Update sui-sdk-types version - ([afd8709](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/afd8709c1b3da95dd9280ca028d018e7eb5f5333))
+
+### ⚙️ Miscellaneous Tasks
+
+- Fix clippy warnings - ([32ac795](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/32ac795944585afff61d97f62efc325ba1ac7c83))
+- Update some dependencies - ([a7afcf6](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/a7afcf6a7de99c293edd52923cc46387164f132d))
+
+
 ## [0.18.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-jsonrpc-v0.17.0...sui-jsonrpc-v0.18.0)
 
 ### ⛰️ Features

@@ -1,7 +1,7 @@
 [package]
 description = "Move types for the Sui package at address 0x2"
 name        = "sui-framework-sdk"
-version     = "0.12.3"
+version     = "0.12.4"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -28,10 +28,10 @@ workspace = true
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-move-type    = { version = "0.13.0", public = true, path = "../af-move-type" }
-af-sui-pkg-sdk  = { version = "0.10.3", public = true, path = "../af-sui-pkg-sdk" }
-af-sui-types    = { version = "0.13.0", public = true, path = "../af-sui-types" }
-move-stdlib-sdk = { version = "0.11.3", public = true, path = "../move-stdlib-sdk" }
+af-move-type    = { version = "0.13.1", public = true, path = "../af-move-type" }
+af-sui-pkg-sdk  = { version = "0.10.4", public = true, path = "../af-sui-pkg-sdk" }
+af-sui-types    = { version = "0.13.1", public = true, path = "../af-sui-types" }
+move-stdlib-sdk = { version = "0.11.4", public = true, path = "../move-stdlib-sdk" }
 
 derive_more = { version = "2", features = ["from"] }
 

@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.12.4](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/wormhole-sui-sdk-v0.12.3...wormhole-sui-sdk-v0.12.4)
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated the following local packages: af-sui-pkg-sdk, sui-framework-sdk - ([0000000](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0000000))
+
+
 ## [0.12.2](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/wormhole-sui-sdk-v0.12.1...wormhole-sui-sdk-v0.12.2)
 
 ### ⚙️ Miscellaneous Tasks

@@ -1,7 +1,7 @@
 [package]
 description = "Sui GraphQL RPC client by Aftermath using `cynic`"
 name        = "sui-gql-client"
-version     = "0.20.3"
+version     = "0.20.4"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -49,15 +49,15 @@ scalars = ["sui-gql-schema/scalars"]
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 # FIXME: this is in dire need of refactoring; see
 # https://github.com/AftermathFinance/aftermath-sdk-rust/issues/181
-af-move-type   = { version = "0.13.0", public = true, optional = true, path = "../af-move-type" }
-af-sui-types   = { version = "0.13.0", public = true, path = "../af-sui-types", optional = true }
+af-move-type   = { version = "0.13.1", public = true, optional = true, path = "../af-move-type" }
+af-sui-types   = { version = "0.13.1", public = true, path = "../af-sui-types", optional = true }
 bimap          = { version = "0.6", public = true, optional = true }
 cynic          = { version = "3", public = true }
 futures-core   = { version = "0.3", public = true, optional = true }
 reqwest        = { version = "0.12", public = true, default-features = false, optional = true }
 serde          = { version = "1", public = true }
 serde_json     = { version = "1", public = true, optional = true }
-sui-gql-schema = { version = "0.12.0", public = true, default-features = false, path = "../sui-gql-schema" }
+sui-gql-schema = { version = "0.12.1", public = true, default-features = false, path = "../sui-gql-schema" }
 sui-sdk-types  = { version = "0.0.7", public = true, optional = true }
 
 graphql-extract = { version = "0.0.10", path = "../graphql-extract", optional = true }
@@ -84,7 +84,7 @@ bcs = { version = "0.1", optional = true }
 default-features = false
 features         = ["build"]
 path             = "../sui-gql-schema"
-version          = "0.12.0"
+version = "0.12.1"
 
 
 [dev-dependencies]

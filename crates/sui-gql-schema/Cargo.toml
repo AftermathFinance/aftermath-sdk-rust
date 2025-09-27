@@ -1,7 +1,7 @@
 [package]
 description = "Sui GraphQL schema for the Cynic client"
 name        = "sui-gql-schema"
-version     = "0.12.0"
+version     = "0.12.1"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -43,7 +43,7 @@ scalars = [
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-sui-types = { version = "0.13.0", public = true, optional = true, path = "../af-sui-types" }
+af-sui-types = { version = "0.13.1", public = true, optional = true, path = "../af-sui-types" }
 cynic        = { version = "3", public = true }
 
 # For scalars (optional)
