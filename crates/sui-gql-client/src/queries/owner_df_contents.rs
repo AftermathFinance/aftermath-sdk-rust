@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use af_sui_types::Address as SuiAddress;
+use af_sui_types::{Address as SuiAddress, ObjectId};
 
 use super::Error;
 use super::fragments::MoveValueRaw;
@@ -147,7 +147,7 @@ struct Owner {
 #[derive(cynic::QueryFragment, Debug)]
 struct MoveObject {
     #[cynic(rename = "address")]
-    object_id: SuiAddress,
+    object_id: ObjectId,
     version: af_sui_types::Version,
     contents: Option<MoveValueRaw>,
 }

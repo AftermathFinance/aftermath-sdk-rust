@@ -1,5 +1,5 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, TypeTag, Version};
+use af_sui_types::{ObjectId, TypeTag, Version};
 use futures::Stream;
 use sui_gql_client::GraphQlClient;
 use sui_gql_client::queries::GraphQlClientExt as _;
@@ -9,9 +9,9 @@ use super::Result as QResult;
 
 pub(super) fn query<C>(
     client: &C,
-    registry_address: Address,
+    registry_address: ObjectId,
     version: Option<Version>,
-) -> impl Stream<Item = QResult<Address, C>> + '_
+) -> impl Stream<Item = QResult<ObjectId, C>> + '_
 where
     C: GraphQlClient,
 {
@@ -20,7 +20,7 @@ where
         let mut cursor = None;
         while has_next_page {
             let (dfs, cursor_) = client
-                .owner_df_contents(registry_address, version, None, cursor)
+                .owner_df_contents(registry_address.into(), version, None, cursor)
                 .await?;
             cursor = cursor_;
             has_next_page = cursor.is_some();

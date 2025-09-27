@@ -1,5 +1,5 @@
 use af_ptbuilder::{ProgrammableTransactionBuilder, ptbuilder};
-use af_sui_types::{Address, Argument, ObjectArg, TypeTag};
+use af_sui_types::{Argument, ObjectArg, ObjectId, TypeTag};
 
 /// Groups the [ProgrammableTransactionBuilder] variables for updating a Switchboard `Aggregator`.
 #[derive(Clone, Debug)]
@@ -18,7 +18,7 @@ impl ProgrammableTransactionBuilder {
     /// This means that `oracle_args.len() >= aggregator.min_sample_size`
     fn update_switchboard_aggregator(
         &mut self,
-        switchboard_pkg: Address,
+        switchboard_pkg: ObjectId,
         switchboard_agg: ObjectArg,
         queue: ObjectArg,
         fee_coin: Argument,

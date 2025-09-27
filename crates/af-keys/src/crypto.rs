@@ -1,5 +1,6 @@
 use std::hash::Hash;
 
+use af_sui_types::Address as SuiAddress;
 use derive_more::{AsMut, AsRef};
 use enum_dispatch::enum_dispatch;
 use eyre::eyre;
@@ -39,7 +40,6 @@ use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_with::base64::Base64;
 use serde_with::{Bytes, IfIsHumanReadable, serde_as};
 use strum::EnumString;
-use sui_sdk_types::Address as SuiAddress;
 
 use crate::intent::IntentMessage;
 
@@ -371,7 +371,7 @@ impl ToFromBytes for Signature {
     }
 }
 
-impl From<Signature> for sui_sdk_types::UserSignature {
+impl From<Signature> for af_sui_types::UserSignature {
     fn from(value: Signature) -> Self {
         Self::from_bytes(value.as_bytes()).expect("Compatible")
     }

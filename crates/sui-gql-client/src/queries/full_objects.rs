@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use af_sui_types::{Address, Object};
+use af_sui_types::{Object, ObjectId};
 use futures::{StreamExt as _, TryStreamExt as _};
 use graphql_extract::extract;
 use itertools::Itertools as _;
@@ -13,9 +13,9 @@ use crate::{GraphQlClient, GraphQlResponseExt as _, missing_data, schema};
 
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
-    objects: impl IntoIterator<Item = Address> + Send,
+    objects: impl IntoIterator<Item = ObjectId> + Send,
     page_size: Option<u32>,
-) -> Result<HashMap<Address, Object>, Error<C::Error>> {
+) -> Result<HashMap<ObjectId, Object>, Error<C::Error>> {
     // To keep track of all ids requested.
     let object_ids = objects.into_iter().collect_vec();
 
@@ -53,7 +53,7 @@ async fn request<C: GraphQlClient>(
     vars: Variables<'_>,
 ) -> super::Result<
     stream::Page<
-        impl Iterator<Item = super::Result<(Address, Option<Object>), C>> + 'static + use<C>,
+        impl Iterator<Item = super::Result<(ObjectId, Option<Object>), C>> + 'static + use<C>,
     >,
     C,
 > {
@@ -116,7 +116,7 @@ struct ObjectConnection {
 #[cynic(graphql_type = "Object")]
 struct ObjectGql {
     #[cynic(rename = "address")]
-    id: Address,
+    id: ObjectId,
     #[cynic(rename = "bcs")]
     object: Option<Base64Bcs<Object>>,
 }

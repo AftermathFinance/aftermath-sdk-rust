@@ -1,5 +1,5 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, Version};
+use af_sui_types::{Address, ObjectId, Version};
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 use graphql_extract::extract;
@@ -13,7 +13,7 @@ use crate::ordered_map::Leaf;
 pub(super) fn query<C: GraphQlClient>(
     client: &C,
     package: Address,
-    ch: Address,
+    ch: ObjectId,
     version: Option<Version>,
     asks: bool,
 ) -> impl Stream<Item = Result<(u128, Order), Error<C::Error>>> + '_ {
@@ -114,7 +114,7 @@ fn gql_output() {
         .unwrap();
 
     let vars = Variables {
-        ch: Address::ZERO,
+        ch: ObjectId::ZERO,
         version: None,
         orderbook,
         map_name,
@@ -165,7 +165,7 @@ fn gql_output() {
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
 struct Variables {
-    ch: Address,
+    ch: ObjectId,
     version: Option<Version>,
     orderbook: DynamicFieldName,
     map_name: DynamicFieldName,

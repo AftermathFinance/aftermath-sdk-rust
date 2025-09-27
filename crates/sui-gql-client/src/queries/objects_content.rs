@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use af_sui_types::Address;
+use af_sui_types::ObjectId;
 use futures::TryStreamExt as _;
 use sui_gql_schema::schema;
 
@@ -12,8 +12,8 @@ use crate::{GraphQlClient, GraphQlResponseExt as _, missing_data};
 
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
-    object_ids: Vec<Address>,
-) -> super::Result<HashMap<Address, RawMoveStruct>, C> {
+    object_ids: Vec<ObjectId>,
+) -> super::Result<HashMap<ObjectId, RawMoveStruct>, C> {
     let vars = Variables {
         after: None,
         first: None,
@@ -105,6 +105,6 @@ fn gql_output() {
 #[derive(cynic::QueryFragment, Clone, Debug)]
 struct Object {
     #[cynic(rename = "address")]
-    object_id: Address,
+    object_id: ObjectId,
     as_move_object: Option<super::fragments::MoveObjectContent<MoveValueRaw>>,
 }

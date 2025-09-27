@@ -1,5 +1,5 @@
 use af_move_type::{FromRawStructError, MoveInstance};
-use af_sui_types::Address;
+use af_sui_types::{Address, ObjectId};
 use enum_as_inner::EnumAsInner;
 use sui_gql_client::queries::Error as QueryError;
 use sui_gql_client::queries::fragments::{DynamicFieldName, MoveValueRaw};
@@ -21,7 +21,7 @@ type Vault = MoveInstance<crate::Vault>;
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
     package: Address,
-    ch: Address,
+    ch: ObjectId,
 ) -> Result<Vault, Error<C::Error>> {
     let raw = request(client, package, ch).await?;
     Ok(raw.try_into()?)
@@ -30,7 +30,7 @@ pub(super) async fn query<C: GraphQlClient>(
 async fn request<C: GraphQlClient>(
     client: &C,
     package: Address,
-    ch: Address,
+    ch: ObjectId,
 ) -> Result<RawMoveStruct, QueryError<C::Error>> {
     let vars = Variables {
         ch,
@@ -72,7 +72,7 @@ fn gql_output() {
 
     let package = Address::ZERO;
     let vars = Variables {
-        ch: Address::ZERO,
+        ch: ObjectId::ZERO,
         vault: keys::MarketVault::new()
             .move_instance(package)
             .try_into()
@@ -100,7 +100,7 @@ fn gql_output() {
 
 #[derive(cynic::QueryVariables, Debug)]
 struct Variables {
-    ch: Address,
+    ch: ObjectId,
     vault: DynamicFieldName,
 }
 

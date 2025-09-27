@@ -47,24 +47,23 @@ default = ["client"]
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
+af-sui-types          = { version = "0.13.0", public = true, path = "../af-sui-types" }
 futures-core          = { version = "0.3", public = true, optional = true }
-jsonrpsee-core        = { version = "0.26", public = true, optional = true }
-jsonrpsee-http-client = { version = "0.26", public = true, optional = true }
-jsonrpsee-types       = { version = "0.26", public = true, optional = true }
+jsonrpsee-core        = { version = "0.25", public = true, optional = true }
+jsonrpsee-http-client = { version = "0.25", public = true, optional = true }
+jsonrpsee-types       = { version = "0.25", public = true, optional = true }
 serde                 = { version = "1", public = true }
 serde_json            = { version = "1", public = true }
-sui-sdk-types         = { version = "0.0.7", public = true, features = ["hash", "serde"] }
+sui-sdk-types         = { version = "0.0.6", public = true }
 
-base64ct      = "1"
 bcs           = "0.1"
-bs58          = "0.5"
 colored       = "3"
 derive_more   = { version = "2", features = ["from"] }
 enum_dispatch = "0.3"
 itertools     = "0.14"
 json_to_table = "0.6"
 regex         = "1"
-serde_with    = { version = "3", features = ["base64"] }
+serde_with    = "3"
 tabled        = "0.12"
 thiserror     = "2"
 
@@ -72,7 +71,7 @@ async-stream     = { version = "0.3", optional = true }
 extension-traits = { version = "2", optional = true }
 futures-util     = { version = "0.3", optional = true }
 http             = { version = "1", optional = true }
-jsonrpsee        = { version = "0.26", optional = true }
+jsonrpsee        = { version = "0.25", optional = true }
 rustversion      = "1"
 
 [dev-dependencies]

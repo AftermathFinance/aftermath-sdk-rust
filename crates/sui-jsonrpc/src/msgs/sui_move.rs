@@ -5,12 +5,12 @@ use std::collections::BTreeMap;
 use std::fmt;
 use std::fmt::{Display, Formatter, Write};
 
+use af_sui_types::{Address as SuiAddress, ObjectId, StructTag};
 use colored::Colorize;
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use serde_with::{DisplayFromStr, serde_as};
-use sui_sdk_types::{Address, StructTag};
 
 pub type SuiMoveTypeParameterIndex = u16;
 
@@ -145,10 +145,10 @@ pub enum SuiMoveValue {
     // u64 and u128 are converted to String to avoid overflow
     Number(u32),
     Bool(bool),
-    Address(Address),
+    Address(SuiAddress),
     Vector(Vec<SuiMoveValue>),
     String(String),
-    UID { id: Address },
+    UID { id: ObjectId },
     Struct(SuiMoveStruct),
     Option(Box<Option<SuiMoveValue>>),
     Variant(SuiMoveVariant),

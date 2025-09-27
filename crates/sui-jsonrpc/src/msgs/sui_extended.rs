@@ -1,10 +1,11 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
+use af_sui_types::{Address as SuiAddress, CheckpointSequenceNumber, Identifier, ObjectId};
 use serde::{Deserialize, Serialize};
 use serde_with::base64::Base64;
 use serde_with::{DisplayFromStr, IfIsHumanReadable, serde_as};
-use sui_sdk_types::{Address, CheckpointSequenceNumber, EpochId, Identifier};
+use sui_sdk_types::EpochId;
 
 use super::Page;
 use crate::serde::BigInt;
@@ -41,7 +42,7 @@ pub struct EpochInfo {
 #[serde(rename_all = "camelCase")]
 pub struct SuiValidatorSummary {
     // Metadata
-    pub sui_address: Address,
+    pub sui_address: SuiAddress,
     #[serde_as(as = "Base64")]
     pub protocol_pubkey_bytes: Vec<u8>,
     #[serde_as(as = "Base64")]
@@ -73,7 +74,7 @@ pub struct SuiValidatorSummary {
 
     #[serde_as(as = "IfIsHumanReadable<BigInt<u64>, _>")]
     pub voting_power: u64,
-    pub operation_cap_id: Address,
+    pub operation_cap_id: ObjectId,
     #[serde_as(as = "IfIsHumanReadable<BigInt<u64>, _>")]
     pub gas_price: u64,
     #[serde_as(as = "IfIsHumanReadable<BigInt<u64>, _>")]
@@ -87,7 +88,7 @@ pub struct SuiValidatorSummary {
 
     // Staking pool information
     /// ID of the staking pool object.
-    pub staking_pool_id: Address,
+    pub staking_pool_id: ObjectId,
     /// The epoch at which this pool became active.
     #[serde_as(as = "Option<IfIsHumanReadable<BigInt<u64>, _>>")]
     pub staking_pool_activation_epoch: Option<u64>,
@@ -113,7 +114,7 @@ pub struct SuiValidatorSummary {
     #[serde_as(as = "IfIsHumanReadable<BigInt<u64>, _>")]
     pub pending_pool_token_withdraw: u64,
     /// ID of the exchange rate table object.
-    pub exchange_rates_id: Address,
+    pub exchange_rates_id: ObjectId,
     /// Number of exchange rates in the table.
     #[serde_as(as = "IfIsHumanReadable<BigInt<u64>, _>")]
     pub exchange_rates_size: u64,
@@ -156,7 +157,7 @@ pub struct EndOfEpochInfo {
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct MoveFunctionName {
-    pub package: Address,
+    pub package: ObjectId,
     #[serde_as(as = "DisplayFromStr")]
     pub module: Identifier,
     #[serde_as(as = "DisplayFromStr")]

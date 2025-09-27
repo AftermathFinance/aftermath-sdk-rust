@@ -4,7 +4,7 @@
 
 use af_move_type::otw::Otw;
 use af_sui_pkg_sdk::sui_pkg_sdk;
-use af_sui_types::{Address, IdentStr, SUI_FRAMEWORK_ADDRESS};
+use af_sui_types::{Address, IdentStr, ObjectId, SUI_FRAMEWORK_ADDRESS, object_id};
 use af_utilities::types::ifixed::IFixed;
 use sui_framework_sdk::balance::Balance;
 use sui_framework_sdk::dynamic_object_field::Wrapper;
@@ -28,7 +28,7 @@ pub use self::orderbook::Order;
 pub use self::position::Position;
 
 /// Package IDs of the perpetuals contract versions published on testnet, in order of its versions.
-pub const TESTNET_PACKAGE_VERSIONS: &[Address] = &[Address::from_hex_unwrap(
+pub const TESTNET_PACKAGE_VERSIONS: &[ObjectId] = &[object_id(
     b"0x1fc71972750d0d81567183a8500befef94d7699aac76edffcca253fe541367fd",
 )];
 
@@ -1026,7 +1026,7 @@ impl<T: af_move_type::MoveType> clearing_house::ClearingHouse<T> {
     ///
     /// Attempting to make a PTB Move call that mutates this clearing house but is not defined in
     /// this package version will fail.
-    pub const fn governing_package_testnet(&self) -> Address {
+    pub const fn governing_package_testnet(&self) -> ObjectId {
         // NOTE: we published the most recent testnet contracts starting with `VERSION = 1`
         TESTNET_PACKAGE_VERSIONS[self.version as usize - 1]
     }

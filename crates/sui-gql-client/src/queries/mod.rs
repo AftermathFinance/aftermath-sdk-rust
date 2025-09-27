@@ -2,9 +2,9 @@ use std::collections::HashMap;
 
 use af_sui_types::{
     Address as SuiAddress,
-    Address,
     Object,
     ObjectArg,
+    ObjectId,
     ObjectRef,
     StructTag,
     TransactionData,
@@ -104,7 +104,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     }
 
     /// The full [`Object`] contents at a certain version or the latest if not specified.
-    async fn full_object(&self, object_id: Address, version: Option<u64>) -> Result<Object, Self> {
+    async fn full_object(&self, object_id: ObjectId, version: Option<u64>) -> Result<Object, Self> {
         full_object::query(self, object_id, version)
     }
 
@@ -119,9 +119,9 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// is undefined. Avoid doing so.
     async fn latest_full_objects(
         &self,
-        objects: impl IntoIterator<Item = Address> + Send,
+        objects: impl IntoIterator<Item = ObjectId> + Send,
         page_size: Option<u32>,
-    ) -> Result<HashMap<Address, Object>, Self> {
+    ) -> Result<HashMap<ObjectId, Object>, Self> {
         full_objects::query(self, objects, page_size)
     }
 
@@ -130,7 +130,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// Duplicate object keys are automatically discarded.
     async fn multi_get_objects(
         &self,
-        keys: impl IntoIterator<Item = (Address, Version)> + Send,
+        keys: impl IntoIterator<Item = (ObjectId, Version)> + Send,
     ) -> Result<Vec<Object>, Self> {
         self::multi_get_objects::query(self, keys)
     }
@@ -146,7 +146,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     }
 
     /// The latest checkpoint number and object version of an object.
-    async fn latest_object_version(&self, object_id: Address) -> Result<(u64, u64), Self> {
+    async fn latest_object_version(&self, object_id: ObjectId) -> Result<(u64, u64), Self> {
         latest_object_version::query(self, object_id)
     }
 
@@ -156,22 +156,22 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// Fails if the server doesn't return the version for any of the requested objects.
     async fn latest_objects_version(
         &self,
-        object_ids: &[Address],
-    ) -> Result<(u64, HashMap<Address, u64>), Self> {
+        object_ids: &[ObjectId],
+    ) -> Result<(u64, HashMap<ObjectId, u64>), Self> {
         latest_objects_version::query(self, object_ids)
     }
 
     /// Version of the object at this checkpoint.
     async fn latest_version_at_checkpoint(
         &self,
-        id: Address,
+        id: ObjectId,
         ckpt_num: u64,
     ) -> std::result::Result<u64, LatestVersionAtCheckpointError<Self::Error>> {
         latest_version_at_checkpoint_v2::query(self, id, ckpt_num)
     }
 
     /// Get the object argument for a programmable transaction.
-    async fn object_arg(&self, id: Address) -> Result<ObjectArg, Self> {
+    async fn object_arg(&self, id: ObjectId) -> Result<ObjectArg, Self> {
         object_arg::query(self, id)
     }
 
@@ -180,7 +180,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// Fails if the query response does not have the necessary data for the input map.
     async fn object_args(
         &self,
-        names: BiMap<String, Address>,
+        names: BiMap<String, ObjectId>,
         page_size: Option<u32>,
     ) -> std::result::Result<BiMap<String, ObjectArg>, ObjectArgsError<Self::Error>> {
         object_args::query(self, names, page_size)
@@ -198,7 +198,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// Fails if any object in the response is missing data.
     async fn object_args_and_content(
         &self,
-        object_ids: impl IntoIterator<Item = Address> + Send,
+        object_ids: impl IntoIterator<Item = ObjectId> + Send,
         mutable: bool,
         page_size: Option<u32>,
     ) -> std::result::Result<Vec<(ObjectArg, RawMoveStruct)>, ObjectArgsAndContentError<Self::Error>>
@@ -209,7 +209,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// Get the raw Move struct of an object's content.
     async fn object_content(
         &self,
-        object_id: Address,
+        object_id: ObjectId,
         version: Option<u64>,
     ) -> Result<RawMoveStruct, Self> {
         object_content::query(self, object_id, version)
@@ -217,8 +217,8 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
 
     async fn objects_content(
         &self,
-        object_ids: Vec<Address>,
-    ) -> Result<HashMap<Address, RawMoveStruct>, Self> {
+        object_ids: Vec<ObjectId>,
+    ) -> Result<HashMap<ObjectId, RawMoveStruct>, Self> {
         objects_content::query(self, object_ids)
     }
 
@@ -266,32 +266,32 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// Get the latest version of a package.
     ///
     /// Returns both its ID and version number.
-    async fn latest_package(&self, package_id: Address) -> Result<(Address, Version), Self> {
+    async fn latest_package(&self, package_id: ObjectId) -> Result<(ObjectId, Version), Self> {
         latest_package::query(self, package_id)
     }
 
     /// Get the address of a package at a specific version.
     async fn package_at_version(
         &self,
-        package_id: Address,
+        package_id: ObjectId,
         version: Version,
-    ) -> Result<Address, Self> {
+    ) -> Result<ObjectId, Self> {
         package_at_version::query(self, package_id, version)
     }
 
     /// Get all the package ids and versions given the original package id.
     async fn packages_from_original(
         &self,
-        package_id: Address,
-    ) -> Result<impl Iterator<Item = (Address, u64)>, Self> {
+        package_id: ObjectId,
+    ) -> Result<impl Iterator<Item = (ObjectId, u64)>, Self> {
         packages_from_original::query(self, package_id)
     }
 
     /// The epoch and checkpoint number (in this order) for each package id.
     async fn packages_published_epoch(
         &self,
-        package_ids: Vec<Address>,
-    ) -> Result<impl Iterator<Item = (Address, u64, u64)>, Self> {
+        package_ids: Vec<ObjectId>,
+    ) -> Result<impl Iterator<Item = (ObjectId, u64, u64)>, Self> {
         packages_published_epoch::query(self, package_ids)
     }
 
@@ -319,7 +319,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
         &self,
         sponsor: SuiAddress,
         budget: u64,
-        exclude: Vec<Address>,
+        exclude: Vec<ObjectId>,
     ) -> std::result::Result<Vec<ObjectRef>, GasPaymentError<Self::Error>> {
         gas_payment::query(self, sponsor, budget, exclude)
     }
@@ -330,7 +330,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     }
 
     /// Struct type of an object given its ID.
-    async fn object_type(&self, id: Address) -> Result<StructTag, Self> {
+    async fn object_type(&self, id: ObjectId) -> Result<StructTag, Self> {
         object_type::query(self, id)
     }
 

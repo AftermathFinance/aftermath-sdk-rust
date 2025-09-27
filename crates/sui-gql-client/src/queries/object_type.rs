@@ -1,4 +1,4 @@
-use af_sui_types::{Address, StructTag, TypeTag};
+use af_sui_types::{ObjectId, StructTag, TypeTag};
 use graphql_extract::extract;
 
 use super::Error;
@@ -6,7 +6,7 @@ use crate::{GraphQlClient, GraphQlResponseExt, schema};
 
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
-    id: Address,
+    id: ObjectId,
 ) -> Result<StructTag, Error<C::Error>> {
     let data = client
         .query::<ObjectType, _>(Variables { object_id: id })
@@ -35,7 +35,7 @@ fn gql_string() {
     use cynic::QueryBuilder as _;
     use insta::assert_snapshot;
     let operation = ObjectType::build(Variables {
-        object_id: Address::ZERO,
+        object_id: ObjectId::ZERO,
     });
     assert_snapshot!(operation.query, @r###"
     query ObjectType($objectId: SuiAddress!) {
@@ -54,7 +54,7 @@ fn gql_string() {
 
 #[derive(cynic::QueryVariables, Debug)]
 struct Variables {
-    object_id: Address,
+    object_id: ObjectId,
 }
 
 #[derive(cynic::QueryFragment, Debug)]

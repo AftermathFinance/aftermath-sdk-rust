@@ -20,7 +20,7 @@ use std::str::FromStr;
 
 pub use af_move_type_derive::MoveStruct;
 use af_sui_types::u256::U256;
-use af_sui_types::{Address, Identifier, StructTag, TypeTag};
+use af_sui_types::{Address, Identifier, ObjectId, StructTag, TypeTag};
 use serde::{Deserialize, Serialize};
 
 #[doc(hidden)]
@@ -152,7 +152,7 @@ impl<T> MoveStructTag for T where
 // =============================================================================
 
 pub trait HasKey: MoveStruct {
-    fn object_id(&self) -> Address;
+    fn object_id(&self) -> ObjectId;
 }
 
 pub trait HasCopy: MoveStruct + Copy {}

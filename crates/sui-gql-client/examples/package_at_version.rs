@@ -1,4 +1,4 @@
-use af_sui_types::{Address, Version};
+use af_sui_types::{ObjectId, Version};
 use clap::Parser;
 use color_eyre::Result;
 use sui_gql_client::queries::GraphQlClientExt as _;
@@ -6,10 +6,11 @@ use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long, default_value_t = Address::from_hex_unwrap(
-        b"0x9725155a70cf2d2241b8cc2fa8376809689312cabb4acaa5ca5ba47eaf4d611f",
-    ))]
-    package: Address,
+    #[arg(
+        long,
+        default_value = "0x9725155a70cf2d2241b8cc2fa8376809689312cabb4acaa5ca5ba47eaf4d611f"
+    )]
+    package: ObjectId,
 
     #[arg(long, default_value_t = 1)]
     version: Version,

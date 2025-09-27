@@ -3,8 +3,8 @@
 
 use std::net::SocketAddr;
 
+use af_sui_types::Address as SuiAddress;
 use jsonrpsee::proc_macros::rpc;
-use sui_sdk_types::Address;
 
 use crate::msgs::{
     DevInspectArgs,
@@ -48,7 +48,7 @@ pub trait WriteApi {
     #[method(name = "devInspectTransactionBlock")]
     async fn dev_inspect_transaction_block(
         &self,
-        sender_address: Address,
+        sender_address: SuiAddress,
         tx_bytes: String,
         gas_price: Option<BigInt<u64>>,
         epoch: Option<BigInt<u64>>,

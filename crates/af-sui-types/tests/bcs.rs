@@ -1,4 +1,4 @@
-use af_sui_types::{Address, decode_base64_default};
+use af_sui_types::{ObjectId, decode_base64_default, hex_address_bytes};
 use sui_sdk_types::{Object, Transaction};
 
 /// This showcases how to obtain a DOF's object ID from its wrapper `Field`'s BCS bytes.
@@ -35,11 +35,11 @@ NB4i8B6YCC9BXLQAAAAAA";
     let contents = &move_object.contents();
     println!("{wrapper:#?}");
 
-    let id = Address::new(contents[(contents.len() - 32)..].try_into().unwrap());
+    let id = ObjectId::new(contents[(contents.len() - 32)..].try_into().unwrap());
 
-    let expected = Address::from_hex_unwrap(
+    let expected = ObjectId::new(hex_address_bytes(
         b"be10f678ac8c024e45bf117000a230b2c7c36a7cba08d2e0e66fbcba1c7d5399",
-    );
+    ));
     assert_eq!(id, expected);
 }
 

@@ -5,7 +5,7 @@ use std::fmt;
 use std::sync::OnceLock;
 
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::Digest;
+use sui_sdk_types::CheckpointDigest;
 
 use crate::encoding::Base58;
 
@@ -24,7 +24,7 @@ use crate::encoding::Base58;
     Deserialize,
     derive_more::FromStr,
 )]
-pub struct ChainIdentifier(Digest);
+pub struct ChainIdentifier(CheckpointDigest);
 
 impl ChainIdentifier {
     /// take a short 4 byte identifier and convert it into a ChainIdentifier
@@ -63,7 +63,7 @@ static TESTNET_CHAIN_IDENTIFIER: OnceLock<ChainIdentifier> = OnceLock::new();
 
 fn get_mainnet_chain_identifier() -> ChainIdentifier {
     let digest = MAINNET_CHAIN_IDENTIFIER.get_or_init(|| {
-        let digest = Digest::new(
+        let digest = CheckpointDigest::new(
             Base58::decode(MAINNET_CHAIN_IDENTIFIER_BASE58)
                 .expect("mainnet genesis checkpoint digest literal is invalid")
                 .try_into()
@@ -76,7 +76,7 @@ fn get_mainnet_chain_identifier() -> ChainIdentifier {
 
 fn get_testnet_chain_identifier() -> ChainIdentifier {
     let digest = TESTNET_CHAIN_IDENTIFIER.get_or_init(|| {
-        let digest = Digest::new(
+        let digest = CheckpointDigest::new(
             Base58::decode(TESTNET_CHAIN_IDENTIFIER_BASE58)
                 .expect("testnet genesis checkpoint digest literal is invalid")
                 .try_into()
@@ -96,13 +96,13 @@ impl fmt::Display for ChainIdentifier {
     }
 }
 
-impl From<Digest> for ChainIdentifier {
-    fn from(digest: Digest) -> Self {
+impl From<CheckpointDigest> for ChainIdentifier {
+    fn from(digest: CheckpointDigest) -> Self {
         Self(digest)
     }
 }
 
-impl From<ChainIdentifier> for Digest {
+impl From<ChainIdentifier> for CheckpointDigest {
     fn from(value: ChainIdentifier) -> Self {
         value.0
     }

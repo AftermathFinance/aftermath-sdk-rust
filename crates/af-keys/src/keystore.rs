@@ -7,11 +7,11 @@ use std::fs::File;
 use std::io::BufReader;
 use std::path::PathBuf;
 
+use af_sui_types::Address as SuiAddress;
 use enum_dispatch::enum_dispatch;
 use eyre::{Context as _, bail, eyre};
 use fastcrypto::traits::EncodeDecodeBase64;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use sui_sdk_types::Address as SuiAddress;
 
 use crate::crypto::{PublicKey, Signature, SuiKeyPair};
 use crate::intent::{Intent, IntentMessage};

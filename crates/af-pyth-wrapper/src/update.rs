@@ -1,5 +1,5 @@
 use af_ptbuilder::{Argument, ProgrammableTransactionBuilder, ptbuilder};
-use af_sui_pkg_sdk::Address;
+use af_sui_pkg_sdk::ObjectId;
 use af_sui_pkg_sdk::af_sui_types::ObjectArg;
 
 /// Groups the [ProgrammableTransactionBuilder] arguments for updating AfOracle `PriceFeed`s.
@@ -50,7 +50,7 @@ impl ProgrammableTransactionBuilder {
     /// Add a PythWrapper update to the PTB being built.
     fn update_af_oracle_pyth_feed(
         &mut self,
-        pyth_wrapper_pkg: Address,
+        pyth_wrapper_pkg: ObjectId,
         arguments: UpdateAfOracleArguments,
     ) -> Result<(), af_ptbuilder::Error> {
         let UpdateAfOracleArguments {

@@ -7,7 +7,7 @@ use af_iperps::graphql::{GraphQlClientExt as _, OrderMaps};
 use af_iperps::order_helpers::Side;
 use af_iperps::order_id::{order_side, price_ask, price_bid};
 use af_move_type::MoveInstance;
-use af_sui_types::Address;
+use af_sui_types::{ObjectId, hex_address_bytes};
 use clap::Parser;
 use color_eyre::Result;
 use color_eyre::eyre::OptionExt as _;
@@ -22,10 +22,10 @@ struct Args {
     #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
     rpc: String,
 
-    #[arg(long, default_value_t = Address::from_hex_unwrap(
+    #[arg(long, default_value_t = ObjectId::new(hex_address_bytes(
         b"0x49bd40cc7880bd358465116157f0271c25d23361b94eace9a25dc2019b449bfc",
-    ))]
-    ch: Address,
+    )))]
+    ch: ObjectId,
 
     #[arg(long, default_value_t = 0.005)]
     max_spread: f64,

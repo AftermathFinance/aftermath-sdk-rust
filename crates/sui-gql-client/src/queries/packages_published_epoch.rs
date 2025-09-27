@@ -1,15 +1,15 @@
-use af_sui_types::{Address, Version};
+use af_sui_types::{ObjectId, Version};
 use futures::TryStreamExt as _;
 
 use super::fragments::{ObjectFilterV2, PageInfo, PageInfoForward};
 use super::{Error, stream};
 use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
 
-type Item = (Address, u64, u64);
+type Item = (ObjectId, u64, u64);
 
 pub async fn query<C: GraphQlClient>(
     client: &C,
-    package_ids: Vec<Address>,
+    package_ids: Vec<ObjectId>,
 ) -> Result<impl Iterator<Item = Item> + use<C>, Error<C::Error>> {
     let vars = QueryVariables {
         filter: Some(ObjectFilterV2 {
@@ -135,7 +135,7 @@ struct ObjectConnection {
 
 #[derive(cynic::QueryFragment, Debug)]
 struct Object {
-    address: Address,
+    address: ObjectId,
     as_move_package: Option<MovePackage>,
 }
 

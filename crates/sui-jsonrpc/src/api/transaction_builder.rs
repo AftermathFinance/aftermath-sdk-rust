@@ -2,8 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 #![allow(clippy::too_many_arguments)]
 
+use af_sui_types::{Address as SuiAddress, ObjectId};
 use jsonrpsee::proc_macros::rpc;
-use sui_sdk_types::Address;
 
 use crate::msgs::{
     RPCTransactionRequestParams,
@@ -20,21 +20,21 @@ pub trait TransactionBuilder {
     #[method(name = "transferObject")]
     async fn transfer_object(
         &self,
-        signer: Address,
-        object_id: Address,
-        gas: Option<Address>,
+        signer: SuiAddress,
+        object_id: ObjectId,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
-        recipient: Address,
+        recipient: SuiAddress,
     ) -> RpcResult<TransactionBlockBytes>;
 
     /// Create an unsigned transaction to send SUI coin object to a Sui address. The SUI object is also used as the gas object.
     #[method(name = "transferSui")]
     async fn transfer_sui(
         &self,
-        signer: Address,
-        sui_object_id: Address,
+        signer: SuiAddress,
+        sui_object_id: ObjectId,
         gas_budget: BigInt<u64>,
-        recipient: Address,
+        recipient: SuiAddress,
         amount: Option<BigInt<u64>>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -45,11 +45,11 @@ pub trait TransactionBuilder {
     #[method(name = "pay")]
     async fn pay(
         &self,
-        signer: Address,
-        input_coins: Vec<Address>,
-        recipients: Vec<Address>,
+        signer: SuiAddress,
+        input_coins: Vec<ObjectId>,
+        recipients: Vec<SuiAddress>,
         amounts: Vec<BigInt<u64>>,
-        gas: Option<Address>,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -65,9 +65,9 @@ pub trait TransactionBuilder {
     #[method(name = "paySui")]
     async fn pay_sui(
         &self,
-        signer: Address,
-        input_coins: Vec<Address>,
-        recipients: Vec<Address>,
+        signer: SuiAddress,
+        input_coins: Vec<ObjectId>,
+        recipients: Vec<SuiAddress>,
         amounts: Vec<BigInt<u64>>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
@@ -82,9 +82,9 @@ pub trait TransactionBuilder {
     #[method(name = "payAllSui")]
     async fn pay_all_sui(
         &self,
-        signer: Address,
-        input_coins: Vec<Address>,
-        recipient: Address,
+        signer: SuiAddress,
+        input_coins: Vec<ObjectId>,
+        recipient: SuiAddress,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -92,13 +92,13 @@ pub trait TransactionBuilder {
     #[method(name = "moveCall")]
     async fn move_call(
         &self,
-        signer: Address,
-        package_object_id: Address,
+        signer: SuiAddress,
+        package_object_id: ObjectId,
         module: String,
         function: String,
         type_arguments: Vec<SuiTypeTag>,
         arguments: Vec<serde_json::Value>,
-        gas: Option<Address>,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
         execution_mode: Option<SuiTransactionBlockBuilderMode>,
     ) -> RpcResult<TransactionBlockBytes>;
@@ -107,10 +107,10 @@ pub trait TransactionBuilder {
     #[method(name = "publish")]
     async fn publish(
         &self,
-        sender: Address,
+        sender: SuiAddress,
         compiled_modules: Vec<String>,
-        dependencies: Vec<Address>,
-        gas: Option<Address>,
+        dependencies: Vec<ObjectId>,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -118,10 +118,10 @@ pub trait TransactionBuilder {
     #[method(name = "splitCoin")]
     async fn split_coin(
         &self,
-        signer: Address,
-        coin_object_id: Address,
+        signer: SuiAddress,
+        coin_object_id: ObjectId,
         split_amounts: Vec<BigInt<u64>>,
-        gas: Option<Address>,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -129,10 +129,10 @@ pub trait TransactionBuilder {
     #[method(name = "splitCoinEqual")]
     async fn split_coin_equal(
         &self,
-        signer: Address,
-        coin_object_id: Address,
+        signer: SuiAddress,
+        coin_object_id: ObjectId,
         split_count: BigInt<u64>,
-        gas: Option<Address>,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -140,10 +140,10 @@ pub trait TransactionBuilder {
     #[method(name = "mergeCoins")]
     async fn merge_coin(
         &self,
-        signer: Address,
-        primary_coin: Address,
-        coin_to_merge: Address,
-        gas: Option<Address>,
+        signer: SuiAddress,
+        primary_coin: ObjectId,
+        coin_to_merge: ObjectId,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -151,9 +151,9 @@ pub trait TransactionBuilder {
     #[method(name = "batchTransaction")]
     async fn batch_transaction(
         &self,
-        signer: Address,
+        signer: SuiAddress,
         single_transaction_params: Vec<RPCTransactionRequestParams>,
-        gas: Option<Address>,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
         txn_builder_mode: Option<SuiTransactionBlockBuilderMode>,
     ) -> RpcResult<TransactionBlockBytes>;
@@ -162,11 +162,11 @@ pub trait TransactionBuilder {
     #[method(name = "requestAddStake")]
     async fn request_add_stake(
         &self,
-        signer: Address,
-        coins: Vec<Address>,
+        signer: SuiAddress,
+        coins: Vec<ObjectId>,
         amount: Option<BigInt<u64>>,
-        validator: Address,
-        gas: Option<Address>,
+        validator: SuiAddress,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 
@@ -174,9 +174,9 @@ pub trait TransactionBuilder {
     #[method(name = "requestWithdrawStake")]
     async fn request_withdraw_stake(
         &self,
-        signer: Address,
-        staked_sui: Address,
-        gas: Option<Address>,
+        signer: SuiAddress,
+        staked_sui: ObjectId,
+        gas: Option<ObjectId>,
         gas_budget: BigInt<u64>,
     ) -> RpcResult<TransactionBlockBytes>;
 }

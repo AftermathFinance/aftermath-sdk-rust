@@ -1,4 +1,4 @@
-use af_sui_types::{Address as SuiAddress, TypeTag, Version};
+use af_sui_types::{Address as SuiAddress, ObjectId, TypeTag, Version};
 use cynic::QueryFragment;
 use sui_gql_schema::{scalars, schema};
 
@@ -9,7 +9,7 @@ use sui_gql_schema::{scalars, schema};
 /// This is only used in `Query.multiGetObjects` currently
 #[derive(cynic::InputObject, Clone, Debug)]
 pub struct ObjectKey {
-    pub object_id: SuiAddress,
+    pub object_id: ObjectId,
     pub version: Version,
 }
 
@@ -24,7 +24,7 @@ pub(crate) struct ObjectFilterV2<'a> {
     #[cynic(rename = "type")]
     pub(crate) type_: Option<String>,
     pub(crate) owner: Option<SuiAddress>,
-    pub(crate) object_ids: Option<&'a [SuiAddress]>,
+    pub(crate) object_ids: Option<&'a [ObjectId]>,
 }
 
 #[derive(cynic::InputObject, Clone, Debug)]

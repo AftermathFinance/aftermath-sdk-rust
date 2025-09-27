@@ -4,6 +4,7 @@
 use std::hash::{Hash, Hasher};
 use std::str::FromStr;
 
+use af_sui_types::Address as SuiAddress;
 pub use enum_dispatch::enum_dispatch;
 use fastcrypto::encoding::{Base64, Encoding};
 use fastcrypto::error::FastCryptoError;
@@ -12,7 +13,6 @@ use fastcrypto::traits::ToFromBytes;
 use once_cell::sync::OnceCell;
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
-use sui_sdk_types::Address as SuiAddress;
 
 use crate::crypto::{
     CompressedSignature,
@@ -217,7 +217,7 @@ impl AsRef<[u8]> for MultiSig {
     }
 }
 
-impl From<MultiSig> for sui_sdk_types::UserSignature {
+impl From<MultiSig> for af_sui_types::UserSignature {
     fn from(value: MultiSig) -> Self {
         Self::from_bytes(value.as_bytes()).expect("Compatible")
     }

@@ -1,5 +1,5 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, Version};
+use af_sui_types::{ObjectId, Version};
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 pub use sui_gql_client::queries::Error;
@@ -12,7 +12,7 @@ use crate::ordered_map::Leaf;
 
 pub(super) fn query<C: GraphQlClient>(
     client: &C,
-    map: Address,
+    map: ObjectId,
     ch_version: Option<Version>,
 ) -> impl Stream<Item = Result<(u128, Order), Error<C::Error>>> + '_ {
     async_stream::try_stream! {
@@ -72,7 +72,7 @@ fn gql_output() {
     use cynic::QueryBuilder as _;
 
     let vars = Variables {
-        map: Address::ZERO,
+        map: ObjectId::ZERO,
         ch_version: None,
         first: Some(10),
         after: None,
@@ -105,7 +105,7 @@ fn gql_output() {
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
 struct Variables {
-    map: Address,
+    map: ObjectId,
     ch_version: Option<Version>,
     first: Option<i32>,
     after: Option<String>,

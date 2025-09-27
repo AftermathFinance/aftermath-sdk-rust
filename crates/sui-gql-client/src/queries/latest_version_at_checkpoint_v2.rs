@@ -1,4 +1,4 @@
-use af_sui_types::{Address, Version};
+use af_sui_types::{ObjectId, Version};
 use cynic::{QueryFragment, QueryVariables};
 
 use crate::{GraphQlClient, GraphQlErrors, GraphQlResponseExt as _, schema};
@@ -15,7 +15,7 @@ pub enum Error<C: std::error::Error> {
     #[error("No data in GraphQL response")]
     NoData,
     #[error("No transaction blocks found for object {id}")]
-    NoTransactionBlocks { id: Address },
+    NoTransactionBlocks { id: ObjectId },
     #[error("Missing transaction effects")]
     MissingTxEffects,
     #[error("In client: {0}")]
@@ -36,7 +36,7 @@ pub enum Error<C: std::error::Error> {
 /// - `ckpt_num`: highest checkpoint to consider; the server will scan the history `<= ckpt_num`
 pub async fn query<C: GraphQlClient>(
     client: &C,
-    id: Address,
+    id: ObjectId,
     ckpt_num: u64,
 ) -> Result<u64, Error<C::Error>> {
     let Some(mut data): Option<Query> = client
@@ -72,7 +72,7 @@ pub async fn query<C: GraphQlClient>(
 #[derive(QueryVariables, Debug)]
 struct Variables {
     checkpoint_num: Option<Version>,
-    object_id: Option<Address>,
+    object_id: Option<ObjectId>,
 }
 
 #[derive(QueryFragment, Debug)]

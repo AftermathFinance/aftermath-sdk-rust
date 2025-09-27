@@ -1,5 +1,5 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, Version};
+use af_sui_types::{Address, ObjectId, Version};
 use futures::Stream;
 use sui_gql_client::GraphQlClient;
 pub use sui_gql_client::queries::Error;
@@ -35,7 +35,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     fn clearing_house_orders(
         &self,
         package: Address,
-        ch: Address,
+        ch: ObjectId,
         version: Option<Version>,
         asks: bool,
     ) -> impl Stream<Item = Result<(u128, Order), Self>> + '_ {
@@ -52,7 +52,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// [`order_maps`]: GraphQlClientExt::order_maps
     fn map_orders(
         &self,
-        map: Address,
+        map: ObjectId,
         ch_version: Option<Version>,
     ) -> impl Stream<Item = Result<(u128, Order), Self>> + '_ {
         map_orders::query(self, map, ch_version)
@@ -64,7 +64,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     fn order_maps(
         &self,
         package: Address,
-        ch: Address,
+        ch: ObjectId,
     ) -> impl Future<Output = Result<OrderMaps, Self>> + Send + '_ {
         order_maps::query(self, package, ch)
     }
@@ -75,7 +75,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     fn clearing_house_vault(
         &self,
         package: Address,
-        ch: Address,
+        ch: ObjectId,
     ) -> impl Future<Output = StdResult<MoveInstance<Vault>, ChVaultError<Self::Error>>> + Send + '_
     {
         ch_vault::query(self, package, ch)
@@ -86,7 +86,7 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// [`ClearingHouse`]: crate::ClearingHouse
     fn clearing_house_positions(
         &self,
-        ch: Address,
+        ch: ObjectId,
         version: Option<Version>,
     ) -> impl Stream<Item = Result<(u64, MoveInstance<Position>), Self>> + '_ {
         ch_positions::query(self, ch, version)
@@ -95,9 +95,9 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     /// List of registered [`ClearingHouse`](crate::ClearingHouse) object IDs.
     fn registered_clearing_houses(
         &self,
-        registry_address: Address,
+        registry_address: ObjectId,
         version: Option<Version>,
-    ) -> impl Stream<Item = Result<Address, Self>> + '_ {
+    ) -> impl Stream<Item = Result<ObjectId, Self>> + '_ {
         self::registry::query(self, registry_address, version)
     }
 }

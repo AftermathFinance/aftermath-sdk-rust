@@ -1,6 +1,5 @@
 ---
 source: crates/af-iperps/src/lib.rs
-assertion_line: 1087
 expression: public_api
 ---
 pub mod af_iperps
@@ -17,7 +16,7 @@ pub fn af_iperps::account::Account<T>::new(id: sui_framework_sdk::object::UID, a
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::account::Account<T>
 pub fn af_iperps::account::Account<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::HasKey for af_iperps::account::Account<T>
-pub fn af_iperps::account::Account<T>::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::account::Account<T>::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::account::Account<T>
 pub type af_iperps::account::Account<T>::StructTag = af_iperps::account::AccountTypeTag<T>
 impl<T: af_move_type::MoveType> af_move_type::MoveType for af_iperps::account::Account<T>
@@ -44,7 +43,7 @@ pub fn af_iperps::account::AccountCap<T>::new(id: sui_framework_sdk::object::UID
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::account::AccountCap<T>
 pub fn af_iperps::account::AccountCap<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::HasKey for af_iperps::account::AccountCap<T>
-pub fn af_iperps::account::AccountCap<T>::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::account::AccountCap<T>::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::account::AccountCap<T>
 pub type af_iperps::account::AccountCap<T>::StructTag = af_iperps::account::AccountCapTypeTag<T>
 impl<T: af_move_type::MoveType> af_move_type::MoveType for af_iperps::account::AccountCap<T>
@@ -144,7 +143,7 @@ pub fn af_iperps::admin::AdminCapability::type_(address: sui_sdk_types::address:
 impl af_iperps::admin::AdminCapability
 pub fn af_iperps::admin::AdminCapability::new(id: sui_framework_sdk::object::UID) -> Self
 impl af_move_type::HasKey for af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::admin::AdminCapability::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl af_move_type::MoveStruct for af_iperps::admin::AdminCapability
 pub type af_iperps::admin::AdminCapability::StructTag = af_iperps::admin::AdminCapabilityTypeTag
 impl af_move_type::MoveType for af_iperps::admin::AdminCapability
@@ -185,7 +184,7 @@ pub af_iperps::clearing_house::ClearingHouse::market_params: af_iperps::market::
 pub af_iperps::clearing_house::ClearingHouse::market_state: af_iperps::market::MarketState
 pub af_iperps::clearing_house::ClearingHouse::version: u64
 impl<T: af_move_type::MoveType> af_iperps::clearing_house::ClearingHouse<T>
-pub const fn af_iperps::clearing_house::ClearingHouse<T>::governing_package_testnet(&self) -> sui_sdk_types::address::Address
+pub const fn af_iperps::clearing_house::ClearingHouse<T>::governing_package_testnet(&self) -> sui_sdk_types::object_id::ObjectId
 pub fn af_iperps::clearing_house::ClearingHouse<T>::orderbook_dof_wrapper_type(package: sui_sdk_types::address::Address) -> sui_framework_sdk::dynamic_field::FieldTypeTag<sui_framework_sdk::dynamic_object_field::Wrapper<af_iperps::keys::Orderbook>, sui_framework_sdk::object::ID>
 pub fn af_iperps::clearing_house::ClearingHouse<T>::position_df_type(package: sui_sdk_types::address::Address) -> sui_framework_sdk::dynamic_field::FieldTypeTag<af_iperps::keys::Position, af_iperps::position::Position>
 impl<T: af_move_type::MoveType> af_iperps::clearing_house::ClearingHouse<T>
@@ -201,7 +200,7 @@ impl<T: af_move_type::MoveType> af_iperps::math::OrderBookUnits for af_iperps::c
 pub fn af_iperps::clearing_house::ClearingHouse<T>::lot_size(&self) -> u64
 pub fn af_iperps::clearing_house::ClearingHouse<T>::tick_size(&self) -> u64
 impl<T: af_move_type::MoveType> af_move_type::HasKey for af_iperps::clearing_house::ClearingHouse<T>
-pub fn af_iperps::clearing_house::ClearingHouse<T>::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::clearing_house::ClearingHouse<T>::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::clearing_house::ClearingHouse<T>
 pub type af_iperps::clearing_house::ClearingHouse<T>::StructTag = af_iperps::clearing_house::ClearingHouseTypeTag<T>
 impl<T: af_move_type::MoveType> af_move_type::MoveType for af_iperps::clearing_house::ClearingHouse<T>
@@ -4102,7 +4101,7 @@ pub fn af_iperps::orderbook::Orderbook::type_(address: sui_sdk_types::address::A
 impl af_iperps::orderbook::Orderbook
 pub fn af_iperps::orderbook::Orderbook::new(id: sui_framework_sdk::object::UID, counter: u64) -> Self
 impl af_move_type::HasKey for af_iperps::orderbook::Orderbook
-pub fn af_iperps::orderbook::Orderbook::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::orderbook::Orderbook::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl af_move_type::MoveStruct for af_iperps::orderbook::Orderbook
 pub type af_iperps::orderbook::Orderbook::StructTag = af_iperps::orderbook::OrderbookTypeTag
 impl af_move_type::MoveType for af_iperps::orderbook::Orderbook
@@ -4242,7 +4241,7 @@ pub fn af_iperps::ordered_map::Map<V>::new(id: sui_framework_sdk::object::UID, s
 impl<V: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::ordered_map::Map<V>
 pub fn af_iperps::ordered_map::Map<V>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<V: af_move_type::MoveType> af_move_type::HasKey for af_iperps::ordered_map::Map<V>
-pub fn af_iperps::ordered_map::Map<V>::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::ordered_map::Map<V>::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl<V: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::ordered_map::Map<V>
 pub type af_iperps::ordered_map::Map<V>::StructTag = af_iperps::ordered_map::MapTypeTag<V>
 impl<V: af_move_type::MoveType> af_move_type::MoveType for af_iperps::ordered_map::Map<V>
@@ -4511,7 +4510,7 @@ pub fn af_iperps::registry::Registry::type_(address: sui_sdk_types::address::Add
 impl af_iperps::registry::Registry
 pub fn af_iperps::registry::Registry::new(id: sui_framework_sdk::object::UID, next_account_id: u64) -> Self
 impl af_move_type::HasKey for af_iperps::registry::Registry
-pub fn af_iperps::registry::Registry::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::registry::Registry::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl af_move_type::MoveStruct for af_iperps::registry::Registry
 pub type af_iperps::registry::Registry::StructTag = af_iperps::registry::RegistryTypeTag
 impl af_move_type::MoveType for af_iperps::registry::Registry
@@ -4561,7 +4560,7 @@ pub fn af_iperps::stop_orders::StopOrderTicket<T>::new(id: sui_framework_sdk::ob
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::stop_orders::StopOrderTicket<T>
 pub fn af_iperps::stop_orders::StopOrderTicket<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::HasKey for af_iperps::stop_orders::StopOrderTicket<T>
-pub fn af_iperps::stop_orders::StopOrderTicket<T>::object_id(&self) -> sui_sdk_types::address::Address
+pub fn af_iperps::stop_orders::StopOrderTicket<T>::object_id(&self) -> sui_sdk_types::object_id::ObjectId
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::stop_orders::StopOrderTicket<T>
 pub type af_iperps::stop_orders::StopOrderTicket<T>::StructTag = af_iperps::stop_orders::StopOrderTicketTypeTag<T>
 impl<T: af_move_type::MoveType> af_move_type::MoveType for af_iperps::stop_orders::StopOrderTicket<T>
@@ -4750,7 +4749,7 @@ impl tabled::tabled::Tabled for af_iperps::position::Position
 pub const af_iperps::position::Position::LENGTH: usize
 pub fn af_iperps::position::Position::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
 pub fn af_iperps::position::Position::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
-pub const af_iperps::TESTNET_PACKAGE_VERSIONS: &[sui_sdk_types::address::Address]
+pub const af_iperps::TESTNET_PACKAGE_VERSIONS: &[sui_sdk_types::object_id::ObjectId]
 pub type af_iperps::Account = af_iperps::account::Account<af_move_type::otw::Otw>
 pub type af_iperps::AccountCap = af_iperps::account::AccountCap<af_move_type::otw::Otw>
 pub type af_iperps::AccountCapTypeTag = af_iperps::account::AccountCapTypeTag<af_move_type::otw::Otw>

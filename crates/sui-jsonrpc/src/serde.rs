@@ -1,29 +1,9 @@
 use std::fmt::Display;
 use std::str::FromStr;
 
+use af_sui_types::GasCostSummary;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde_with::{DeserializeAs, DisplayFromStr, SerializeAs, serde_as};
-use sui_sdk_types::GasCostSummary;
-
-fn decode_base58(base58: &str) -> Result<Vec<u8>, bs58::decode::Error> {
-    bs58::decode(base58).into_vec()
-}
-
-/// Convenience method for decoding base64 bytes the way Sui expects.
-fn decode_base64_default(base64: &str) -> Result<Vec<u8>, base64ct::Error> {
-    // let mut result: Vec<u8> = Vec::<u8>::from(base64);
-    // let s = <base64ct::Base64 as base64ct::Encoding>::decode_in_place(&mut result)?;
-    // let len = s.len();
-    // result.truncate(len);
-    // Ok(result)
-
-    <base64ct::Base64 as base64ct::Encoding>::decode_vec(base64)
-}
-
-/// Convenience method for encoding bytes to base64 the way Sui expects.
-pub(crate) fn encode_base64_default(bytes: impl AsRef<[u8]>) -> String {
-    <base64ct::Base64 as base64ct::Encoding>::encode_string(bytes.as_ref())
-}
 
 // =============================================================================
 //  BigInt
@@ -119,7 +99,7 @@ where
     where
         S: Serializer,
     {
-        let encoded_string = encode_base64_default(value);
+        let encoded_string = af_sui_types::encode_base64_default(value);
         encoded_string.serialize(serializer)
     }
 }
@@ -131,8 +111,8 @@ impl<'de> DeserializeAs<'de, Vec<u8>> for Base64orBase58 {
     {
         let s = String::deserialize(deserializer)?;
 
-        decode_base64_default(&s)
-            .or_else(|_| decode_base58(&s))
+        af_sui_types::decode_base64_default(&s)
+            .or_else(|_| af_sui_types::encoding::Base58::decode(&s))
             .map_err(|_| serde::de::Error::custom("Deserialization failed"))
     }
 }

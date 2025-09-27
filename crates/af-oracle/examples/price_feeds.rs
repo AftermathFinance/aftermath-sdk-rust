@@ -1,7 +1,7 @@
 use std::time::Instant;
 
 use af_oracle::graphql::GraphQlClientExt as _;
-use af_sui_types::Address;
+use af_sui_types::ObjectId;
 use clap::Parser;
 use color_eyre::Result;
 use futures::TryStreamExt as _;
@@ -13,10 +13,10 @@ struct Args {
     #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
     rpc: String,
 
-    #[arg(long, default_value_t = Address::from_hex_unwrap(
+    #[arg(long, default_value_t = af_sui_types::object_id(
         b"0x2e26816616244fe952ef924453d3468ed76addeaaf5873caf0970ba9b2b32722",
     ))]
-    pfs: Address,
+    pfs: ObjectId,
 
     /// Only the summary of query time and number of price feeds.
     #[arg(long, short)]

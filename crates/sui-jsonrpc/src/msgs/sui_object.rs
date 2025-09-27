@@ -7,24 +7,26 @@ use std::fmt;
 use std::fmt::{Display, Formatter, Write};
 use std::str::FromStr;
 
+use af_sui_types::{
+    Address as SuiAddress,
+    Identifier,
+    MoveObjectType,
+    Object,
+    ObjectArg,
+    ObjectDigest,
+    ObjectId,
+    ObjectRef,
+    StructTag,
+    TransactionDigest,
+    TypeOrigin,
+    UpgradeInfo,
+};
 use colored::Colorize;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 use serde_with::base64::Base64;
 use serde_with::{DisplayFromStr, serde_as};
-use sui_sdk_types::{
-    Address,
-    Digest,
-    Identifier,
-    Input,
-    Object,
-    ObjectReference,
-    StructTag,
-    TypeOrigin,
-    TypeTag,
-    UpgradeInfo,
-    Version,
-};
+use sui_sdk_types::Version;
 
 use super::{Page, SuiMoveStruct, SuiMoveValue};
 use crate::serde::BigInt;
@@ -103,7 +105,7 @@ impl SuiObjectResponse {
         None
     }
 
-    pub fn object_id(&self) -> Result<Address, MissingObjectIdError> {
+    pub fn object_id(&self) -> Result<ObjectId, MissingObjectIdError> {
         match (&self.data, &self.error) {
             (Some(obj_data), None) => Ok(obj_data.object_id),
             (None, Some(SuiObjectResponseError::NotExists { object_id })) => Ok(*object_id),
@@ -119,7 +121,7 @@ impl SuiObjectResponse {
         }
     }
 
-    pub fn object_ref_if_exists(&self) -> Option<(Address, Version, Digest)> {
+    pub fn object_ref_if_exists(&self) -> Option<ObjectRef> {
         match (&self.data, &self.error) {
             (Some(obj_data), None) => Some(obj_data.object_ref()),
             _ => None,
@@ -158,9 +160,9 @@ impl PartialOrd for SuiObjectResponse {
 #[serde(tag = "code", rename = "ObjectResponseError", rename_all = "camelCase")]
 pub enum SuiObjectResponseError {
     #[error("Object {:?} does not exist.", object_id)]
-    NotExists { object_id: Address },
+    NotExists { object_id: ObjectId },
     #[error("Cannot find dynamic field for parent object {:?}.", parent_object_id)]
-    DynamicFieldNotFound { parent_object_id: Address },
+    DynamicFieldNotFound { parent_object_id: ObjectId },
     #[error(
         "Object has been deleted object_id: {:?} at version: {:?} in digest {:?}",
         object_id,
@@ -168,11 +170,11 @@ pub enum SuiObjectResponseError {
         digest
     )]
     Deleted {
-        object_id: Address,
+        object_id: ObjectId,
         /// Object version.
         version: Version,
         /// Base64 string representing the object digest
-        digest: Digest,
+        digest: ObjectDigest,
     },
     #[error("Unknown Error.")]
     Unknown,
@@ -220,13 +222,13 @@ pub enum FullObjectDataError {
     MissingPreviousTransaction,
     #[error("Missing storage rebate")]
     MissingStorageRebate,
-    #[error("MoveObject BCS doesn't start with Address")]
+    #[error("MoveObject BCS doesn't start with ObjectId")]
     InvalidBcs,
     #[error("Invalid identifier: {ident}\nReason: {source}")]
     InvalidIdentifier {
         ident: Box<str>,
         #[source]
-        source: sui_sdk_types::TypeParseError,
+        source: af_sui_types::TypeParseError,
     },
 }
 
@@ -234,12 +236,12 @@ pub enum FullObjectDataError {
 #[derive(Debug, Clone, Deserialize, Serialize, Eq, PartialEq)]
 #[serde(rename_all = "camelCase", rename = "ObjectData")]
 pub struct SuiObjectData {
-    pub object_id: Address,
+    pub object_id: ObjectId,
     /// Object version.
     #[serde_as(as = "BigInt<u64>")]
     pub version: Version,
     /// Base64 string representing the object digest
-    pub digest: Digest,
+    pub digest: ObjectDigest,
     /// The type of the object. Default to be None unless SuiObjectDataOptions.showType is set to true
     #[serde_as(as = "Option<DisplayFromStr>")]
     #[serde(rename = "type", skip_serializing_if = "Option::is_none")]
@@ -251,7 +253,7 @@ pub struct SuiObjectData {
     /// The digest of the transaction that created or last mutated this object. Default to be None unless
     /// SuiObjectDataOptions.showPreviousTransaction is set to true
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub previous_transaction: Option<Digest>,
+    pub previous_transaction: Option<TransactionDigest>,
     /// The amount of SUI we would rebate if this object gets deleted.
     /// This number is re-calculated each time the object is mutated based on
     /// the present storage gas price.
@@ -272,7 +274,7 @@ pub struct SuiObjectData {
 }
 
 impl SuiObjectData {
-    pub fn object_ref(&self) -> (Address, Version, Digest) {
+    pub fn object_ref(&self) -> ObjectRef {
         (self.object_id, self.version, self.digest)
     }
 
@@ -315,38 +317,35 @@ impl SuiObjectData {
         self.bcs.take().ok_or(SuiObjectDataError::MissingBcs)
     }
 
-    pub fn shared_object_arg(&self, mutable: bool) -> Result<Input, SuiObjectDataError> {
+    pub fn shared_object_arg(&self, mutable: bool) -> Result<ObjectArg, SuiObjectDataError> {
         let Owner::Shared {
             initial_shared_version,
         } = self.owner()?
         else {
             return Err(SuiObjectDataError::NotShared);
         };
-        Ok(Input::Shared {
-            object_id: self.object_id,
+        Ok(ObjectArg::SharedObject {
+            id: self.object_id,
             initial_shared_version,
             mutable,
         })
     }
 
-    pub fn imm_or_owned_object_arg(&self) -> Result<Input, SuiObjectDataError> {
+    pub fn imm_or_owned_object_arg(&self) -> Result<ObjectArg, SuiObjectDataError> {
         use Owner::*;
         if !matches!(self.owner()?, AddressOwner(_) | ObjectOwner(_) | Immutable) {
             return Err(SuiObjectDataError::NotImmOrOwned);
         };
         let (i, v, d) = self.object_ref();
-        let object_reference = ObjectReference::new(i, v, d);
-        Ok(Input::ImmutableOrOwned(object_reference))
+        Ok(ObjectArg::ImmOrOwnedObject((i, v, d)))
     }
 
     #[cfg(feature = "client")]
-    pub(crate) fn object_arg(&self, mutable: bool) -> Result<Input, SuiObjectDataError> {
+    pub(crate) fn object_arg(&self, mutable: bool) -> Result<ObjectArg, SuiObjectDataError> {
         use Owner as O;
         Ok(match self.owner()? {
             O::AddressOwner(_) | O::ObjectOwner(_) | O::Immutable => {
-                let (i, v, d) = self.object_ref();
-                let object_reference = ObjectReference::new(i, v, d);
-                Input::ImmutableOrOwned(object_reference)
+                ObjectArg::ImmOrOwnedObject(self.object_ref())
             }
             O::Shared {
                 initial_shared_version,
@@ -354,8 +353,8 @@ impl SuiObjectData {
             | O::ConsensusAddressOwner {
                 start_version: initial_shared_version,
                 ..
-            } => Input::Shared {
-                object_id: self.object_id,
+            } => ObjectArg::SharedObject {
+                id: self.object_id,
                 initial_shared_version,
                 mutable,
             },
@@ -397,7 +396,7 @@ impl SuiObjectData {
                         ))
                     })
                     .try_collect()?;
-                let inner = sui_sdk_types::MovePackage {
+                let inner = af_sui_types::MovePackage {
                     id: p.id,
                     version: p.version,
                     modules,
@@ -482,10 +481,10 @@ impl Display for SuiObjectData {
 #[derive(Eq, PartialEq, Debug, Clone, Deserialize, Serialize, Hash, Ord, PartialOrd)]
 pub enum Owner {
     /// Object is exclusively owned by a single address, and is mutable.
-    AddressOwner(Address),
+    AddressOwner(SuiAddress),
     /// Object is exclusively owned by a single object, and is mutable.
-    /// The object ID is converted to Address as Address is universal.
-    ObjectOwner(Address),
+    /// The object ID is converted to SuiAddress as SuiAddress is universal.
+    ObjectOwner(SuiAddress),
     /// Object is shared, can be used by any address, and is mutable.
     Shared {
         /// The version at which the object became shared
@@ -500,7 +499,7 @@ pub enum Owner {
         /// if the object's Owner type changes.
         start_version: Version,
         // The owner of the object.
-        owner: Address,
+        owner: SuiAddress,
     },
 }
 
@@ -508,7 +507,7 @@ impl From<Owner> for sui_sdk_types::Owner {
     fn from(value: Owner) -> sui_sdk_types::Owner {
         match value {
             Owner::AddressOwner(a) => sui_sdk_types::Owner::Address(a),
-            Owner::ObjectOwner(o) => sui_sdk_types::Owner::Object(o),
+            Owner::ObjectOwner(o) => sui_sdk_types::Owner::Object(o.into()),
             Owner::Shared {
                 initial_shared_version,
             } => sui_sdk_types::Owner::Shared(initial_shared_version),
@@ -523,92 +522,6 @@ impl From<Owner> for sui_sdk_types::Owner {
         }
     }
 }
-
-// =============================================================================
-//  MoveObjectType
-// =============================================================================
-
-/// Wrapper around [`StructTag`] with a space-efficient representation for common types like coins.
-///
-/// The `StructTag` for a gas coin is 84 bytes, so using 1 byte instead is a win.
-#[derive(Eq, PartialEq, PartialOrd, Ord, Debug, Clone, Deserialize, Serialize, Hash)]
-pub struct MoveObjectType(MoveObjectType_);
-
-impl fmt::Display for MoveObjectType {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> std::fmt::Result {
-        let s: StructTag = self.clone().into();
-        write!(f, "{s}")
-    }
-}
-
-impl MoveObjectType {
-    /// Return true if `self` is 0x2::coin::Coin<0x2::sui::SUI>
-    pub const fn is_gas_coin(&self) -> bool {
-        match &self.0 {
-            MoveObjectType_::GasCoin => true,
-            MoveObjectType_::StakedSui | MoveObjectType_::Coin(_) | MoveObjectType_::Other(_) => {
-                false
-            }
-        }
-    }
-}
-
-impl From<StructTag> for MoveObjectType {
-    fn from(mut s: StructTag) -> Self {
-        Self(if s == StructTag::gas_coin() {
-            MoveObjectType_::GasCoin
-        } else if s.is_coin().is_some() {
-            // unwrap safe because a coin has exactly one type parameter
-            MoveObjectType_::Coin(
-                s.type_params
-                    .pop()
-                    .expect("Coin should have exactly one type parameter"),
-            )
-        } else if s == StructTag::staked_sui() {
-            MoveObjectType_::StakedSui
-        } else {
-            MoveObjectType_::Other(s)
-        })
-    }
-}
-
-impl From<MoveObjectType> for StructTag {
-    fn from(t: MoveObjectType) -> Self {
-        match t.0 {
-            MoveObjectType_::GasCoin => Self::gas_coin(),
-            MoveObjectType_::StakedSui => Self::staked_sui(),
-            MoveObjectType_::Coin(inner) => Self::coin(inner),
-            MoveObjectType_::Other(s) => s,
-        }
-    }
-}
-
-impl From<MoveObjectType> for TypeTag {
-    fn from(o: MoveObjectType) -> Self {
-        let s: StructTag = o.into();
-        Self::Struct(Box::new(s))
-    }
-}
-
-/// The internal representation for [`MoveObjectType`].
-///
-/// It's private to prevent incorrectly constructing an `Other` instead of one of the specialized
-/// variants, e.g. `Other(GasCoin::type_())` instead of `GasCoin`
-#[derive(Eq, PartialEq, PartialOrd, Ord, Debug, Clone, Deserialize, Serialize, Hash)]
-enum MoveObjectType_ {
-    /// A type that is not `0x2::coin::Coin<T>`
-    Other(StructTag),
-    /// A SUI coin (i.e., `0x2::coin::Coin<0x2::sui::SUI>`)
-    GasCoin,
-    /// A record of a staked SUI coin (i.e., `0x3::staking_pool::StakedSui`)
-    StakedSui,
-    /// A non-SUI coin type (i.e., `0x2::coin::Coin<T> where T != 0x2::sui::SUI`)
-    Coin(TypeTag),
-    // NOTE: if adding a new type here, and there are existing on-chain objects of that
-    // type with Other(_), that is ok, but you must hand-roll PartialEq/Eq/Ord/maybe Hash
-    // to make sure the new type and Other(_) are interpreted consistently.
-}
-
 // =============================================================================
 //  ObjectType
 // =============================================================================
@@ -773,15 +686,15 @@ impl SuiObjectDataOptions {
 #[serde(rename_all = "camelCase", rename = "ObjectRef")]
 pub struct SuiObjectRef {
     /// Hex code as string representing the object id
-    pub object_id: Address,
+    pub object_id: ObjectId,
     /// Object version.
     pub version: Version,
     /// Base64 string representing the object digest
-    pub digest: Digest,
+    pub digest: ObjectDigest,
 }
 
 impl SuiObjectRef {
-    pub fn to_object_ref(&self) -> (Address, Version, Digest) {
+    pub fn to_object_ref(&self) -> ObjectRef {
         (self.object_id, self.version, self.digest)
     }
 }
@@ -796,8 +709,8 @@ impl Display for SuiObjectRef {
     }
 }
 
-impl From<(Address, Version, Digest)> for SuiObjectRef {
-    fn from(oref: (Address, Version, Digest)) -> Self {
+impl From<ObjectRef> for SuiObjectRef {
+    fn from(oref: ObjectRef) -> Self {
         Self {
             object_id: oref.0,
             version: oref.1,
@@ -860,7 +773,6 @@ impl SuiData for SuiRawData {
     }
 }
 
-#[allow(clippy::large_enum_variant)]
 #[derive(Debug, Deserialize, Serialize, Clone, Eq, PartialEq)]
 #[serde(tag = "dataType", rename_all = "camelCase", rename = "Data")]
 pub enum SuiParsedData {
@@ -985,12 +897,12 @@ impl SuiRawMoveObject {
 #[derive(Debug, Deserialize, Serialize, Clone, Eq, PartialEq)]
 #[serde(rename = "RawMovePackage", rename_all = "camelCase")]
 pub struct SuiRawMovePackage {
-    pub id: Address,
+    pub id: ObjectId,
     pub version: Version,
     #[serde_as(as = "BTreeMap<_, Base64>")]
     pub module_map: BTreeMap<String, Vec<u8>>,
     pub type_origin_table: Vec<TypeOrigin>,
-    pub linkage_table: BTreeMap<Address, UpgradeInfo>,
+    pub linkage_table: BTreeMap<ObjectId, UpgradeInfo>,
 }
 
 /// Errors for [`SuiPastObjectResponse`].
@@ -998,7 +910,7 @@ pub struct SuiRawMovePackage {
 pub enum SuiPastObjectResponseError {
     #[error("Could not find the referenced object {object_id:?} at version {version:?}.")]
     ObjectNotFound {
-        object_id: Address,
+        object_id: ObjectId,
         version: Option<Version>,
     },
 
@@ -1008,15 +920,13 @@ pub enum SuiPastObjectResponseError {
             is higher than the latest {latest_version:?}"
     )]
     ObjectSequenceNumberTooHigh {
-        object_id: Address,
+        object_id: ObjectId,
         asked_version: Version,
         latest_version: Version,
     },
 
     #[error("Object deleted at reference {object_ref:?}.")]
-    ObjectDeleted {
-        object_ref: (Address, Version, Digest),
-    },
+    ObjectDeleted { object_ref: ObjectRef },
 }
 
 #[rustversion::attr(nightly, expect(clippy::large_enum_variant))]
@@ -1026,14 +936,14 @@ pub enum SuiPastObjectResponse {
     /// The object exists and is found with this version
     VersionFound(SuiObjectData),
     /// The object does not exist
-    ObjectNotExists(Address),
+    ObjectNotExists(ObjectId),
     /// The object is found to be deleted with this version
     ObjectDeleted(SuiObjectRef),
     /// The object exists but not found with this version
-    VersionNotFound(Address, Version),
+    VersionNotFound(ObjectId, Version),
     /// The asked object version is higher than the latest
     VersionTooHigh {
-        object_id: Address,
+        object_id: ObjectId,
         asked_version: Version,
         latest_version: Version,
     },
@@ -1104,13 +1014,13 @@ pub struct SuiMovePackage {
 }
 
 pub type QueryObjectsPage = Page<SuiObjectResponse, CheckpointedObjectId>;
-pub type ObjectsPage = Page<SuiObjectResponse, Address>;
+pub type ObjectsPage = Page<SuiObjectResponse, ObjectId>;
 
 #[serde_as]
 #[derive(Debug, Deserialize, Serialize, Clone, Copy, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 pub struct CheckpointedObjectId {
-    pub object_id: Address,
+    pub object_id: ObjectId,
     #[serde_as(as = "Option<BigInt<u64>>")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub at_checkpoint: Option<Version>,
@@ -1121,7 +1031,7 @@ pub struct CheckpointedObjectId {
 #[serde(rename = "GetPastObjectRequest", rename_all = "camelCase")]
 pub struct SuiGetPastObjectRequest {
     /// the ID of the queried object
-    pub object_id: Address,
+    pub object_id: ObjectId,
     /// the version of the queried object.
     #[serde_as(as = "BigInt<u64>")]
     pub version: Version,
@@ -1134,11 +1044,11 @@ pub enum SuiObjectDataFilter {
     MatchAny(Vec<SuiObjectDataFilter>),
     MatchNone(Vec<SuiObjectDataFilter>),
     /// Query by type a specified Package.
-    Package(Address),
+    Package(ObjectId),
     /// Query by type a specified Move module.
     MoveModule {
         /// the Move package ID
-        package: Address,
+        package: ObjectId,
         /// the module name
         #[serde_as(as = "DisplayFromStr")]
         module: Identifier,
@@ -1146,11 +1056,11 @@ pub enum SuiObjectDataFilter {
     /// Query by type
     // StructType(#[serde_as(as = "SuiStructTag")] StructTag),
     StructType(#[serde_as(as = "DisplayFromStr")] StructTag),
-    AddressOwner(Address),
-    ObjectOwner(Address),
-    Address(Address),
+    AddressOwner(SuiAddress),
+    ObjectOwner(ObjectId),
+    ObjectId(ObjectId),
     // allow querying for multiple object ids
-    ObjectIds(Vec<Address>),
+    ObjectIds(Vec<ObjectId>),
     Version(#[serde_as(as = "BigInt<u64>")] u64),
 }
 

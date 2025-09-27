@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 use af_ptbuilder::ptb;
-use af_sui_types::{Address, TypeTag};
+use af_sui_types::{Address, ObjectId, TypeTag};
 use clap::Parser;
 use color_eyre::Result;
 use sui_gql_client::object_args;
@@ -21,9 +21,9 @@ async fn main() -> Result<()> {
     let client = ReqwestClient::new(reqwest::Client::default(), rpc.to_owned());
 
     let perpetuals_package =
-        Address::from_str("0x3bee2aefb42092215d5a22808e2a0abd49f58ca5a8ecfee9634c406370890233")?;
+        ObjectId::from_str("0x3bee2aefb42092215d5a22808e2a0abd49f58ca5a8ecfee9634c406370890233")?;
     let perpetuals_registry =
-        Address::from_str("0x8ae8b5a9517644be751ecf10aa83c10fe3dfe32849b7d682c570d7a8215cd942")?;
+        ObjectId::from_str("0x8ae8b5a9517644be751ecf10aa83c10fe3dfe32849b7d682c570d7a8215cd942")?;
     // Account's collateral type
     let otw = TypeTag::from_str(
         &"0x457049371f5b5dc2bda857bb804ca6e93c5a3cae1636d0cd17bb6b6070d19458::usdc::USDC",

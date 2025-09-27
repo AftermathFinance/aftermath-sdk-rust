@@ -1,5 +1,5 @@
 //! For requesting [`ObjectArg`]s from the server. Defines [`object_args!`](crate::object_args!).
-use af_sui_types::{Address, ObjectArg, Version};
+use af_sui_types::{ObjectArg, ObjectId, Version};
 use bimap::BiMap;
 use futures::TryStreamExt as _;
 use itertools::Itertools as _;
@@ -24,7 +24,7 @@ pub enum Error<T> {
     #[error("No data in object args query response")]
     NoData,
     #[error("Response missing object args for pairs: {0:?}")]
-    MissingNamedArgs(Vec<(String, Address)>),
+    MissingNamedArgs(Vec<(String, ObjectId)>),
 }
 
 /// Turn a bijective map of names and object ids into one of names and object args.
@@ -32,7 +32,7 @@ pub enum Error<T> {
 /// Fails if the query response does not have the necessary data for the input map.
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
-    mut names: BiMap<String, Address>,
+    mut names: BiMap<String, ObjectId>,
     page_size: Option<u32>,
 ) -> Res<BiMap<String, ObjectArg>, C> {
     let object_ids = names.right_values().cloned().collect_vec();
@@ -136,7 +136,7 @@ fn gql_output() {
 
 /// Query [ObjectArg]s and assign them to variables. Optionally, set the page size.
 ///
-/// This will panic if the user specifies two different identifiers mapping to the same [Address].
+/// This will panic if the user specifies two different identifiers mapping to the same [ObjectId].
 ///
 /// The `mut` keyword here means we're requesting a mutable [ObjectArg::SharedObject].
 ///
@@ -255,7 +255,7 @@ macro_rules! object_args {
 #[derive(cynic::QueryFragment, Debug)]
 struct Object {
     #[cynic(rename = "address")]
-    object_id: Address,
+    object_id: ObjectId,
     version: Version,
     digest: Option<scalars::Digest>,
     owner: Option<ObjectOwner>,
@@ -281,14 +281,14 @@ impl Object {
 }
 
 pub(crate) fn build_object_arg_default(
-    id: Address,
+    id: ObjectId,
     version: Version,
     owner: ObjectOwner,
     digest: Option<scalars::Digest>,
 ) -> Option<ObjectArg> {
     Some(match owner {
         ObjectOwner::Immutable(_) | ObjectOwner::Parent(_) | ObjectOwner::AddressOwner(_) => {
-            ObjectArg::ImmOrOwnedObject((id, version, digest?.0))
+            ObjectArg::ImmOrOwnedObject((id, version, digest?.0.into()))
         }
         ObjectOwner::Shared(Shared {
             initial_shared_version,
@@ -303,7 +303,7 @@ pub(crate) fn build_object_arg_default(
 }
 
 pub(super) fn build_oarg_set_mut(
-    object_id: Address,
+    object_id: ObjectId,
     version: Version,
     owner: Option<ObjectOwner>,
     digest: Option<scalars::Digest>,

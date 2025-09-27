@@ -1,6 +1,6 @@
 use std::str::FromStr;
 
-use af_sui_types::{Address as SuiAddress, encoding};
+use af_sui_types::{Address as SuiAddress, ObjectId, encoding};
 use cynic::impl_scalar;
 use derive_more::with_trait::{AsRef, Deref, Display, From, Into};
 use serde::{Deserialize, Serialize};
@@ -220,11 +220,11 @@ type MoveTypeLayout =
     }
   | { enum: [{
           type: string,
-          variants: [{
+          variants: [{ 
               name: string,
               fields: [{ name: string, layout: MoveTypeLayout }],
           }]
-      }]
+      }] 
     }"#]
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -384,6 +384,7 @@ pub enum OpenMoveTypeSignatureBody {
 //  in output is guaranteed to be 66 characters long).
 // =============================================================================
 
+impl_scalar!(ObjectId, schema::SuiAddress);
 impl_scalar!(SuiAddress, schema::SuiAddress);
 
 // =============================================================================

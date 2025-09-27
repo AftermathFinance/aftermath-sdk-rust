@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
+use af_sui_types::Address as SuiAddress;
 use jsonrpsee::proc_macros::rpc;
-use sui_sdk_types::Address;
 
 use crate::msgs::{Balance, CoinPage, SuiCoinMetadata, Supply};
 
@@ -12,7 +12,7 @@ pub trait CoinReadApi {
     #[method(name = "getCoins")]
     async fn get_coins(
         &self,
-        owner: Address,
+        owner: SuiAddress,
         coin_type: Option<String>,
         cursor: Option<String>,
         limit: Option<usize>,
@@ -22,18 +22,19 @@ pub trait CoinReadApi {
     #[method(name = "getAllCoins")]
     async fn get_all_coins(
         &self,
-        owner: Address,
+        owner: SuiAddress,
         cursor: Option<String>,
         limit: Option<usize>,
     ) -> RpcResult<CoinPage>;
 
     /// Return the total coin balance for one coin type, owned by the address owner.
     #[method(name = "getBalance")]
-    async fn get_balance(&self, owner: Address, coin_type: Option<String>) -> RpcResult<Balance>;
+    async fn get_balance(&self, owner: SuiAddress, coin_type: Option<String>)
+    -> RpcResult<Balance>;
 
     /// Return the total coin balance for all coin type, owned by the address owner.
     #[method(name = "getAllBalances")]
-    async fn get_all_balances(&self, owner: Address) -> RpcResult<Vec<Balance>>;
+    async fn get_all_balances(&self, owner: SuiAddress) -> RpcResult<Vec<Balance>>;
 
     /// Return metadata (e.g., symbol, decimals) for a coin.
     ///

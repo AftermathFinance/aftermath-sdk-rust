@@ -11,12 +11,18 @@
 //! </div>
 //!
 //! [`sui_crypto`]: https://docs.rs/sui-crypto/latest/sui_crypto/
+use af_sui_types::{
+    Address as SuiAddress,
+    GasData,
+    TransactionData,
+    TransactionDataV1,
+    UserSignature,
+};
 use crypto::Signature;
 use eyre::{Context as _, Result};
 pub use intent::Intent;
 pub use keystore::{FileBasedKeystore, ReadOnlyAccountKeystore};
 use multisig::{MultiSig, MultiSigSigner, ThresholdUnit};
-use sui_sdk_types::{Address as SuiAddress, GasPayment, Transaction, UserSignature};
 
 pub mod crypto;
 pub mod intent;
@@ -25,7 +31,7 @@ pub mod multisig;
 
 /// Computes the required signatures for a transaction's data.
 ///
-/// [`Transaction`] has a sender and a sponsor (which may be equal to sender), which are
+/// [`TransactionData`] has a sender and a sponsor (which may be equal to sender), which are
 /// [`SuiAddress`]es. This function then gets that information and knows who it has to sign for.
 ///
 /// For simple cases, it just uses those `SuiAddress`es and signs for them using the `keystore`.
@@ -42,16 +48,16 @@ pub mod multisig;
 /// The [`MultiSigSigner`] message declares what public keys the `Keystore` has to sign for. It's
 /// not required to sign for all of them, only a subset that has enough weight.
 pub fn signatures<K: ReadOnlyAccountKeystore>(
-    tx_data: &Transaction,
+    tx_data: &TransactionData,
     multisig_sender: Option<MultiSigSigner>,
     multisig_sponsor: Option<MultiSigSigner>,
     keystore: &K,
 ) -> Result<Vec<UserSignature>> {
-    let Transaction {
+    let TransactionData::V1(TransactionDataV1 {
         sender,
-        gas_payment: GasPayment { owner: sponsor, .. },
+        gas_data: GasData { owner: sponsor, .. },
         ..
-    } = tx_data;
+    }) = tx_data;
 
     let sender_signature = sign_for_address(tx_data, sender, multisig_sender, keystore)
         .context("Signing for sender")?;
@@ -67,7 +73,7 @@ pub fn signatures<K: ReadOnlyAccountKeystore>(
 }
 
 pub fn sign_for_address<K: ReadOnlyAccountKeystore>(
-    tx_data: &Transaction,
+    tx_data: &TransactionData,
     address: &SuiAddress,
     multisig_signer: Option<MultiSigSigner>,
     keystore: &K,
@@ -86,7 +92,7 @@ pub fn sign_for_address<K: ReadOnlyAccountKeystore>(
 }
 
 pub fn sign_transaction<K: ReadOnlyAccountKeystore>(
-    tx_data: &Transaction,
+    tx_data: &TransactionData,
     signer: &SuiAddress,
     keystore: &K,
 ) -> Result<Signature> {
@@ -95,7 +101,7 @@ pub fn sign_transaction<K: ReadOnlyAccountKeystore>(
 }
 
 pub fn sign_transaction_multisig<K: ReadOnlyAccountKeystore>(
-    tx_data: &Transaction,
+    tx_data: &TransactionData,
     MultiSigSigner {
         multisig_pk,
         signers,

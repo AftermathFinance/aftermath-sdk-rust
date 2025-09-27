@@ -17,7 +17,7 @@ use sui_sdk_types::{
 };
 
 use crate::encoding::decode_base64_default;
-use crate::{Address, ObjectRef};
+use crate::{Address, ObjectId, ObjectRef};
 
 // =================================================================================================
 //  TransactionData
@@ -196,7 +196,7 @@ pub enum ObjectArg {
     ///
     /// SharedObject::mutable controls whether caller asks for a mutable reference to shared object.
     SharedObject {
-        id: Address,
+        id: ObjectId,
         initial_shared_version: Version,
         mutable: bool,
     },
@@ -229,26 +229,26 @@ impl ObjectArg {
     ///
     /// Only system transactions acquire mutable references to the clock.
     pub const CLOCK_IMM: Self = Self::SharedObject {
-        id: Address::from_hex_unwrap(b"0x6"),
+        id: crate::object_id(b"0x6"),
         initial_shared_version: 1,
         mutable: false,
     };
 
     /// Argument for transactions acquiring an immutable reference to the system state.
     pub const SYSTEM_STATE_IMM: Self = Self::SharedObject {
-        id: Address::from_hex_unwrap(b"0x5"),
+        id: crate::object_id(b"0x5"),
         initial_shared_version: 1,
         mutable: false,
     };
 
     /// Argument for transactions acquiring a mutable reference to the system state.
     pub const SYSTEM_STATE_MUT: Self = Self::SharedObject {
-        id: Address::from_hex_unwrap(b"0x5"),
+        id: crate::object_id(b"0x5"),
         initial_shared_version: 1,
         mutable: true,
     };
 
-    pub const fn id(&self) -> Address {
+    pub const fn id(&self) -> ObjectId {
         match self {
             Self::ImmOrOwnedObject((id, ..)) => *id,
             Self::SharedObject { id, .. } => *id,
@@ -256,7 +256,7 @@ impl ObjectArg {
         }
     }
 
-    pub const fn id_borrowed(&self) -> &Address {
+    pub const fn id_borrowed(&self) -> &ObjectId {
         match self {
             Self::ImmOrOwnedObject((id, ..)) => id,
             Self::SharedObject { id, .. } => id,
@@ -391,7 +391,6 @@ impl TransactionDataAPI for TransactionDataV1 {
             | TransactionKind::ProgrammableSystemTransaction(_)
             | TransactionKind::EndOfEpoch(_) => true,
             TransactionKind::ProgrammableTransaction(_) => false,
-            _ => panic!("unknown TransactionKind variant"),
         }
     }
 

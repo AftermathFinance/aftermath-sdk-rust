@@ -1,5 +1,5 @@
 use af_ptbuilder::{Argument, ProgrammableTransactionBuilder, ptbuilder};
-use af_sui_pkg_sdk::Address;
+use af_sui_pkg_sdk::ObjectId;
 use af_sui_pkg_sdk::af_sui_types::ObjectArg;
 
 /// Groups the [ProgrammableTransactionBuilder] arguments for updating AfOracle `PriceFeed`s.
@@ -45,7 +45,7 @@ impl ProgrammableTransactionBuilder {
     /// Add a SwitchboardWrapper update to the PTB being built.
     fn update_af_oracle_switchboard_feed(
         &mut self,
-        switchboard_wrapper_pkg: Address,
+        switchboard_wrapper_pkg: ObjectId,
         arguments: UpdateAfOracleArguments,
     ) -> Result<(), af_ptbuilder::Error> {
         let UpdateAfOracleArguments {

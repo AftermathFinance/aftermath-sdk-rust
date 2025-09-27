@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use af_sui_types::{Address, Version};
+use af_sui_types::{Address, ObjectId, Version};
 use graphql_extract::extract;
 
 use super::fragments::PageInfoForward;
@@ -34,13 +34,13 @@ struct ObjectFilter<'a> {
     #[cynic(rename = "type")]
     type_: Option<&'a scalars::TypeTag>,
     owner: Option<&'a Address>,
-    object_ids: Option<&'a [Address]>,
+    object_ids: Option<&'a [ObjectId]>,
 }
 
 pub async fn query<C: GraphQlClient>(
     client: &C,
-    object_ids: &[Address],
-) -> super::Result<(u64, HashMap<Address, u64>), C> {
+    object_ids: &[ObjectId],
+) -> super::Result<(u64, HashMap<ObjectId, u64>), C> {
     let vars = Variables {
         after: None,
         first: None,
@@ -128,7 +128,7 @@ struct QueryPage {
 struct Object {
     version: Version,
     #[cynic(rename = "address")]
-    object_id: Address,
+    object_id: ObjectId,
 }
 
 #[derive(cynic::QueryFragment, Debug, Clone)]

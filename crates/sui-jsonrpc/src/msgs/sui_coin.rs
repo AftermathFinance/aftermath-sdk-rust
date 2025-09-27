@@ -3,9 +3,10 @@
 
 use std::collections::HashMap;
 
+use af_sui_types::{EpochId, ObjectDigest, ObjectId, ObjectRef, TransactionDigest};
 use serde::{Deserialize, Serialize};
 use serde_with::{IfIsHumanReadable, serde_as};
-use sui_sdk_types::{Address, Digest, EpochId, Version};
+use sui_sdk_types::Version;
 
 use super::Page;
 use crate::serde::BigInt;
@@ -40,17 +41,17 @@ impl Balance {
 #[serde(rename_all = "camelCase")]
 pub struct Coin {
     pub coin_type: String,
-    pub coin_object_id: Address,
+    pub coin_object_id: ObjectId,
     #[serde_as(as = "BigInt<u64>")]
     pub version: Version,
-    pub digest: Digest,
+    pub digest: ObjectDigest,
     #[serde_as(as = "BigInt<u64>")]
     pub balance: u64,
-    pub previous_transaction: Digest,
+    pub previous_transaction: TransactionDigest,
 }
 
 impl Coin {
-    pub fn object_ref(&self) -> (Address, Version, Digest) {
+    pub fn object_ref(&self) -> ObjectRef {
         (self.coin_object_id, self.version, self.digest)
     }
 }
@@ -69,7 +70,7 @@ pub struct SuiCoinMetadata {
     /// URL for the token logo
     pub icon_url: Option<String>,
     /// Object id for the CoinMetadata object
-    pub id: Option<Address>,
+    pub id: Option<ObjectId>,
 }
 
 /// Originally from `sui_types::balance`.

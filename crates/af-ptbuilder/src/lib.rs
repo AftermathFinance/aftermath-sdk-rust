@@ -7,21 +7,22 @@
 //! [`ProgrammableTransactionBuilder`](crate::ProgrammableTransactionBuilder) for a macro-less
 //! approach.
 
+#[doc(no_inline)]
+pub use af_sui_types::Argument;
+#[doc(hidden)]
+pub use af_sui_types::IdentStr;
+#[doc(no_inline)]
+pub use af_sui_types::MoveCall;
+#[doc(inline)]
+pub use af_sui_types::ObjectArg;
+#[doc(no_inline)]
+pub use af_sui_types::ObjectId;
+#[doc(no_inline)]
+pub use af_sui_types::TypeTag;
+use af_sui_types::{Identifier, ProgrammableTransaction};
 use indexmap::IndexMap;
 use serde::{Deserialize, Serialize};
-#[doc(no_inline)]
-pub use sui_sdk_types::Address;
-#[doc(no_inline)]
-pub use sui_sdk_types::Argument;
-#[doc(hidden)]
-pub use sui_sdk_types::Identifier;
-#[doc(inline)]
-pub use sui_sdk_types::Input;
-#[doc(no_inline)]
-pub use sui_sdk_types::MoveCall;
-use sui_sdk_types::ProgrammableTransaction;
-#[doc(no_inline)]
-pub use sui_sdk_types::TypeTag;
+use sui_sdk_types::Input;
 
 #[cfg(test)]
 mod tests;
@@ -41,9 +42,6 @@ pub enum Error {
 
     #[error(transparent)]
     MismatchedObjArgKinds(Box<MismatchedObjArgKindsError>),
-
-    #[error("tried to use a pure argument as an object argument")]
-    NotAnObjectArg,
 }
 
 #[derive(thiserror::Error, Debug)]
@@ -52,7 +50,7 @@ pub enum Error {
         {old_value:?} is not compatible with {new_value:?}"
 )]
 pub struct MismatchedObjArgKindsError {
-    pub id: Address,
+    pub id: ObjectId,
     pub old_value: Input,
     pub new_value: Input,
 }
@@ -61,7 +59,7 @@ pub struct MismatchedObjArgKindsError {
 #[derive(Clone, Debug, Default)]
 pub struct ProgrammableTransactionBuilder {
     inputs: IndexMap<BuilderArg, Input>,
-    commands: Vec<sui_sdk_types::Command>,
+    commands: Vec<af_sui_types::Command>,
 }
 
 /// Base API.
@@ -108,17 +106,10 @@ impl ProgrammableTransactionBuilder {
     /// the body.
     ///
     /// May fail if overriding a previously declared input.
-    pub fn obj<O: Into<Input>>(&mut self, obj_arg: O) -> Result<Argument> {
-        let obj_arg = obj_arg.into();
-        let id = match &obj_arg {
-            Input::Pure { .. } => return Err(Error::NotAnObjectArg),
-            Input::ImmutableOrOwned(object_reference) => *object_reference.object_id(),
-            Input::Shared { object_id, .. } => *object_id,
-            Input::Receiving(object_reference) => *object_reference.object_id(),
-            _ => panic!("unknown Input variant"),
-        };
+    pub fn obj(&mut self, obj_arg: ObjectArg) -> Result<Argument> {
+        let id = obj_arg.id();
         let key = BuilderArg::Object(id);
-        let mut input_arg = obj_arg;
+        let mut input_arg = obj_arg.into();
 
         if let Some(old_value) = self.inputs.get(&key) {
             // Check if the key hash didn't collide with a previous pure input
@@ -174,7 +165,7 @@ impl ProgrammableTransactionBuilder {
     /// Add a command to the PTB.
     ///
     /// This will come after any commands that were previously declared.
-    pub fn command(&mut self, command: impl Into<sui_sdk_types::Command>) -> Argument {
+    pub fn command(&mut self, command: impl Into<af_sui_types::Command>) -> Argument {
         let i = self.commands.len();
         self.commands.push(command.into());
         Argument::Result(i as u16)
@@ -204,7 +195,7 @@ impl ProgrammableTransactionBuilder {
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 enum BuilderArg {
-    Object(Address),
+    Object(ObjectId),
     Pure(Vec<u8>),
     ForcedNonUniquePure(usize),
 }
@@ -228,24 +219,23 @@ impl TryFrom<ProgrammableTransaction> for ProgrammableTransactionBuilder {
                 Pure { value } => {
                     self_.pure_bytes(value, true);
                 }
-                ImmutableOrOwned(object_reference) => {
-                    self_.obj(Input::ImmutableOrOwned(object_reference))?;
+                ImmutableOrOwned(oref) => {
+                    self_.obj(ObjectArg::ImmOrOwnedObject(oref.into_parts()))?;
                 }
                 Shared {
                     object_id,
                     initial_shared_version,
                     mutable,
                 } => {
-                    self_.obj(Input::Shared {
-                        object_id,
+                    self_.obj(ObjectArg::SharedObject {
+                        id: object_id,
                         initial_shared_version,
                         mutable,
                     })?;
                 }
-                Receiving(object_reference) => {
-                    self_.obj(Input::Receiving(object_reference))?;
+                Receiving(oref) => {
+                    self_.obj(ObjectArg::Receiving(oref.into_parts()))?;
                 }
-                _ => panic!("unknown Input variant"),
             }
         }
         for command in commands {
@@ -284,7 +274,7 @@ pub enum Command {
     MergeCoins(Argument, Vec<Argument>),
     /// Publishes a Move package. It takes the package bytes and a list of the package's transitive
     /// dependencies to link against on-chain.
-    Publish(Vec<Vec<u8>>, Vec<Address>),
+    Publish(Vec<Vec<u8>>, Vec<ObjectId>),
     /// `forall T: Vec<T> -> vector<T>`
     /// Given n-values of the same type, it constructs a vector. For non objects or an empty vector,
     /// the type tag must be specified.
@@ -296,13 +286,12 @@ pub enum Command {
     /// 3. The object ID of the package being upgraded.
     /// 4. An argument holding the `UpgradeTicket` that must have been produced from an earlier command in the same
     ///    programmable transaction.
-    Upgrade(Vec<Vec<u8>>, Vec<Address>, Address, Argument),
+    Upgrade(Vec<Vec<u8>>, Vec<ObjectId>, ObjectId, Argument),
 }
 
-#[allow(clippy::fallible_impl_from)]
-impl From<sui_sdk_types::Command> for Command {
-    fn from(value: sui_sdk_types::Command) -> Self {
-        use sui_sdk_types::Command::*;
+impl From<af_sui_types::Command> for Command {
+    fn from(value: af_sui_types::Command) -> Self {
+        use af_sui_types::Command::*;
         match value {
             MoveCall(args) => Self::MoveCall(Box::new(args)),
             TransferObjects(args) => Self::TransferObjects(args.objects, args.address),
@@ -313,12 +302,11 @@ impl From<sui_sdk_types::Command> for Command {
             Upgrade(args) => {
                 Self::Upgrade(args.modules, args.dependencies, args.package, args.ticket)
             }
-            _ => panic!("unknown Command variant"),
         }
     }
 }
 
-impl From<Command> for sui_sdk_types::Command {
+impl From<Command> for af_sui_types::Command {
     fn from(value: Command) -> Self {
         use Command::*;
         use sui_sdk_types::{
@@ -358,7 +346,7 @@ impl From<Command> for sui_sdk_types::Command {
 
 impl Command {
     pub fn move_call(
-        package: Address,
+        package: ObjectId,
         module: Identifier,
         function: Identifier,
         type_arguments: Vec<TypeTag>,
@@ -401,12 +389,12 @@ impl Command {
 ///
 /// ## Packages
 ///
-/// Move functions expect the [`Address`] of their package in the transaction payload (see
+/// Move functions expect the [`ObjectId`] of their package in the transaction payload (see
 /// [`MoveCall`]). One can declare the packages using the syntax
 /// ```no_run
-/// # use sui_sdk_types::Address;
-/// let package_name = Address::new(rand::random());
-/// let object_id = Address::new(rand::random());
+/// # use af_sui_types::ObjectId;
+/// let package_name = ObjectId::new(rand::random());
+/// let object_id = ObjectId::new(rand::random());
 /// af_ptbuilder::ptb!(
 ///     package package_name;
 ///     package package_name: object_id;
@@ -420,7 +408,7 @@ impl Command {
 /// Move functions that have type arguments expect [`TypeTag`] arguments in the transaction payload
 /// (see [`MoveCall`]). One can declare these variables using the syntax
 /// ```no_run
-/// # use sui_sdk_types::TypeTag;
+/// # use af_sui_types::TypeTag;
 /// let T = TypeTag::U8;
 /// let type_tag = TypeTag::U32;
 /// af_ptbuilder::ptb!(
@@ -435,14 +423,11 @@ impl Command {
 /// [`ProgrammableTransaction`]s need all their inputs declared upfront. One can
 /// declare the two types of inputs using the syntax
 /// ```no_run
-/// # use sui_sdk_types::{Address, Input};
-/// let clock = Input::Shared {
-///     object_id: Address::from_hex_unwrap(b"0x6"),
-///     initial_shared_version: 1,
-///     mutable: false
-/// };
-/// let object = Input::Shared {
-///     object_id: Address::new(rand::random()),
+/// # use af_sui_types::ObjectArg;
+/// # use af_sui_types::ObjectId;
+/// let clock = ObjectArg::CLOCK_IMM;
+/// let object = ObjectArg::SharedObject {
+///     id: ObjectId::new(rand::random()),
 ///     initial_shared_version: 1,
 ///     mutable: true
 /// };
@@ -456,7 +441,7 @@ impl Command {
 /// );
 /// # eyre::Ok(())
 /// ```
-/// Similar to struct initialization syntax. `input obj`s expect [`Input`] values and
+/// Similar to struct initialization syntax. `input obj`s expect [`ObjectArg`] values and
 /// become object [`Input`]s in the transaction payload. `input pure`s expect any type `T` that
 /// is [`Serialize`] `+ ?Sized` (see [`ProgrammableTransactionBuilder::pure`] for the internals) and
 /// become [`Input::Pure`]s in the transaction payload. Within the macro scope, both variables
@@ -467,8 +452,8 @@ impl Command {
 /// Use the syntax
 /// ```no_run
 /// # af_ptbuilder::ptb!(
-/// # package package: sui_sdk_types::Address::new(rand::random());
-/// # type T = sui_sdk_types::TypeTag::U8;
+/// # package package: af_sui_types::ObjectId::new(rand::random());
+/// # type T = af_sui_types::TypeTag::U8;
 /// # input pure arg: &0_u32;
 ///     package::module::function<T>(arg);
 /// # );
@@ -481,19 +466,14 @@ impl Command {
 ///
 /// Functions that return can have their results assigned to a value or unpacked into several ones:
 /// ```no_run
-/// # use sui_sdk_types::{Address, Input};
-/// # let clock = Input::Shared {
-/// #     object_id: Address::from_hex_unwrap(b"0x6"),
-/// #     initial_shared_version: 1,
-/// #     mutable: false
-/// # };
-/// # let clock2 = clock.clone();
-/// # let clock3 = clock.clone();
+/// # use af_sui_types::ObjectArg;
+/// # use af_sui_types::ObjectId;
+/// # let clock = ObjectArg::CLOCK_IMM;
 /// # af_ptbuilder::ptb!(
-/// # package package: Address::new(rand::random());
+/// # package package: ObjectId::new(rand::random());
 /// # input obj a: clock;
-/// # input obj b: clock2;
-/// # input obj arg: clock3;
+/// # input obj b: clock;
+/// # input obj arg: clock;
 /// let result = package::module::function(a, b);
 /// let (a, b) = package::module::function(arg);
 /// # );
@@ -517,16 +497,16 @@ impl Command {
 ///
 /// ```no_run
 /// use af_ptbuilder::ptb;
-/// use sui_sdk_types::{Address, Input, TypeTag};
+/// use af_sui_types::{address, object_id, ObjectArg, TypeTag};
 ///
-/// let foo = Address::from_hex_unwrap(b"0xbeef");
+/// let foo = object_id(b"0xbeef");
 /// let otw: TypeTag = "0x2::sui::SUI".parse()?;
-/// let registry = Input::Shared {
-///     object_id: Address::from_hex_unwrap(b"0xdeed"),
+/// let registry = ObjectArg::SharedObject {
+///     id: object_id(b"0xdeed"),
 ///     initial_shared_version: 1,
 ///     mutable: true,
 /// };
-/// let sender = Address::from_hex_unwrap(b"0xabcd");
+/// let sender = address(b"0xabcd");
 ///
 /// ptb!(
 ///     package foo;
@@ -584,7 +564,7 @@ macro_rules! ptbuilder {
         package $name:ident $value:literal;
         $($tt:tt)*
     }) => {
-        let $name: $crate::Address = $value.parse()?;
+        let $name: $crate::ObjectId = $value.parse()?;
 
         $crate::ptbuilder!($builder { $($tt)* });
     };
@@ -593,7 +573,7 @@ macro_rules! ptbuilder {
         package $name:ident;
         $($tt:tt)*
     }) => {
-        let $name: $crate::Address = $name;
+        let $name: $crate::ObjectId = $name;
 
         $crate::ptbuilder!($builder { $($tt)* });
     };
@@ -602,7 +582,7 @@ macro_rules! ptbuilder {
         package $name:ident: $value:expr_2021;
         $($tt:tt)*
     }) => {
-        let $name: $crate::Address = $value;
+        let $name: $crate::ObjectId = $value;
 
         $crate::ptbuilder!($builder { $($tt)* });
     };
@@ -671,8 +651,8 @@ macro_rules! ptbuilder {
         let _fun = stringify!($fun);
         $builder.command($crate::Command::move_call(
             $package,
-            $crate::Identifier::from_static(_module),
-            $crate::Identifier::from_static(_fun),
+            $crate::IdentStr::cast(_module).to_owned(),
+            $crate::IdentStr::cast(_fun).to_owned(),
             vec![$($($T.clone()),+)?],
             vec![$($arg),*]
         ));
@@ -688,8 +668,8 @@ macro_rules! ptbuilder {
         let _fun = stringify!($fun);
         let $ret = $builder.command($crate::Command::move_call(
             $package,
-            $crate::Identifier::from_static(_module),
-            $crate::Identifier::from_static(_fun),
+            $crate::IdentStr::cast(_module).to_owned(),
+            $crate::IdentStr::cast(_fun).to_owned(),
             vec![$($($T.clone()),+)?],
             vec![$($arg),*]
         ));
@@ -705,8 +685,8 @@ macro_rules! ptbuilder {
         let _fun = stringify!($fun);
         let rets = $builder.command($crate::Command::move_call(
             $package,
-            $crate::Identifier::from_static(_module),
-            $crate::Identifier::from_static(_fun),
+            $crate::IdentStr::cast(_module).to_owned(),
+            $crate::IdentStr::cast(_fun).to_owned(),
             vec![$($($T.clone()),+)?],
             vec![$($arg),*]
         ));
@@ -742,7 +722,7 @@ macro_rules! ptbuilder {
 /// # Example
 /// ```
 /// use af_ptbuilder::ProgrammableTransactionBuilder;
-/// use sui_sdk_types::Argument;
+/// use af_sui_types::Argument;
 ///
 /// let mut builder = ProgrammableTransactionBuilder::new();
 /// let arg = Argument::Result(0);

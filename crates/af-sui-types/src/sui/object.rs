@@ -30,7 +30,6 @@ impl ObjectHelpers for Object {
                 initial_shared_version: *initial_shared_version,
                 mutable,
             },
-            _ => panic!("unknown Owner variant"),
         }
     }
 }
@@ -76,17 +75,15 @@ impl OwnerHelpers for Owner {
             | Self::Immutable
             | Self::Object(_)
             | Self::ConsensusAddress { .. } => None,
-            _ => panic!("unknown Owner variant"),
         }
     }
 
     fn get_owner_address(&self) -> Option<Address> {
         match self {
             Self::Address(address) => Some(*address),
-            Self::Object(id) => Some(*id),
+            Self::Object(id) => Some(*id.as_address()),
             Self::ConsensusAddress { owner, .. } => Some(*owner),
             Self::Shared { .. } | Self::Immutable => None,
-            _ => panic!("unknown Owner variant"),
         }
     }
 
@@ -111,7 +108,6 @@ impl OwnerHelpers for Owner {
             Self::Immutable | Self::Object(_) | Self::Address(_) => None,
             Self::Shared(version) => Some(*version),
             Self::ConsensusAddress { start_version, .. } => Some(*start_version),
-            _ => panic!("unknown Owner variant"),
         }
     }
 }

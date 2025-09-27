@@ -3,18 +3,21 @@
 
 use std::fmt::Display;
 
+use af_sui_types::{
+    Address as SuiAddress,
+    OBJECT_DIGEST_DELETED,
+    OBJECT_DIGEST_WRAPPED,
+    ObjectDigest,
+    ObjectId,
+    ObjectRef,
+    StructTag,
+};
 use serde::{Deserialize, Serialize};
 use serde_with::{DisplayFromStr, serde_as};
-use sui_sdk_types::{Address, Digest, StructTag, Version};
+use sui_sdk_types::Version;
 
 use crate::msgs::Owner;
 use crate::serde::BigInt;
-
-/// A marker that signifies the object is deleted.
-const OBJECT_DIGEST_DELETED: Digest = Digest::new([99; 32]);
-
-/// A marker that signifies the object is wrapped into another object.
-const OBJECT_DIGEST_WRAPPED: Digest = Digest::new([88; 32]);
 
 /// ObjectChange are derived from the object mutations in the TransactionEffect to provide richer object information.
 #[serde_as]
@@ -24,79 +27,79 @@ pub enum ObjectChange {
     /// Module published
     #[serde(rename_all = "camelCase")]
     Published {
-        package_id: Address,
+        package_id: ObjectId,
         #[serde_as(as = "BigInt<u64>")]
         version: Version,
-        digest: Digest,
+        digest: ObjectDigest,
         modules: Vec<String>,
     },
     /// Transfer objects to new address / wrap in another object
     #[serde(rename_all = "camelCase")]
     Transferred {
-        sender: Address,
+        sender: SuiAddress,
         recipient: Owner,
         // #[serde_as(as = "SuiStructTag")]
         #[serde_as(as = "DisplayFromStr")]
         object_type: StructTag,
-        object_id: Address,
+        object_id: ObjectId,
         #[serde_as(as = "BigInt<u64>")]
         version: Version,
-        digest: Digest,
+        digest: ObjectDigest,
     },
     /// Object mutated.
     #[serde(rename_all = "camelCase")]
     Mutated {
-        sender: Address,
+        sender: SuiAddress,
         owner: Owner,
         // #[serde_as(as = "SuiStructTag")]
         #[serde_as(as = "DisplayFromStr")]
         object_type: StructTag,
-        object_id: Address,
+        object_id: ObjectId,
         #[serde_as(as = "BigInt<u64>")]
         version: Version,
         #[serde_as(as = "BigInt<u64>")]
         previous_version: Version,
-        digest: Digest,
+        digest: ObjectDigest,
     },
     /// Delete object
     #[serde(rename_all = "camelCase")]
     Deleted {
-        sender: Address,
+        sender: SuiAddress,
         // #[serde_as(as = "SuiStructTag")]
         #[serde_as(as = "DisplayFromStr")]
         object_type: StructTag,
-        object_id: Address,
+        object_id: ObjectId,
         #[serde_as(as = "BigInt<u64>")]
         version: Version,
     },
     /// Wrapped object
     #[serde(rename_all = "camelCase")]
     Wrapped {
-        sender: Address,
+        sender: SuiAddress,
         // #[serde_as(as = "SuiStructTag")]
         #[serde_as(as = "DisplayFromStr")]
         object_type: StructTag,
-        object_id: Address,
+        object_id: ObjectId,
         #[serde_as(as = "BigInt<u64>")]
         version: Version,
     },
     /// New object creation
     #[serde(rename_all = "camelCase")]
     Created {
-        sender: Address,
+        sender: SuiAddress,
         owner: Owner,
         // #[serde_as(as = "SuiStructTag")]
         #[serde_as(as = "DisplayFromStr")]
         object_type: StructTag,
-        object_id: Address,
+        object_id: ObjectId,
         #[serde_as(as = "BigInt<u64>")]
         version: Version,
-        digest: Digest,
+        digest: ObjectDigest,
     },
 }
 
 impl ObjectChange {
-    pub fn object_id(&self) -> Address {
+    pub fn object_id(&self) -> ObjectId {
         match self {
             ObjectChange::Published { package_id, .. } => *package_id,
             ObjectChange::Transferred { object_id, .. }
@@ -107,7 +110,7 @@ impl ObjectChange {
         }
     }
 
-    pub fn object_ref(&self) -> (Address, Version, Digest) {
+    pub fn object_ref(&self) -> ObjectRef {
         match self {
             ObjectChange::Published {
                 package_id,
@@ -171,7 +174,7 @@ impl Display for ObjectChange {
             } => {
                 write!(
                     f,
-                    " ┌──\n │ Address: {}\n │ Sender: {} \n │ Recipient: {:?}\n │ ObjectType: {} \n │ Version: {}\n │ Digest: {}\n └──",
+                    " ┌──\n │ ObjectId: {}\n │ Sender: {} \n │ Recipient: {:?}\n │ ObjectType: {} \n │ Version: {}\n │ Digest: {}\n └──",
                     object_id, sender, recipient, object_type, version, digest
                 )
             }
@@ -186,7 +189,7 @@ impl Display for ObjectChange {
             } => {
                 write!(
                     f,
-                    " ┌──\n │ Address: {}\n │ Sender: {} \n │ Owner: {:?}\n │ ObjectType: {} \n │ Version: {}\n │ Digest: {}\n └──",
+                    " ┌──\n │ ObjectId: {}\n │ Sender: {} \n │ Owner: {:?}\n │ ObjectType: {} \n │ Version: {}\n │ Digest: {}\n └──",
                     object_id, sender, owner, object_type, version, digest
                 )
             }
@@ -198,7 +201,7 @@ impl Display for ObjectChange {
             } => {
                 write!(
                     f,
-                    " ┌──\n │ Address: {}\n │ Sender: {} \n │ ObjectType: {} \n │ Version: {}\n └──",
+                    " ┌──\n │ ObjectId: {}\n │ Sender: {} \n │ ObjectType: {} \n │ Version: {}\n └──",
                     object_id, sender, object_type, version
                 )
             }
@@ -210,7 +213,7 @@ impl Display for ObjectChange {
             } => {
                 write!(
                     f,
-                    " ┌──\n │ Address: {}\n │ Sender: {} \n │ ObjectType: {} \n │ Version: {}\n └──",
+                    " ┌──\n │ ObjectId: {}\n │ Sender: {} \n │ ObjectType: {} \n │ Version: {}\n └──",
                     object_id, sender, object_type, version
                 )
             }
@@ -224,7 +227,7 @@ impl Display for ObjectChange {
             } => {
                 write!(
                     f,
-                    " ┌──\n │ Address: {}\n │ Sender: {} \n │ Owner: {:?}\n │ ObjectType: {} \n │ Version: {}\n │ Digest: {}\n └──",
+                    " ┌──\n │ ObjectId: {}\n │ Sender: {} \n │ Owner: {:?}\n │ ObjectType: {} \n │ Version: {}\n │ Digest: {}\n └──",
                     object_id, sender, owner, object_type, version, digest
                 )
             }

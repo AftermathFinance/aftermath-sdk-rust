@@ -6,7 +6,7 @@ use af_iperps::order_helpers::{OrderType, Side};
 use af_move_type::ObjectExt;
 use af_ptbuilder::ptb;
 use af_sui_types::sui::object::ObjectHelpers as _;
-use af_sui_types::{Address, ObjectArg};
+use af_sui_types::{ObjectArg, ObjectId};
 use af_utilities::IFixed;
 use clap::Parser;
 use color_eyre::Result;
@@ -27,12 +27,12 @@ async fn main() -> Result<()> {
     let client = ReqwestClient::new(reqwest::Client::default(), rpc.to_owned());
 
     let perpetuals_package =
-        Address::from_str("0x3bee2aefb42092215d5a22808e2a0abd49f58ca5a8ecfee9634c406370890233")?;
+        ObjectId::from_str("0x3bee2aefb42092215d5a22808e2a0abd49f58ca5a8ecfee9634c406370890233")?;
     let account_obj_id =
-        Address::from_str("0x2b01d94dcb7a9451306223acefd7867968f881d24ce8f9bc564acc767f32e4b7")?;
+        ObjectId::from_str("0x2b01d94dcb7a9451306223acefd7867968f881d24ce8f9bc564acc767f32e4b7")?;
     // BTC/USD market
     let ch_id =
-        Address::from_str("0xa2c011a2834c6e4db3db1179ea414411b9523739d47b800d9fcd4aa691f94a04")?;
+        ObjectId::from_str("0xa2c011a2834c6e4db3db1179ea414411b9523739d47b800d9fcd4aa691f94a04")?;
 
     // Fetch the clearing house object reference AND the object contents.
     // The object contents are used to access information such

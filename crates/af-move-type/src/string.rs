@@ -112,7 +112,7 @@ impl StaticTypeTag for String {
 
 impl StaticAddress for String {
     fn address() -> Address {
-        Address::from_hex_unwrap(b"0x1")
+        Address::new(af_sui_types::hex_address_bytes(b"0x1"))
     }
 }
 

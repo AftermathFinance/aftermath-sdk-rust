@@ -3,9 +3,9 @@
 
 use std::fmt::Display;
 
+use af_sui_types::TypeTag;
 use serde::{Deserialize, Serialize};
 use serde_with::{DisplayFromStr, serde_as};
-use sui_sdk_types::TypeTag;
 
 use crate::msgs::Owner;
 

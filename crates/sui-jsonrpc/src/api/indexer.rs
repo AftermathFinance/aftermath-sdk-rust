@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
+use af_sui_types::{Address as SuiAddress, ObjectId, TransactionDigest};
 use jsonrpsee::proc_macros::rpc;
-use sui_sdk_types::{Address, Digest};
 
 use crate::msgs::{
     DynamicFieldName,
@@ -31,9 +31,9 @@ pub trait IndexerApi {
     #[method(name = "getOwnedObjects")]
     async fn get_owned_objects(
         &self,
-        address: Address,
+        address: SuiAddress,
         query: Option<SuiObjectResponseQuery>,
-        cursor: Option<Address>,
+        cursor: Option<ObjectId>,
         limit: Option<usize>,
     ) -> RpcResult<ObjectsPage>;
 
@@ -42,7 +42,7 @@ pub trait IndexerApi {
     async fn query_transaction_blocks(
         &self,
         query: SuiTransactionBlockResponseQuery,
-        cursor: Option<Digest>,
+        cursor: Option<TransactionDigest>,
         limit: Option<usize>,
         descending_order: Option<bool>,
     ) -> RpcResult<TransactionBlocksPage>;
@@ -69,8 +69,8 @@ pub trait IndexerApi {
     #[method(name = "getDynamicFields")]
     async fn get_dynamic_fields(
         &self,
-        parent_object_id: Address,
-        cursor: Option<Address>,
+        parent_object_id: ObjectId,
+        cursor: Option<ObjectId>,
         limit: Option<usize>,
     ) -> RpcResult<DynamicFieldPage>;
 
@@ -78,21 +78,21 @@ pub trait IndexerApi {
     #[method(name = "getDynamicFieldObject")]
     async fn get_dynamic_field_object(
         &self,
-        parent_object_id: Address,
+        parent_object_id: ObjectId,
         name: DynamicFieldName,
     ) -> RpcResult<SuiObjectResponse>;
 
     /// Return the resolved address given resolver and name
     #[method(name = "resolveNameServiceAddress")]
-    async fn resolve_name_service_address(&self, name: String) -> RpcResult<Option<Address>>;
+    async fn resolve_name_service_address(&self, name: String) -> RpcResult<Option<SuiAddress>>;
 
     /// Return the resolved names given address,
     /// if multiple names are resolved, the first one is the primary name.
     #[method(name = "resolveNameServiceNames")]
     async fn resolve_name_service_names(
         &self,
-        address: Address,
-        cursor: Option<Address>,
+        address: SuiAddress,
+        cursor: Option<ObjectId>,
         limit: Option<usize>,
-    ) -> RpcResult<Page<String, Address>>;
+    ) -> RpcResult<Page<String, ObjectId>>;
 }

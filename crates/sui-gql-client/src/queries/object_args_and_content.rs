@@ -1,4 +1,4 @@
-use af_sui_types::{Address, ObjectArg, Version};
+use af_sui_types::{ObjectArg, ObjectId, Version};
 use futures::TryStreamExt as _;
 use itertools::Itertools as _;
 use sui_gql_schema::{scalars, schema};
@@ -26,7 +26,7 @@ pub enum Error<T> {
     #[error("No data in object args query response")]
     NoData,
     #[error("Missing data for object: {0}")]
-    MissingObject(Address),
+    MissingObject(ObjectId),
 }
 
 /// Get a sequence of object args and contents corresponding to `object_ids`, but not
@@ -38,7 +38,7 @@ pub enum Error<T> {
 /// Fails if any object in the response is missing data.
 pub async fn query<C: GraphQlClient>(
     client: &C,
-    object_ids: impl IntoIterator<Item = Address> + Send,
+    object_ids: impl IntoIterator<Item = ObjectId> + Send,
     mutable: bool,
     page_size: Option<u32>,
 ) -> Result<Vec<(ObjectArg, RawMoveStruct)>, Error<C::Error>> {
@@ -155,7 +155,7 @@ fn gql_output() {
 #[derive(cynic::QueryFragment, Debug)]
 struct Object {
     #[cynic(rename = "address")]
-    object_id: Address,
+    object_id: ObjectId,
     version: Version,
     digest: Option<scalars::Digest>,
     owner: Option<ObjectOwner>,

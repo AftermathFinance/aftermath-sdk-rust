@@ -1,10 +1,10 @@
-use af_sui_types::Address;
+use af_sui_types::ObjectId;
 use graphql_extract::extract;
 
 use crate::queries::Error;
 use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
 
-pub async fn query<C>(client: &C, object_id: Address) -> Result<(u64, u64), Error<C::Error>>
+pub async fn query<C>(client: &C, object_id: ObjectId) -> Result<(u64, u64), Error<C::Error>>
 where
     C: GraphQlClient,
 {
@@ -28,7 +28,7 @@ where
 
 #[derive(cynic::QueryVariables, Debug)]
 struct Variables {
-    object_id: Address,
+    object_id: ObjectId,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
@@ -57,7 +57,7 @@ fn gql_output() {
     use cynic::QueryBuilder as _;
 
     let vars = Variables {
-        object_id: Address::new(rand::random()),
+        object_id: ObjectId::new(rand::random()),
     };
     let operation = Query::build(vars);
     insta::assert_snapshot!(operation.query, @r###"

@@ -1,5 +1,5 @@
 use af_move_type::MoveInstance;
-use af_sui_types::Address;
+use af_sui_types::{Address, ObjectId};
 use sui_framework_sdk::object::ID;
 use sui_gql_client::GraphQlClient;
 use sui_gql_client::queries::{Error as QueryError, GraphQlClientExt as _};
@@ -25,12 +25,12 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     async fn price_info_object_id_for_feed(
         &self,
         pyth_wrapper_pkg: Address,
-        price_feed: Address,
-    ) -> Result<Address, Error<Self::Error>> {
+        price_feed: ObjectId,
+    ) -> Result<ObjectId, Error<Self::Error>> {
         async move {
             let key = Key::new().move_instance(pyth_wrapper_pkg);
             let raw = self
-                .owner_df_content(price_feed, key.try_into()?, None)
+                .owner_df_content(price_feed.into(), key.try_into()?, None)
                 .await
                 .map_err(Error::OwnerDfContent)?;
             let pf: MoveInstance<ID> = raw.try_into()?;

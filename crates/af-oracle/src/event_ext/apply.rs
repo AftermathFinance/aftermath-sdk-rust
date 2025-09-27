@@ -1,4 +1,4 @@
-use af_sui_types::Address;
+use af_sui_types::ObjectId;
 use sui_framework_sdk::object::{ID, UID};
 
 use crate::events;
@@ -42,7 +42,7 @@ impl<T: PriceFeedStorage> Apply<T> for events::CreatedPriceFeed {
             // with price feeds in AfOracle are done through the `PriceFeedStorage`.
             id: UID {
                 id: ID {
-                    bytes: Address::ZERO,
+                    bytes: ObjectId::ZERO,
                 },
             },
             price,

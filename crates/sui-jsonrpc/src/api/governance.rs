@@ -1,8 +1,8 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
 
+use af_sui_types::{Address as SuiAddress, ObjectId};
 use jsonrpsee::proc_macros::rpc;
-use sui_sdk_types::Address;
 
 use crate::msgs::{DelegatedStake, SuiCommittee, SuiSystemStateSummary, ValidatorApys};
 use crate::serde::BigInt;
@@ -13,12 +13,12 @@ pub trait GovernanceReadApi {
     #[method(name = "getStakesByIds")]
     async fn get_stakes_by_ids(
         &self,
-        staked_sui_ids: Vec<Address>,
+        staked_sui_ids: Vec<ObjectId>,
     ) -> RpcResult<Vec<DelegatedStake>>;
 
     /// Return all [DelegatedStake].
     #[method(name = "getStakes")]
-    async fn get_stakes(&self, owner: Address) -> RpcResult<Vec<DelegatedStake>>;
+    async fn get_stakes(&self, owner: SuiAddress) -> RpcResult<Vec<DelegatedStake>>;
 
     /// Return the committee information for the asked `epoch`.
     #[method(name = "getCommitteeInfo")]

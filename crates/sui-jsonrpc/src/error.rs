@@ -1,9 +1,9 @@
 use std::sync::LazyLock;
 
+use af_sui_types::ObjectId;
 use extension_traits::extension;
 use jsonrpsee_core::ClientError;
 use jsonrpsee_types::{ErrorCode, ErrorObject, ErrorObjectOwned};
-use sui_sdk_types::Address;
 
 pub type JsonRpcClientResult<T = ()> = Result<T, JsonRpcClientError>;
 
@@ -143,7 +143,7 @@ impl<'a> ErrorObject<'a> {
     /// with the effects of a previous one.
     ///
     /// [`InvalidParams`]: ErrorCode::InvalidParams
-    fn as_object_not_found(&self) -> Option<(Address, Option<u64>)> {
+    fn as_object_not_found(&self) -> Option<(ObjectId, Option<u64>)> {
         if self.code() != ErrorCode::InvalidParams.code() {
             return None;
         }

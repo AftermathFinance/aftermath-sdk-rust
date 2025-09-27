@@ -1,4 +1,4 @@
-use af_sui_types::{Address, StructTag, TypeTag, encode_base64_default};
+use af_sui_types::{ObjectId, StructTag, TypeTag, encode_base64_default};
 use derive_more::Display;
 
 /// An instance of a dynamic field or dynamic object.
@@ -22,7 +22,7 @@ pub enum DynamicField {
 #[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Hash)]
 #[display("({object_id}, {version})")]
 pub struct ObjectKey {
-    pub object_id: Address,
+    pub object_id: ObjectId,
     pub version: u64,
 }
 

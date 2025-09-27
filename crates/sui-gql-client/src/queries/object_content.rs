@@ -1,4 +1,4 @@
-use af_sui_types::{Address, Version};
+use af_sui_types::{ObjectId, Version};
 use graphql_extract::extract;
 
 use super::Error;
@@ -8,7 +8,7 @@ use crate::{GraphQlClient, GraphQlResponseExt, schema};
 
 pub async fn query<C: GraphQlClient>(
     client: &C,
-    object_id: Address,
+    object_id: ObjectId,
     version: Option<u64>,
 ) -> Result<RawMoveStruct, Error<C::Error>> {
     let vars = Variables {
@@ -34,7 +34,7 @@ pub async fn query<C: GraphQlClient>(
 
 #[derive(cynic::QueryVariables, Debug)]
 struct Variables {
-    address: Address,
+    address: ObjectId,
     version: Option<Version>,
 }
 
@@ -52,7 +52,7 @@ fn gql_output() {
     use cynic::QueryBuilder as _;
 
     let vars = Variables {
-        address: Address::new(rand::random()),
+        address: ObjectId::new(rand::random()),
         version: None,
     };
     let operation = Query::build(vars);

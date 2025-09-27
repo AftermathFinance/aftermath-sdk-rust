@@ -4,15 +4,22 @@
 use std::fmt;
 use std::fmt::Display;
 
+use af_sui_types::{
+    Address as SuiAddress,
+    Identifier,
+    ObjectId,
+    StructTag,
+    TransactionDigest,
+    encode_base64_default,
+};
 use json_to_table::json_to_table;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value, json};
 use serde_with::{DisplayFromStr, IfIsHumanReadable, serde_as};
-use sui_sdk_types::{Address, Digest, Identifier, StructTag};
 use tabled::settings::Style as TableStyle;
 
 use super::Page;
-use crate::serde::{Base64orBase58, BigInt, encode_base64_default};
+use crate::serde::{Base64orBase58, BigInt};
 
 pub type EventPage = Page<SuiEvent, EventID>;
 
@@ -27,12 +34,12 @@ pub struct SuiEvent {
     /// This ID is the "cursor" for event querying.
     pub id: EventID,
     /// Move package where this event was emitted.
-    pub package_id: Address,
+    pub package_id: ObjectId,
     /// Move module where this event was emitted.
     #[serde_as(as = "DisplayFromStr")]
     pub transaction_module: Identifier,
     /// Sender's Sui address.
-    pub sender: Address,
+    pub sender: SuiAddress,
     /// Move event type.
     // #[serde_as(as = "SuiStructTag")]
     #[serde_as(as = "DisplayFromStr")]
@@ -112,7 +119,7 @@ fn try_into_byte(v: &Value) -> Option<u8> {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Hash)]
 #[serde(rename_all = "camelCase")]
 pub struct EventID {
-    pub tx_digest: Digest,
+    pub tx_digest: TransactionDigest,
     #[serde_as(as = "IfIsHumanReadable<BigInt<u64>, _>")]
     pub event_seq: u64,
 }
@@ -123,11 +130,11 @@ pub enum EventFilter {
     /// Return all events.
     All([Box<EventFilter>; 0]),
     /// Query by sender address.
-    Sender(Address),
+    Sender(SuiAddress),
     /// Return events emitted by the given transaction.
     Transaction(
         ///digest of the transaction, as base-64 encoded string
-        Digest,
+        TransactionDigest,
     ),
     /// Return events emitted in a specified Move module.
     /// If the event is defined in Module A but emitted in a tx with Module B,
@@ -135,7 +142,7 @@ pub enum EventFilter {
     /// Query `MoveEventModule` by module A returns the event too.
     MoveModule {
         /// the Move package ID
-        package: Address,
+        package: ObjectId,
         /// the module name
         #[serde_as(as = "DisplayFromStr")]
         module: Identifier,
@@ -150,7 +157,7 @@ pub enum EventFilter {
     /// Query `MoveModule` by module B returns the event too.
     MoveEventModule {
         /// the Move package ID
-        package: Address,
+        package: ObjectId,
         /// the module name
         #[serde_as(as = "DisplayFromStr")]
         module: Identifier,

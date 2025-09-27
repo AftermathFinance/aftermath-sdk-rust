@@ -63,7 +63,7 @@
 //! #     serde::Deserialize, serde::Serialize, Clone, Debug, derive_more::Display, PartialEq, Eq, Hash,
 //! # )]
 //! # pub struct ID {
-//! #     bytes: af_sui_types::Address,
+//! #     bytes: af_sui_types::ObjectId,
 //! # }
 //! # #[derive(
 //! #     serde::Deserialize, serde::Serialize, Clone, Debug, derive_more::Display, PartialEq, Eq, Hash,
@@ -123,7 +123,7 @@
 //! #     serde::Deserialize, serde::Serialize, Clone, Debug, derive_more::Display, PartialEq, Eq, Hash,
 //! # )]
 //! # pub struct ID {
-//! #     bytes: af_sui_types::Address,
+//! #     bytes: af_sui_types::ObjectId,
 //! # }
 //! # #[derive(
 //! #     serde::Deserialize, serde::Serialize, Clone, Debug, derive_more::Display, PartialEq, Eq, Hash,
@@ -196,7 +196,7 @@
 pub use af_move_type::vector::MoveVec;
 pub use af_move_type::{HasKey, MoveStruct, MoveType};
 pub use af_sui_types::u256::U256;
-pub use af_sui_types::{self, Address, TypeTag};
+pub use af_sui_types::{self, Address, ObjectId, TypeTag};
 use tabled::grid::config::ColoredConfig;
 use tabled::grid::dimension::CompleteDimensionVecRecords;
 use tabled::grid::records::vec_records::{Text, VecRecords};
@@ -716,7 +716,7 @@ macro_rules! sui_pkg_sdk {
         [key, $($rest:tt)*]
     ) => {
         impl$(<$($G: $crate::MoveType),*>)? $crate::HasKey for $Struct$(<$($G),*>)? {
-            fn object_id(&self) -> $crate::Address {
+            fn object_id(&self) -> $crate::ObjectId {
                 self.id.id.bytes
             }
         }

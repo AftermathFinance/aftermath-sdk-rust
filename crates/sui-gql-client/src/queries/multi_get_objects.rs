@@ -1,4 +1,4 @@
-use af_sui_types::{Address, Object, Version};
+use af_sui_types::{Object, ObjectId, Version};
 use itertools::Itertools as _;
 use sui_gql_schema::scalars::Base64Bcs;
 
@@ -8,7 +8,7 @@ use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
-    objects: impl IntoIterator<Item = (Address, Version)> + Send,
+    objects: impl IntoIterator<Item = (ObjectId, Version)> + Send,
 ) -> super::Result<Vec<Object>, C> {
     let mut object_keys = objects
         .into_iter()

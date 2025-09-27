@@ -1,13 +1,13 @@
 use sui_sdk_types::hash::Hasher;
 use sui_sdk_types::{Intent, IntentAppId, IntentScope, IntentVersion, SigningDigest};
 
-use crate::{Digest, TransactionData};
+use crate::{Digest, TransactionData, TransactionDigest};
 
 impl TransactionData {
-    pub fn digest(&self) -> Digest {
+    pub fn digest(&self) -> TransactionDigest {
         const SALT: &str = "TransactionData::";
         let digest = type_digest(SALT, self);
-        Digest::new(digest.into_inner())
+        TransactionDigest::new(digest.into_inner())
     }
 }
 
