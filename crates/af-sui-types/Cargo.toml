@@ -40,7 +40,7 @@ proptest      = { version = "1", public = true, optional = true }
 rand          = { version = "0.9", public = true, optional = true }
 serde         = { version = "1", public = true }
 serde_with    = { version = "3", public = true, features = ["base64"] }
-sui-sdk-types = { version = "0.0.7", features = ["serde"], public = true }
+sui-sdk-types = { version = "0.0.8", features = ["serde"], public = true }
 
 enum_dispatch = "0.3"
 hex           = "0.4"
@@ -57,7 +57,7 @@ uint            = { version = "0.10", optional = true }
 insta         = "1"
 proptest      = "1"
 serde_json    = "1"
-sui-sdk-types = { version = "0.0.7", features = ["proptest"] }
+sui-sdk-types = { version = "0.0.8", features = ["proptest"] }
 test-strategy = "0.4"
 
 [[test]]

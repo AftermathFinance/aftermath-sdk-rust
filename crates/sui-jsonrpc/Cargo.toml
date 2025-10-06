@@ -53,7 +53,7 @@ jsonrpsee-http-client = { version = "0.26", public = true, optional = true }
 jsonrpsee-types       = { version = "0.26", public = true, optional = true }
 serde                 = { version = "1", public = true }
 serde_json            = { version = "1", public = true }
-sui-sdk-types         = { version = "0.0.7", public = true, features = ["hash", "serde"] }
+sui-sdk-types         = { version = "0.0.8", public = true, features = ["hash", "serde"] }
 
 base64ct      = "1"
 bcs           = "0.1"

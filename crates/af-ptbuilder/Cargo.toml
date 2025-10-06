@@ -30,7 +30,7 @@ workspace = true
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 bcs           = { version = "0.1", public = true }
 serde         = { version = "1", public = true, features = ["derive"] }
-sui-sdk-types = { version = "0.0.7", public = true, features = ["hash", "serde"] }
+sui-sdk-types = { version = "0.0.8", public = true, features = ["hash", "serde"] }
 
 indexmap  = "2"
 thiserror = "2"
@@ -43,7 +43,7 @@ proptest      = "1"
 rand          = "0.9"
 serde_json    = "1"
 serde_with    = { version = "3", features = ["base64"] }
-sui-sdk-types = { version = "0.0.7", features = ["proptest"] }
+sui-sdk-types = { version = "0.0.8", features = ["proptest"] }
 test-strategy = "0.4"
 
 

@@ -32,7 +32,7 @@ eyre          = { version = "0.6", public = true }
 fastcrypto    = { version = "0.1.9", public = true }
 serde         = { version = "1", public = true }
 signature     = { version = "2", public = true }
-sui-sdk-types = { version = "0.0.7", public = true, features = ["hash", "serde"] }
+sui-sdk-types = { version = "0.0.8", public = true, features = ["hash", "serde"] }
 
 ## Because of `fastcrypto`
 blake2  = { version = "0.10", public = true }
