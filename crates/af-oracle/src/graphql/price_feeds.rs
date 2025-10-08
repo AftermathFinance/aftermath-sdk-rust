@@ -2,8 +2,8 @@ use af_move_type::MoveInstance;
 use af_sui_types::{Address, Version};
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
-use sui_gql_client::queries::fragments::{MoveValueRaw, PageInfoForward};
-use sui_gql_client::queries::{Error, GraphQlClientExt as _};
+use sui_gql_client::queries::Error;
+use sui_gql_client::queries::model::fragments::{MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 type PriceFeed = MoveInstance<crate::oracle::PriceFeed>;
@@ -17,7 +17,7 @@ pub(super) fn query<C: GraphQlClient>(
         let mut vars = Variables {
             pfs,
             version,
-            first: Some(client.max_page_size().await?),
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -57,7 +57,7 @@ async fn request<C: GraphQlClient>(
 fn extract(data: Option<Query>) -> Result<PfsDfsConnection, &'static str> {
     graphql_extract::extract!(data => {
         price_feed_storage? {
-            dfs
+            dfs?
         }
     });
     Ok(dfs)
@@ -136,7 +136,7 @@ struct Query {
 struct PfsObject {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    dfs: PfsDfsConnection,
+    dfs: Option<PfsDfsConnection>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
@@ -150,7 +150,7 @@ struct PfsDfsConnection {
 #[cynic(graphql_type = "DynamicField")]
 struct PfsDf {
     #[cynic(alias, rename = "name")]
-    df_name: Option<MoveValueRaw>,
+    df_name: Option<MoveValueGql>,
     #[cynic(alias, rename = "value")]
     df_value: Option<PfsDfValue>,
 }
@@ -158,7 +158,7 @@ struct PfsDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum PfsDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }
