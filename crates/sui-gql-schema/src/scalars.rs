@@ -5,7 +5,7 @@ use cynic::impl_scalar;
 use derive_more::with_trait::{AsRef, Deref, Display, From, Into};
 use serde::{Deserialize, Serialize};
 use serde_json::Value as Json;
-use serde_with::{Bytes, DisplayFromStr, base64, serde_as};
+use serde_with::{DisplayFromStr, base64, serde_as};
 
 use crate::schema;
 
@@ -146,57 +146,6 @@ pub struct DateTime(#[serde_as(as = "DisplayFromStr")] chrono::DateTime<chrono::
 // =============================================================================
 
 impl_scalar!(Json, schema::JSON);
-
-// =============================================================================
-//  MoveData
-// =============================================================================
-
-impl_scalar!(MoveData, schema::MoveData);
-
-/// The contents of a Move Value, corresponding to the following recursive type:
-///
-/// type MoveData =
-///     { Address: SuiAddress }
-///   | { UID:     SuiAddress }
-///   | { ID:      SuiAddress }
-///   | { Bool:    bool }
-///   | { Number:  BigInt }
-///   | { String:  string }
-///   | { Vector:  [MoveData] }
-///   | { Option:   MoveData? }
-///   | { Struct:  [{ name: string, value: MoveData }] }
-///   | { Variant: {
-///       name: string,
-///       fields: [{ name: string, value: MoveData }],
-///   }
-#[serde_as]
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub enum MoveData {
-    Address(#[serde_as(as = "Bytes")] [u8; 32]),
-    #[serde(rename = "UID")]
-    Uid(#[serde_as(as = "Bytes")] [u8; 32]),
-    #[serde(rename = "ID")]
-    Id(#[serde_as(as = "Bytes")] [u8; 32]),
-    Bool(bool),
-    Number(String),
-    String(String),
-    Vector(Vec<Self>),
-    Option(Option<Box<Self>>),
-    Struct(Vec<MoveField>),
-    Variant(MoveVariant),
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct MoveVariant {
-    name: String,
-    fields: Vec<MoveField>,
-}
-
-#[derive(Deserialize, Serialize, Clone, Debug)]
-pub struct MoveField {
-    pub name: String,
-    pub value: MoveData,
-}
 
 // =============================================================================
 //  MoveTypeLayout
