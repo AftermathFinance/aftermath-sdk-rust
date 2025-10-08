@@ -2,10 +2,10 @@ use af_sui_types::Address;
 use color_eyre::Result;
 use serde::Serialize;
 use sui_gql_client::queries::GraphQlClientExt as _;
-use sui_gql_client::queries::outputs::RawMoveValue;
+use sui_gql_client::queries::model::outputs::RawMoveValue;
 use sui_gql_client::reqwest::ReqwestClient;
 
-const SUI_GRAPHQL_SERVER_URL: &str = "https://sui-testnet.mystenlabs.com/graphql";
+const SUI_GRAPHQL_SERVER_URL: &str = "https://graphql.testnet.sui.io/graphql";
 const LINKED_TABLE: &str = "0x4e793859f3276804b8eecfd0fdf07b215e28ffd59b4fefd9605d072c7bce6457";
 const SOURCE_WRAPPER_ID: &str =
     "0xbd621bc8d567577e45ded1425271828d3b69f444334d2e48b3366d453e4d9941";
@@ -34,7 +34,7 @@ async fn main() -> Result<()> {
         bcs: bcs::to_bytes(&name_val)?,
     };
     let result = client
-        .owner_df_content(LINKED_TABLE.parse()?, df_name, None)
+        .object_df_by_name(LINKED_TABLE.parse()?, df_name, None)
         .await?;
     println!("{result:?}");
     Ok(())

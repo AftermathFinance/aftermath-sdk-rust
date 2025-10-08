@@ -1,124 +1,70 @@
-use std::collections::HashMap;
-
-use af_sui_types::{Address, Object};
-use futures::{StreamExt as _, TryStreamExt as _};
-use graphql_extract::extract;
+use af_sui_types::{Address, Object, Version};
 use itertools::Itertools as _;
 use sui_gql_schema::scalars::Base64Bcs;
 
-use super::fragments::{ObjectFilterV2, PageInfo, PageInfoForward};
-use super::stream;
+use super::model::fragments::ObjectKey;
 use crate::queries::Error;
-use crate::{GraphQlClient, GraphQlResponseExt as _, missing_data, schema};
+use crate::queries::model::fragments::ObjectGql;
+use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
+
+#[derive(cynic::QueryVariables, Clone, Debug)]
+struct Variables<'a> {
+    keys: &'a [ObjectKey],
+}
+
+#[derive(cynic::QueryFragment, Clone, Debug)]
+#[cynic(variables = "Variables")]
+struct Query {
+    #[arguments(keys: $keys)]
+    multi_get_objects: Vec<Option<ObjectGql>>,
+}
 
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
-    objects: impl IntoIterator<Item = Address> + Send,
-    page_size: Option<u32>,
-) -> Result<HashMap<Address, Object>, Error<C::Error>> {
-    // To keep track of all ids requested.
-    let object_ids = objects.into_iter().collect_vec();
-
-    let filter = ObjectFilterV2 {
-        object_ids: Some(&object_ids),
-        ..Default::default()
-    };
-    let vars = Variables {
-        after: None,
-        first: page_size.map(|v| v.try_into().unwrap_or(i32::MAX)),
-        filter: Some(filter),
-    };
-
-    let raw_objs: HashMap<_, _> = stream::forward(client, vars, request)
-        .map(|r| -> super::Result<_, C> {
-            let (id, obj) = r?;
-            Ok((id, obj.ok_or_else(|| missing_data!("BCS for {id}"))?))
+    objects: impl IntoIterator<Item = (Address, Option<Version>)> + Send,
+    at_checkpoint: Option<u64>,
+) -> super::Result<Vec<Object>, C> {
+    let mut object_keys = objects
+        .into_iter()
+        .sorted()
+        .dedup()
+        .map(|(object_id, version)| ObjectKey {
+            address: object_id,
+            version,
+            root_version: None,
+            at_checkpoint,
         })
-        .try_collect()
-        .await?;
+        .collect_vec();
 
-    // Ensure all requested objects were returned
-    for id in object_ids {
-        raw_objs
-            .contains_key(&id)
-            .then_some(())
-            .ok_or(missing_data!("Object {id}"))?;
-    }
+    let vars = Variables { keys: &object_keys };
 
-    Ok(raw_objs)
-}
-
-async fn request<C: GraphQlClient>(
-    client: &C,
-    vars: Variables<'_>,
-) -> super::Result<
-    stream::Page<
-        impl Iterator<Item = super::Result<(Address, Option<Object>), C>> + 'static + use<C>,
-    >,
-    C,
-> {
     let data = client
         .query::<Query, _>(vars)
         .await
         .map_err(Error::Client)?
         .try_into_data()?;
 
-    extract!(data => {
-        objects {
-            nodes[] {
-                id
-                object
-            }
-            page_info
-        }
+    graphql_extract::extract!(data => {
+        objects: multi_get_objects
     });
-    Ok(stream::Page::new(
-        page_info,
-        nodes.map(|r| -> super::Result<_, C> {
-            let (id, obj) = r?;
-            Ok((id, obj.map(Base64Bcs::into_inner)))
-        }),
-    ))
-}
 
-#[derive(cynic::QueryVariables, Clone, Debug)]
-struct Variables<'a> {
-    filter: Option<ObjectFilterV2<'a>>,
-    after: Option<String>,
-    first: Option<i32>,
-}
+    let returned = objects
+        .into_iter()
+        .flatten()
+        .filter_map(|o| o.object)
+        .map(Base64Bcs::into_inner)
+        .inspect(|o| {
+            object_keys
+                .iter()
+                .position(|k| k.address == o.object_id())
+                .map(|p| object_keys.swap_remove(p));
+        })
+        .collect_vec();
 
-impl stream::UpdatePageInfo for Variables<'_> {
-    fn update_page_info(&mut self, info: &PageInfo) {
-        self.after.clone_from(&info.end_cursor);
+    if !object_keys.is_empty() {
+        return Err(Error::MissingData(format!("Objects {object_keys:?}")));
     }
-}
-
-#[derive(cynic::QueryFragment, Clone, Debug)]
-#[cynic(variables = "Variables")]
-struct Query {
-    #[arguments(filter: $filter, first: $first, after: $after)]
-    objects: ObjectConnection,
-}
-
-// =============================================================================
-//  Inner query fragments
-// =============================================================================
-
-/// `ObjectConnection` where the `Object` fragment does take any parameters.
-#[derive(cynic::QueryFragment, Clone, Debug)]
-struct ObjectConnection {
-    nodes: Vec<ObjectGql>,
-    page_info: PageInfoForward,
-}
-
-#[derive(cynic::QueryFragment, Debug, Clone)]
-#[cynic(graphql_type = "Object")]
-struct ObjectGql {
-    #[cynic(rename = "address")]
-    id: Address,
-    #[cynic(rename = "bcs")]
-    object: Option<Base64Bcs<Object>>,
+    Ok(returned)
 }
 
 #[cfg(test)]
@@ -128,26 +74,16 @@ fn gql_output() -> color_eyre::Result<()> {
     use cynic::QueryBuilder as _;
 
     // Variables don't matter, we just need it so taht `Query::build()` compiles
-    let vars = Variables {
-        filter: Some(Default::default()),
-        after: None,
-        first: None,
-    };
+    let vars = Variables { keys: &[] };
 
     let operation = Query::build(vars);
-    insta::assert_snapshot!(operation.query, @r###"
-    query Query($filter: ObjectFilter, $after: String, $first: Int) {
-      objects(filter: $filter, first: $first, after: $after) {
-        nodes {
-          address
-          bcs
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-        }
+    insta::assert_snapshot!(operation.query, @r"
+    query Query($keys: [ObjectKey!]!) {
+      multiGetObjects(keys: $keys) {
+        address
+        objectBcs
       }
     }
-    "###);
+    ");
     Ok(())
 }

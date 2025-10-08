@@ -1,11 +1,12 @@
 use clap::Parser;
 use color_eyre::Result;
-use sui_gql_client::queries::{EventEdge, EventFilter, GraphQlClientExt as _};
+use sui_gql_client::queries::GraphQlClientExt as _;
+use sui_gql_client::queries::model::fragments::{EventEdge, EventFilter};
 use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
+    #[arg(long, default_value = "https://graphql.testnet.sui.io/graphql")]
     url: String,
 
     #[arg(long)]
@@ -13,7 +14,7 @@ struct Args {
 
     #[arg(
         long,
-        default_value = "0xfd6f306bb2f8dce24dd3d4a9bdc51a46e7c932b15007d73ac0cfb38c15de0fea::events::AllocatedCollateral"
+        default_value = "0xe76d8a37d4132278a7a752183e90e04890b9e7d0f6657eadb68821609a2a56a3::event::PriceFeedUpdateEvent"
     )]
     event_type: String,
 
@@ -36,9 +37,11 @@ async fn main() -> Result<()> {
 
     let filter = Some(EventFilter {
         sender: None,
-        transaction_digest: None,
-        emitting_module: None,
-        event_type: Some(event_type),
+        after_checkpoint: None,
+        at_checkpoint: None,
+        before_checkpoint: None,
+        module: None,
+        type_: Some(event_type),
     });
 
     let (events, _) = client.events_backward(filter, cursor, page_size).await?;

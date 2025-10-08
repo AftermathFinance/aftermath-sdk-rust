@@ -25,13 +25,13 @@ rustdoc-args = [
 workspace = true
 
 [features]
-default = ["move-type", "mutations", "queries", "reqwest"]
 move-type = ["dep:af-move-type", "dep:bcs", "queries"]
 mutations = ["dep:af-sui-types", "dep:sui-sdk-types", "scalars"]
 queries = [
   "dep:af-sui-types",
   "dep:async-stream",
   "dep:bimap",
+  "dep:enum-as-inner",
   "dep:futures",
   "dep:futures-core",
   "dep:graphql-extract",
@@ -49,18 +49,20 @@ scalars = ["sui-gql-schema/scalars"]
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 # FIXME: this is in dire need of refactoring; see
 # https://github.com/AftermathFinance/aftermath-sdk-rust/issues/181
-af-move-type   = { version = "0.14.1", public = true, optional = true, path = "../af-move-type" }
-af-sui-types   = { version = "0.14.1", public = true, path = "../af-sui-types", optional = true }
-bimap          = { version = "0.6", public = true, optional = true }
-cynic          = { version = "3", public = true }
-futures-core   = { version = "0.3", public = true, optional = true }
-reqwest        = { version = "0.12", public = true, default-features = false, optional = true }
-serde          = { version = "1", public = true }
-serde_json     = { version = "1", public = true, optional = true }
-sui-gql-schema = { version = "0.13.1", public = true, default-features = false, path = "../sui-gql-schema" }
-sui-sdk-types  = { version = "0.0.7", public = true, optional = true }
-
+af-move-type = { version = "0.14.1", public = true, optional = true, path = "../af-move-type" }
+af-sui-types = { version = "0.14.1", public = true, path = "../af-sui-types", features = [
+  "hash",
+], optional = true }
+bimap = { version = "0.6", public = true, optional = true }
+cynic = { version = "3", public = true }
+enum-as-inner = { version = "0.6", optional = true }
+futures-core = { version = "0.3", public = true, optional = true }
 graphql-extract = { version = "0.0.10", path = "../graphql-extract", optional = true }
+reqwest = { version = "0.12", public = true, default-features = false, optional = true }
+serde = { version = "1", public = true }
+serde_json = { version = "1", public = true, optional = true }
+sui-gql-schema = { version = "0.13.1", public = true, default-features = false, path = "../sui-gql-schema" }
+sui-sdk-types = { version = "0.0.7", public = true, features = ["hash"], optional = true }
 
 clap             = { version = "4", features = ["derive"] }
 derive_more      = { version = "2", features = ["display"] }
@@ -84,7 +86,7 @@ bcs = { version = "0.1", optional = true }
 default-features = false
 features         = ["build"]
 path             = "../sui-gql-schema"
-version = "0.13.1"
+version          = "0.13.1"
 
 
 [dev-dependencies]
@@ -104,63 +106,23 @@ sui-gql-schema = { path = "../sui-gql-schema", features = ["build", "scalars"] }
 
 
 [[example]]
-name              = "gql-object-content"
-path              = "examples/object_content.rs"
+name              = "gql-object-type"
+path              = "examples/object_type.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-objects-content"
-path              = "examples/objects_content.rs"
+name              = "gql-object-dfs"
+path              = "examples/object_dfs.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-object-args"
-path              = "examples/object_args.rs"
+name              = "gql-object-df-by-name"
+path              = "examples/object_df_by_name.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-object-args-and-content"
-path              = "examples/object_args_and_content.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-owner-latest-dfs-content"
-path              = "examples/owner_latest_dfs_content.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-owner-latest-df-content"
-path              = "examples/owner_latest_df_content.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-owner-latest-dof-content"
-path              = "examples/owner_latest_dof_content.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-genesis-tx"
-path              = "examples/genesis_tx.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-epochs-final-checkpoint"
-path              = "examples/epochs_final_checkpoint_num.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-packages-published-epoch"
-path              = "examples/packages_published_epoch.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-latest-version-at-checkpoint"
-path              = "examples/latest_version_at_checkpoint.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-events"
-path              = "examples/events.rs"
+name              = "gql-current-epoch"
+path              = "examples/current_epoch.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
@@ -173,25 +135,10 @@ name              = "gql-cached"
 path              = "examples/cached_client.rs"
 required-features = ["queries", "reqwest"]
 
-[[example]]
-name              = "gql-page-limit"
-path              = "examples/max_page_size.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-transaction-status"
-path              = "examples/transaction_blocks_status.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-latest-object-versions"
-path              = "examples/latest_objects_version.rs"
-required-features = ["queries", "reqwest"]
-
-[[example]]
-name              = "gql-latest-object-version"
-path              = "examples/latest_object_version.rs"
-required-features = ["queries", "reqwest"]
+# [[example]]
+# name              = "gql-transaction-status"
+# path              = "examples/transaction_blocks_status.rs"
+# required-features = ["queries", "reqwest"]
 
 [[example]]
 name              = "gql-latest-checkpoint"
@@ -199,24 +146,24 @@ path              = "examples/latest_checkpoint.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-packages-from-original"
-path              = "examples/packages_from_original.rs"
+name              = "gql-full-objects"
+path              = "examples/full_objects.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-filtered-full-objects"
-path              = "examples/filtered_full_objects.rs"
+name              = "gql-latest-full-objects"
+path              = "examples/latest_full_objects.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-latest-package"
-path              = "examples/latest_package.rs"
+name              = "gql-packages"
+path              = "examples/packages.rs"
 required-features = ["queries", "reqwest"]
 
 [[example]]
-name              = "gql-package-at-version"
-path              = "examples/package_at_version.rs"
-required-features = ["queries", "reqwest"]
+name              = "gql-transactions-by-digests"
+path              = "examples/transactions_by_digests.rs"
+required-features = ["hash", "queries", "reqwest"]
 
 [[example]]
 name              = "gql-coin-metadata"

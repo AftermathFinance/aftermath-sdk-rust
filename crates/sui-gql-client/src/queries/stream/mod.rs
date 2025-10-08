@@ -5,7 +5,7 @@ use std::future::Future;
 
 use futures::Stream;
 
-use super::fragments::PageInfo;
+use super::model::fragments::PageInfo;
 use crate::GraphQlClient;
 
 /// Helper for paginating queries forward.

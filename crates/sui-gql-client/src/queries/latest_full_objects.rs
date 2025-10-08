@@ -2,35 +2,49 @@ use af_sui_types::{Address, Object};
 use futures::Stream;
 use sui_gql_schema::scalars::Base64Bcs;
 
-use super::fragments::{ObjectFilterV2, PageInfo, PageInfoForward};
+use super::model::fragments::{ObjectFilter, PageInfo};
 use super::stream;
 use crate::queries::Error;
-use crate::{GraphQlClient, GraphQlResponseExt, scalars, schema};
+use crate::queries::model::fragments::ObjectConnection;
+use crate::{GraphQlClient, GraphQlResponseExt, schema};
+
+#[derive(cynic::QueryVariables, Clone, Debug)]
+struct Variables {
+    filter: ObjectFilter,
+    after: Option<String>,
+    first: Option<i32>,
+}
+
+#[derive(cynic::QueryFragment, Clone, Debug)]
+#[cynic(variables = "Variables")]
+struct Query {
+    #[arguments(filter: $filter, first: $first, after: $after)]
+    objects: Option<ObjectConnection>,
+}
 
 pub(super) fn query<C: GraphQlClient>(
     client: &C,
     owner: Option<Address>,
     type_: Option<String>,
     page_size: Option<u32>,
-) -> impl Stream<Item = super::Result<Object, C>> + '_ {
-    let filter = ObjectFilterV2 {
+) -> impl Stream<Item = super::Result<Object, C>> {
+    let filter = ObjectFilter {
         owner,
         type_,
-        ..Default::default()
+        owner_kind: None,
     };
     let vars = Variables {
         after: None,
         first: page_size.map(|v| v.try_into().unwrap_or(i32::MAX)),
-        filter: Some(filter),
+        filter,
     };
     stream::forward(client, vars, request)
 }
 
 async fn request<C: GraphQlClient>(
     client: &C,
-    vars: Variables<'_>,
-) -> super::Result<stream::Page<impl Iterator<Item = super::Result<Object, C>> + 'static + use<C>>, C>
-{
+    vars: Variables,
+) -> super::Result<stream::Page<impl Iterator<Item = super::Result<Object, C>> + use<C>>, C> {
     let data = client
         .query::<Query, _>(vars)
         .await
@@ -44,11 +58,12 @@ async fn request<C: GraphQlClient>(
     ))
 }
 
+#[expect(clippy::double_parens, reason = "Debug macro")]
 fn extract(
     data: Option<Query>,
 ) -> Result<stream::Page<impl Iterator<Item = Result<Object, String>>>, &'static str> {
     graphql_extract::extract!(data => {
-        objects {
+        objects? {
             nodes[] {
                 id
                 object
@@ -66,44 +81,10 @@ fn extract(
     Ok(stream::Page::new(page_info, nodes))
 }
 
-#[derive(cynic::QueryVariables, Clone, Debug)]
-struct Variables<'a> {
-    filter: Option<ObjectFilterV2<'a>>,
-    after: Option<String>,
-    first: Option<i32>,
-}
-
-impl stream::UpdatePageInfo for Variables<'_> {
+impl stream::UpdatePageInfo for Variables {
     fn update_page_info(&mut self, info: &PageInfo) {
         self.after.clone_from(&info.end_cursor)
     }
-}
-
-#[derive(cynic::QueryFragment, Clone, Debug)]
-#[cynic(variables = "Variables")]
-struct Query {
-    #[arguments(filter: $filter, first: $first, after: $after)]
-    objects: ObjectConnection,
-}
-
-// =============================================================================
-//  Inner query fragments
-// =============================================================================
-
-/// `ObjectConnection` where the `Object` fragment does take any parameters.
-#[derive(cynic::QueryFragment, Clone, Debug)]
-struct ObjectConnection {
-    nodes: Vec<ObjectGql>,
-    page_info: PageInfoForward,
-}
-
-#[derive(cynic::QueryFragment, Debug, Clone)]
-#[cynic(graphql_type = "Object")]
-struct ObjectGql {
-    #[cynic(rename = "address")]
-    id: Address,
-    #[cynic(rename = "bcs")]
-    object: Option<scalars::Base64Bcs<Object>>,
 }
 
 #[cfg(test)]
@@ -112,18 +93,22 @@ fn gql_output() -> color_eyre::Result<()> {
     use cynic::QueryBuilder as _;
 
     let vars = Variables {
-        filter: None,
+        filter: ObjectFilter {
+            type_: None,
+            owner: None,
+            owner_kind: None,
+        },
         after: None,
         first: None,
     };
 
     let operation = Query::build(vars);
-    insta::assert_snapshot!(operation.query, @r###"
-    query Query($filter: ObjectFilter, $after: String, $first: Int) {
+    insta::assert_snapshot!(operation.query, @r"
+    query Query($filter: ObjectFilter!, $after: String, $first: Int) {
       objects(filter: $filter, first: $first, after: $after) {
         nodes {
           address
-          bcs
+          objectBcs
         }
         pageInfo {
           hasNextPage
@@ -131,6 +116,6 @@ fn gql_output() -> color_eyre::Result<()> {
         }
       }
     }
-    "###);
+    ");
     Ok(())
 }
