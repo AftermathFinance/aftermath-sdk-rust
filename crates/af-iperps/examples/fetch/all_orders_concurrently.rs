@@ -19,11 +19,11 @@ use textplots::{Chart, ColorPlot as _, Shape};
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
+    #[arg(long, default_value = "https://graphql.testnet.sui.io/graphql")]
     rpc: String,
 
     #[arg(long, default_value_t = Address::from_static(
-        "0x49bd40cc7880bd358465116157f0271c25d23361b94eace9a25dc2019b449bfc",
+        "0xf6f30ee0450f6e3e628b68ac473699f26da5063f74be1868155a8a83b8b45060",
     ))]
     ch: Address,
 
@@ -41,8 +41,12 @@ async fn main() -> Result<()> {
     } = Args::parse();
     let client = ReqwestClient::new(reqwest::Client::default(), rpc.to_owned());
 
-    let ch_obj = client.full_object(ch, None).await?;
-    let ch_struct = ch_obj.as_struct().ok_or_eyre("Not a Move struct")?;
+    let ch_obj = client.full_objects([(ch, None)], None).await?;
+    let ch_struct = ch_obj
+        .first()
+        .ok_or_eyre("Ch not fetched")?
+        .as_struct()
+        .ok_or_eyre("Not a Move struct")?;
     let OrderMaps { asks, bids, .. } = client
         .order_maps(*ch_struct.object_type().address(), ch)
         .await?;
@@ -52,8 +56,8 @@ async fn main() -> Result<()> {
     )?;
 
     tokio::pin!(
-        let asks_stream = client.map_orders(asks, Some(ch_struct.version()));
-        let bids_stream = client.map_orders(bids, Some(ch_struct.version()));
+        let asks_stream = client.map_orders(asks, None);
+        let bids_stream = client.map_orders(bids, None);
     );
     let mut stream = stream_select!(asks_stream, bids_stream);
 
