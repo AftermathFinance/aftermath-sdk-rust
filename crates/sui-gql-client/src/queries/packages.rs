@@ -1,13 +1,14 @@
-use af_sui_types::{Address, Version};
+use af_sui_types::Address;
 
 use super::Error;
-use super::fragments::PageInfoForward;
+use super::model::fragments::PageInfoForward;
+use crate::queries::model::fragments::MovePackageConnection;
 use crate::{GraphQlClient, Paged, PagedResponse, missing_data, schema};
 
 pub async fn query<C: GraphQlClient>(
     client: &C,
     package_id: Address,
-) -> Result<impl Iterator<Item = (Address, u64)> + use<C>, Error<C::Error>> {
+) -> Result<Vec<(Address, u64)>, Error<C::Error>> {
     let vars = Variables {
         address: package_id,
         first: None,
@@ -19,12 +20,30 @@ pub async fn query<C: GraphQlClient>(
         .try_into_data()?
         .ok_or_else(|| missing_data!("No data"))?;
 
-    Ok(init
+    let pages = pages
+        .into_iter()
+        .map(|x| {
+            x.package_versions
+                .ok_or_else(|| missing_data!("No pages data"))
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+
+    let mut result = vec![];
+
+    for p in init
         .package_versions
+        .ok_or_else(|| missing_data!("No init data"))?
         .nodes
         .into_iter()
-        .chain(pages.into_iter().flat_map(|p| p.package_versions.nodes))
-        .map(|o| (o.address, o.version)))
+        .chain(pages.into_iter().flat_map(|p| p.nodes))
+    {
+        let v = p
+            .version
+            .ok_or_else(|| missing_data!("No version for package"))?;
+        result.push((p.address, v));
+    }
+
+    Ok(result)
 }
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
@@ -38,7 +57,7 @@ pub struct Variables {
 #[cynic(variables = "Variables")]
 pub struct Query {
     #[arguments(address: $address, first: $first, after: $after)]
-    pub package_versions: MovePackageConnection,
+    pub package_versions: Option<MovePackageConnection>,
 }
 
 impl Paged for Query {
@@ -47,29 +66,25 @@ impl Paged for Query {
     type NextInput = Variables;
 
     fn next_variables(&self, mut prev_vars: Self::Input) -> Option<Self::NextInput> {
-        let PageInfoForward {
-            has_next_page,
-            end_cursor,
-        } = &self.package_versions.page_info;
-        if *has_next_page {
-            prev_vars.after.clone_from(end_cursor);
-            Some(prev_vars)
+        if let Some(MovePackageConnection {
+            page_info:
+                PageInfoForward {
+                    has_next_page,
+                    end_cursor,
+                },
+            ..
+        }) = &self.package_versions
+        {
+            if *has_next_page {
+                prev_vars.after.clone_from(end_cursor);
+                Some(prev_vars)
+            } else {
+                None
+            }
         } else {
             None
         }
     }
-}
-
-#[derive(cynic::QueryFragment, Debug)]
-pub struct MovePackageConnection {
-    pub nodes: Vec<MovePackage>,
-    page_info: PageInfoForward,
-}
-
-#[derive(cynic::QueryFragment, Debug)]
-pub struct MovePackage {
-    pub address: Address,
-    pub version: Version,
 }
 
 #[cfg(test)]

@@ -1,8 +1,11 @@
-use af_sui_types::{Address, StructTag, TypeTag, encode_base64_default};
+use af_sui_types::{StructTag, TypeTag, encode_base64_default};
 use derive_more::Display;
+use enum_as_inner::EnumAsInner;
+
+use crate::queries::model::fragments::ObjectKey;
 
 /// An instance of a dynamic field or dynamic object.
-#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Hash)]
+#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Hash, EnumAsInner)]
 pub enum DynamicField {
     /// The object key (id, version) and the raw struct contents.
     ///
@@ -11,19 +14,11 @@ pub enum DynamicField {
     /// objects.
     ///
     /// Reference: <https://move-book.com/reference/enums.html>
-    #[display("DOF {{\n\t{_0}: {_1}\n}})")]
+    #[display("DOF {{\n\t{_0:?}: {_1}\n}})")]
     Object(ObjectKey, RawMoveStruct),
     /// The raw Move value contents. Could be a primitive type, struct, or enum.
     #[display("DF {{\n\t{_0}\n}})")]
     Field(RawMoveValue),
-}
-
-/// Reference to a specific object instance in time.
-#[derive(Clone, Debug, Display, PartialEq, Eq, PartialOrd, Ord, Hash)]
-#[display("({object_id}, {version})")]
-pub struct ObjectKey {
-    pub object_id: Address,
-    pub version: u64,
 }
 
 /// Raw representation of a Move value
