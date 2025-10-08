@@ -1,7 +1,7 @@
 use sui_gql_client::queries::GraphQlClientExt as _;
 use sui_gql_client::reqwest::ReqwestClient;
 
-const SUI_GRAPHQL_SERVER_URL: &str = "https://sui-testnet.mystenlabs.com/graphql";
+const SUI_GRAPHQL_SERVER_URL: &str = "https://graphql.testnet.sui.io/graphql";
 
 #[tokio::main]
 async fn main() -> color_eyre::Result<()> {
@@ -10,7 +10,9 @@ async fn main() -> color_eyre::Result<()> {
         reqwest::Client::default(),
         SUI_GRAPHQL_SERVER_URL.to_owned(),
     );
-    let tx_data = client.genesis_tx().await?;
-    println!("{tx_data:?}");
+
+    let (epoch_id, rgp) = client.current_epoch().await?;
+    println!("Epoch id: {epoch_id}, RGP: {rgp}");
+
     Ok(())
 }

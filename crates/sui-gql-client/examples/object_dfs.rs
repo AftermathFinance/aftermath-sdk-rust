@@ -3,8 +3,8 @@ use futures::TryStreamExt as _;
 use sui_gql_client::queries::GraphQlClientExt as _;
 use sui_gql_client::reqwest::ReqwestClient;
 
-const SUI_GRAPHQL_SERVER_URL: &str = "https://sui-testnet.mystenlabs.com/graphql";
-const BTC_BIDS_MAP: &str = "0x5fb03a8666f451cef89758c9ad3247230436e46ee71544430124130558c91d5a";
+const SUI_GRAPHQL_SERVER_URL: &str = "https://graphql.testnet.sui.io/graphql";
+const CH: &str = "0x20d1db9f07e7de98b290ea279fc21b927a37f7c084429a973773cd2187c3f914";
 
 #[tokio::main]
 async fn main() -> Result<()> {
@@ -15,12 +15,13 @@ async fn main() -> Result<()> {
     );
 
     tokio::pin!(
-        let stream = client.owner_df_contents_stream(BTC_BIDS_MAP.parse()?, None, None).await;
+        let stream = client.object_dfs(CH.parse()?, None, None).await;
     );
 
     let mut count = 0;
     while let Some((name, value)) = stream.try_next().await? {
         count += 1;
+        println!("Count: {count}");
         println!("Name: {name:?}, Value: {value:?}");
     }
     println!("Objects count: {count}");

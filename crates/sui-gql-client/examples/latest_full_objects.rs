@@ -9,7 +9,7 @@ use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
+    #[arg(long, default_value = "https://graphql.testnet.sui.io/graphql")]
     rpc: String,
 
     /// Only the summary of query time and number of objects.
@@ -28,7 +28,7 @@ async fn main() -> Result<()> {
     );
 
     tokio::pin!(
-        let stream = client.filtered_full_objects(owner, type_, None);
+        let stream = client.latest_full_objects(owner, type_, None);
     );
 
     let start = Instant::now();

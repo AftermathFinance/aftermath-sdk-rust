@@ -1,4 +1,4 @@
-use af_sui_types::TransactionEffects;
+use af_sui_types::TransactionEffects as TransactionEffectsSdk;
 use cynic::GraphQlResponse;
 use sui_gql_schema::scalars;
 
@@ -21,8 +21,8 @@ pub struct Variables {
 #[derive(cynic::QueryFragment, Clone, Debug)]
 #[cynic(variables = "Variables")]
 pub struct Mutation {
-    #[arguments(txBytes: $tx_bytes, signatures: $signatures)]
-    pub execute_transaction_block: ExecutionResult,
+    #[arguments(transactionDataBcs: $tx_bytes, signatures: $signatures)]
+    pub execute_transaction: ExecutionResult,
 }
 
 impl Mutation {
@@ -41,7 +41,7 @@ impl Mutation {
         client: &Client,
         tx_bytes: String,
         signatures: Vec<String>,
-    ) -> Result<TransactionEffects, Error<Client::Error>> {
+    ) -> Result<TransactionEffectsSdk, Error<Client::Error>> {
         let result: GraphQlResponse<Self> = client
             .mutation(Variables {
                 tx_bytes,
@@ -50,7 +50,7 @@ impl Mutation {
             .await
             .map_err(Error::Client)?;
         let Some(Self {
-            execute_transaction_block: ExecutionResult { effects, errors },
+            execute_transaction: ExecutionResult { effects, errors },
         }) = result.try_into_data()?
         else {
             return Err(Error::NoData);
@@ -60,7 +60,13 @@ impl Mutation {
             return Err(Error::Execution(errors));
         }
 
-        Ok(effects.bcs.into_inner())
+        if let Some(eff) = effects {
+            if let Some(eff_bcs) = eff.effects_bcs {
+                Ok(eff_bcs.try_into()?)
+            }
+        } else {
+            return Err(Error::NoData);
+        }
     }
 }
 
@@ -79,14 +85,14 @@ pub enum Error<T> {
 #[derive(cynic::QueryFragment, Clone, Debug)]
 pub struct ExecutionResult {
     /// The effects of the executed transaction.
-    pub effects: TransactionBlockEffects,
+    pub effects: Option<TransactionEffects>,
     /// The errors field captures any errors that occurred during execution
     pub errors: Option<Vec<String>>,
 }
 
 /// The effects representing the result of executing a transaction block.
 #[derive(cynic::QueryFragment, Clone, Debug)]
-pub struct TransactionBlockEffects {
+pub struct TransactionEffects {
     /// Base64 encoded bcs serialization of the on-chain transaction effects.
-    pub bcs: scalars::Base64Bcs<TransactionEffects>,
+    pub effects_bcs: Option<scalars::Base64Bcs<TransactionEffectsSdk>>,
 }

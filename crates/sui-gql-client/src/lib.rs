@@ -59,8 +59,6 @@ use extension_traits::extension;
 pub use sui_gql_schema::scalars;
 pub use sui_gql_schema::schema;
 
-#[cfg(feature = "mutations")]
-pub mod mutations;
 #[cfg(feature = "queries")]
 pub mod queries;
 #[cfg(feature = "raw")]
