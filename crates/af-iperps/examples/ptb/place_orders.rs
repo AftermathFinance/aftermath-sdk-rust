@@ -10,7 +10,6 @@ use af_sui_types::{Address, ObjectArg};
 use af_utilities::IFixed;
 use clap::Parser;
 use color_eyre::Result;
-use sui_gql_client::object_args;
 use sui_gql_client::queries::GraphQlClientExt as _;
 use sui_gql_client::reqwest::ReqwestClient;
 
@@ -38,13 +37,18 @@ async fn main() -> Result<()> {
     // The object contents are used to access information such
     // - what oracles object to use in the transaction
     // - what is the `lot_size` and `tick_size` to pass the correct prices to the functions
-    let ch_obj = client.full_object(ch_id, None).await?;
+    let objs = client
+        .full_objects([(ch_id, None), (account_obj_id, None)], None)
+        .await?;
+
     // Get the `ObjectArg` to use in the transaction for the `ClearingHouse` object.
     // This has not been fetched in the `object_args!` macro because it was previously
     // fetched by the `client.full_object` call.
-    let ch_oarg = ch_obj.object_arg(true);
+    let ch_oarg = objs[0].object_arg(true);
+    let account = objs[1].object_arg(true);
+
     // Deserialize the object into a `ClearingHouse`
-    let clearing_house = ch_obj.struct_instance::<ClearingHouse>()?;
+    let clearing_house = objs[0].struct_instance::<ClearingHouse>()?;
 
     // Size must be expressed in "number of lots". You can obtain the number of lots
     // by starting from a size expressed with `IFixed` (18 decimals). Similar way for `price`.
@@ -60,11 +64,20 @@ async fn main() -> Result<()> {
     let order_type2 = OrderType::ImmediateOrCancel;
 
     // Fetch the required objects to perform a trading session
-    object_args!({
-        account: account_obj_id,
-        base_oracle: clearing_house.value.market_params.base_pfs_id.bytes,
-        collateral_oracle: clearing_house.value.market_params.collateral_pfs_id.bytes,
-    } with { &client });
+    let objs = client
+        .full_objects(
+            [
+                (clearing_house.value.market_params.base_pfs_id.bytes, None),
+                (
+                    clearing_house.value.market_params.collateral_pfs_id.bytes,
+                    None,
+                ),
+            ],
+            None,
+        )
+        .await?;
+    let base_oracle = objs[0].object_arg(true);
+    let collateral_oracle = objs[1].object_arg(true);
 
     let ptb = ptb!(
         package perpetuals: perpetuals_package;

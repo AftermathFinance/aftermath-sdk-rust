@@ -1,10 +1,11 @@
 use std::str::FromStr;
 
 use af_ptbuilder::ptb;
+use af_sui_types::sui::object::ObjectHelpers as _;
 use af_sui_types::{Address, TypeTag};
 use clap::Parser;
 use color_eyre::Result;
-use sui_gql_client::object_args;
+use sui_gql_client::queries::GraphQlClientExt as _;
 use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
@@ -34,9 +35,11 @@ async fn main() -> Result<()> {
 
     // Fetch the object reference for the perpetuals registry from the chain using
     // GQL client.
-    object_args!({
-        mut registry: perpetuals_registry
-    } with { &client });
+    // Fetch the required objects to cancel orders
+    let objs = client
+        .full_objects([(perpetuals_registry, None)], None)
+        .await?;
+    let registry = objs[0].object_arg(true);
 
     let ptb = ptb!(
         package perpetuals: perpetuals_package;

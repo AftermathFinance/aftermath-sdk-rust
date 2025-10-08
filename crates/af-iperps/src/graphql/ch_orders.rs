@@ -3,8 +3,8 @@ use af_sui_types::{Address, Version};
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 use graphql_extract::extract;
-use sui_gql_client::queries::fragments::{DynamicFieldName, MoveValueRaw, PageInfoForward};
-use sui_gql_client::queries::{Error, GraphQlClientExt as _};
+use sui_gql_client::queries::Error;
+use sui_gql_client::queries::model::fragments::{DynamicFieldName, MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 use crate::orderbook::Order;
@@ -39,7 +39,7 @@ pub(super) fn query<C: GraphQlClient>(
             version,
             orderbook,
             map_name,
-            first: Some(client.max_page_size().await?),
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -84,7 +84,7 @@ fn extract(data: Option<Query>) -> Result<MapDfsConnection, &'static str> {
                         map_dof? {
                             map? {
                                 ... on MapDofValue::MoveObject {
-                                    map_dfs
+                                    map_dfs?
                                 }
                             }
                         }
@@ -233,7 +233,7 @@ enum MapDofValue {
 struct MapObject {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    map_dfs: MapDfsConnection,
+    map_dfs: Option<MapDfsConnection>,
     __typename: String,
 }
 
@@ -267,7 +267,7 @@ impl MapDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum MapDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

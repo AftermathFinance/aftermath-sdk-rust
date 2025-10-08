@@ -3,8 +3,7 @@ use af_sui_types::{Address, Version};
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 pub use sui_gql_client::queries::Error;
-use sui_gql_client::queries::GraphQlClientExt as _;
-use sui_gql_client::queries::fragments::{MoveValueRaw, PageInfoForward};
+use sui_gql_client::queries::model::fragments::{MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 use crate::orderbook::Order;
@@ -19,7 +18,7 @@ pub(super) fn query<C: GraphQlClient>(
         let mut vars = Variables {
             map,
             ch_version,
-            first: Some(client.max_page_size().await?),
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -59,7 +58,7 @@ async fn request<C: GraphQlClient>(
 fn extract(data: Option<Query>) -> Result<MapDfsConnection, &'static str> {
     graphql_extract::extract!(data => {
         map? {
-            map_dfs
+            map_dfs?
         }
     });
     Ok(map_dfs)
@@ -78,9 +77,9 @@ fn gql_output() {
         after: None,
     };
     let operation = Query::build(vars);
-    insta::assert_snapshot!(operation.query, @r###"
+    insta::assert_snapshot!(operation.query, @r"
     query Query($map: SuiAddress!, $chVersion: UInt53, $first: Int, $after: String) {
-      map: owner(address: $map, rootVersion: $chVersion) {
+      map: address(address: $map, rootVersion: $chVersion) {
         map_dfs: dynamicFields(first: $first, after: $after) {
           nodes {
             map_df: value {
@@ -100,7 +99,7 @@ fn gql_output() {
         }
       }
     }
-    "###);
+    ");
 }
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
@@ -115,16 +114,16 @@ struct Variables {
 #[cynic(variables = "Variables")]
 struct Query {
     #[arguments(address: $map, rootVersion: $ch_version)]
-    #[cynic(alias, rename = "owner")]
+    #[cynic(alias, rename = "address")]
     map: Option<MapAsOwner>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
-#[cynic(graphql_type = "Owner", variables = "Variables")]
+#[cynic(graphql_type = "Address", variables = "Variables")]
 struct MapAsOwner {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    map_dfs: MapDfsConnection,
+    map_dfs: Option<MapDfsConnection>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
@@ -158,7 +157,7 @@ impl MapDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum MapDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

@@ -3,8 +3,7 @@ use af_sui_types::{Address, Version};
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 pub use sui_gql_client::queries::Error;
-use sui_gql_client::queries::GraphQlClientExt as _;
-use sui_gql_client::queries::fragments::{MoveValueRaw, PageInfoForward};
+use sui_gql_client::queries::model::fragments::{MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 type Position = MoveInstance<crate::position::Position>;
@@ -18,7 +17,7 @@ pub(super) fn query<C: GraphQlClient>(
         let mut vars = Variables {
             ch,
             version,
-            first: Some(client.max_page_size().await?),
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -58,7 +57,7 @@ async fn request<C: GraphQlClient>(
 fn extract(data: Option<Query>) -> Result<ChDfsConnection, &'static str> {
     graphql_extract::extract!(data => {
         clearing_house? {
-            dfs
+            dfs?
         }
     });
     Ok(dfs)
@@ -137,7 +136,7 @@ struct Query {
 struct ClearingHouseObject {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    dfs: ChDfsConnection,
+    dfs: Option<ChDfsConnection>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
@@ -151,7 +150,7 @@ struct ChDfsConnection {
 #[cynic(graphql_type = "DynamicField")]
 struct ChDf {
     #[cynic(alias, rename = "name")]
-    df_name: Option<MoveValueRaw>,
+    df_name: Option<MoveValueGql>,
     #[cynic(alias, rename = "value")]
     df_value: Option<ChDfValue>,
 }
@@ -159,7 +158,7 @@ struct ChDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum ChDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

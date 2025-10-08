@@ -1,10 +1,11 @@
 use std::str::FromStr;
 
 use af_ptbuilder::ptb;
+use af_sui_types::sui::object::ObjectHelpers as _;
 use af_sui_types::{Address, TypeTag};
 use clap::Parser;
 use color_eyre::Result;
-use sui_gql_client::object_args;
+use sui_gql_client::queries::GraphQlClientExt as _;
 use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
@@ -32,11 +33,12 @@ async fn main() -> Result<()> {
     let coin_object_id =
         Address::from_str("0x7fbee197cf2e126c3a64f3a3848fd62daaa329c0619c284ceb0369a471782ce6")?;
 
-    // Fetch the account and the USDC coin object references from the chain using GQL client.
-    object_args!({
-        account: account_obj_id,
-        coin_object: coin_object_id,
-    } with { &client });
+    // Fetch the required objects to cancel orders
+    let objs = client
+        .full_objects([(account_obj_id, None), (coin_object_id, None)], None)
+        .await?;
+    let account = objs[0].object_arg(true);
+    let coin_object = objs[1].object_arg(true);
 
     // Similar function exists for `SubAccount`, named `deposit_collateral_subaccount`.
     // To use it, you must fetch your subaccount's `ObjectArg` before and pass it instead

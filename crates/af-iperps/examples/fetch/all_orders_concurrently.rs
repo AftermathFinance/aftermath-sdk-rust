@@ -41,8 +41,12 @@ async fn main() -> Result<()> {
     } = Args::parse();
     let client = ReqwestClient::new(reqwest::Client::default(), rpc.to_owned());
 
-    let ch_obj = client.full_object(ch, None).await?;
-    let ch_struct = ch_obj.as_struct().ok_or_eyre("Not a Move struct")?;
+    let ch_obj = client.full_objects([(ch, None)], None).await?;
+    let ch_struct = ch_obj
+        .first()
+        .ok_or_eyre("Ch not fetched")?
+        .as_struct()
+        .ok_or_eyre("Not a Move struct")?;
     let OrderMaps { asks, bids, .. } = client
         .order_maps(ch_struct.object_type().address, ch)
         .await?;

@@ -92,14 +92,14 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
         ch_positions::query(self, ch, version)
     }
 
-    /// List of registered [`ClearingHouse`](crate::ClearingHouse) object IDs.
-    fn registered_clearing_houses(
-        &self,
-        registry_address: Address,
-        version: Option<Version>,
-    ) -> impl Stream<Item = Result<Address, Self>> + '_ {
-        self::registry::query(self, registry_address, version)
-    }
+    // /// List of registered [`ClearingHouse`](crate::ClearingHouse) object IDs.
+    // fn registered_clearing_houses(
+    //     &self,
+    //     registry_address: Address,
+    //     version: Option<Version>,
+    // ) -> impl Stream<Item = Result<Address, Self>> + '_ {
+    //     self::registry::query(self, registry_address, version)
+    // }
 }
 
 impl<T: GraphQlClient> GraphQlClientExt for T {}
