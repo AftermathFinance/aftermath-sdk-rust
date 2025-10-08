@@ -2,8 +2,8 @@ use af_move_type::{FromRawStructError, MoveInstance};
 use af_sui_types::Address;
 use enum_as_inner::EnumAsInner;
 use sui_gql_client::queries::Error as QueryError;
-use sui_gql_client::queries::fragments::{DynamicFieldName, MoveValueRaw};
-use sui_gql_client::queries::outputs::RawMoveStruct;
+use sui_gql_client::queries::model::fragments::{DynamicFieldName, MoveValueGql};
+use sui_gql_client::queries::model::outputs::RawMoveStruct;
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt, schema};
 
 use crate::keys;
@@ -60,7 +60,7 @@ fn extract(data: Option<Query>) -> Result<RawMoveStruct, &'static str> {
             }
         }
     });
-    let move_value = MoveValueRaw { type_, bcs };
+    let move_value = MoveValueGql { type_, bcs };
     Ok(move_value.try_into().expect("Vault is a struct"))
 }
 
@@ -129,7 +129,7 @@ struct VaultDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum VaultDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

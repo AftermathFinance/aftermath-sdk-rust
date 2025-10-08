@@ -1,10 +1,10 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, Version};
+use af_sui_types::Address;
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 use graphql_extract::extract;
-use sui_gql_client::queries::fragments::{DynamicFieldName, MoveValueRaw, PageInfoForward};
-use sui_gql_client::queries::{Error, GraphQlClientExt as _};
+use sui_gql_client::queries::Error;
+use sui_gql_client::queries::model::fragments::{DynamicFieldName, MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 use crate::orderbook::Order;
@@ -14,7 +14,7 @@ pub(super) fn query<C: GraphQlClient>(
     client: &C,
     package: Address,
     ch: Address,
-    version: Option<Version>,
+    at_checkpoint: Option<u64>,
     asks: bool,
 ) -> impl Stream<Item = Result<(u128, Order), Error<C::Error>>> + '_ {
     let orderbook: DynamicFieldName = crate::keys::Orderbook::new()
@@ -36,10 +36,10 @@ pub(super) fn query<C: GraphQlClient>(
     async_stream::try_stream! {
         let mut vars = Variables {
             ch,
-            version,
+            at_checkpoint,
             orderbook,
             map_name,
-            first: Some(client.max_page_size().await?),
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -84,7 +84,7 @@ fn extract(data: Option<Query>) -> Result<MapDfsConnection, &'static str> {
                         map_dof? {
                             map? {
                                 ... on MapDofValue::MoveObject {
-                                    map_dfs
+                                    map_dfs?
                                 }
                             }
                         }
@@ -115,16 +115,16 @@ fn gql_output() {
 
     let vars = Variables {
         ch: Address::ZERO,
-        version: None,
+        at_checkpoint: None,
         orderbook,
         map_name,
         first: Some(10),
         after: None,
     };
     let operation = Query::build(vars);
-    insta::assert_snapshot!(operation.query, @r###"
-    query Query($ch: SuiAddress!, $version: UInt53, $orderbook: DynamicFieldName!, $mapName: DynamicFieldName!, $first: Int, $after: String) {
-      clearing_house: object(address: $ch, version: $version) {
+    insta::assert_snapshot!(operation.query, @r"
+    query Query($ch: SuiAddress!, $atCheckpoint: UInt53, $orderbook: DynamicFieldName!, $mapName: DynamicFieldName!, $first: Int, $after: String) {
+      clearing_house: object(address: $ch, atCheckpoint: $atCheckpoint) {
         orderbook_dof: dynamicObjectField(name: $orderbook) {
           orderbook: value {
             __typename
@@ -160,13 +160,13 @@ fn gql_output() {
         }
       }
     }
-    "###);
+    ");
 }
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
 struct Variables {
     ch: Address,
-    version: Option<Version>,
+    at_checkpoint: Option<u64>,
     orderbook: DynamicFieldName,
     map_name: DynamicFieldName,
     first: Option<i32>,
@@ -176,7 +176,7 @@ struct Variables {
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(variables = "Variables")]
 struct Query {
-    #[arguments(address: $ch, version: $version)]
+    #[arguments(address: $ch, atCheckpoint: $at_checkpoint)]
     #[cynic(alias, rename = "object")]
     clearing_house: Option<Object>,
 }
@@ -233,7 +233,7 @@ enum MapDofValue {
 struct MapObject {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    map_dfs: MapDfsConnection,
+    map_dfs: Option<MapDfsConnection>,
     __typename: String,
 }
 
@@ -267,7 +267,7 @@ impl MapDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum MapDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

@@ -10,11 +10,11 @@ use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
+    #[arg(long, default_value = "https://graphql.testnet.sui.io/graphql")]
     rpc: String,
 
     #[arg(long, default_value_t = Address::from_static(
-        "0xa8d5e1bf15d606b589a8452e6864841bb7e5a56d031f77a387b2177dd32a1fcd",
+        "0x0017963ebb102e24eecd990435d2c8f352d4245b806fc9369213a2a0dd237f38",
     ))]
     map: Address,
 

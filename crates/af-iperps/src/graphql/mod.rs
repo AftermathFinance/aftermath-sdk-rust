@@ -36,10 +36,10 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
         &self,
         package: Address,
         ch: Address,
-        version: Option<Version>,
+        at_checkpoint: Option<u64>,
         asks: bool,
     ) -> impl Stream<Item = Result<(u128, Order), Self>> + '_ {
-        ch_orders::query(self, package, ch, version, asks)
+        ch_orders::query(self, package, ch, at_checkpoint, asks)
     }
 
     /// Snapshot of the orders on one side of the orderbook, rooted at the [`Map`] id and
@@ -53,9 +53,9 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     fn map_orders(
         &self,
         map: Address,
-        ch_version: Option<Version>,
+        at_checkpoint: Option<Version>,
     ) -> impl Stream<Item = Result<(u128, Order), Self>> + '_ {
-        map_orders::query(self, map, ch_version)
+        map_orders::query(self, map, at_checkpoint)
     }
 
     /// Object IDs of the orderbook and asks/bids maps for a market.
@@ -87,19 +87,19 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
     fn clearing_house_positions(
         &self,
         ch: Address,
-        version: Option<Version>,
+        at_checkpoint: Option<u64>,
     ) -> impl Stream<Item = Result<(u64, MoveInstance<Position>), Self>> + '_ {
-        ch_positions::query(self, ch, version)
+        ch_positions::query(self, ch, at_checkpoint)
     }
 
-    /// List of registered [`ClearingHouse`](crate::ClearingHouse) object IDs.
-    fn registered_clearing_houses(
-        &self,
-        registry_address: Address,
-        version: Option<Version>,
-    ) -> impl Stream<Item = Result<Address, Self>> + '_ {
-        self::registry::query(self, registry_address, version)
-    }
+    // /// List of registered [`ClearingHouse`](crate::ClearingHouse) object IDs.
+    // fn registered_clearing_houses(
+    //     &self,
+    //     registry_address: Address,
+    //     version: Option<Version>,
+    // ) -> impl Stream<Item = Result<Address, Self>> + '_ {
+    //     self::registry::query(self, registry_address, version)
+    // }
 }
 
 impl<T: GraphQlClient> GraphQlClientExt for T {}

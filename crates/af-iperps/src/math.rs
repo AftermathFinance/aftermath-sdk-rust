@@ -144,24 +144,19 @@ impl Position {
         let coll = self.collateral * coll_price;
         let ufunding = self.unrealized_funding(cum_funding_rate_long, cum_funding_rate_short);
         let quote = self.quote_asset_notional_amount;
-
         let base = self.base_asset_amount;
         let bids_net_abs = (base + self.bids_quantity).abs();
         let asks_net_abs = (base - self.asks_quantity).abs();
         let max_abs_net_base = max(bids_net_abs, asks_net_abs);
 
-        println!("Base: {base}");
-        println!("Quote: {quote}");
         let denominator = max_abs_net_base * maintenance_margin_ratio - base;
-        println!("Den: {}", denominator);
 
         if denominator.is_zero() {
             None
         } else {
-            let num = coll + ufunding - quote;
-            println!("Num: {}", num);
+            let numerator = coll + ufunding - quote;
 
-            Some((coll + ufunding - quote) / denominator)
+            Some(numerator / denominator)
         }
     }
 
