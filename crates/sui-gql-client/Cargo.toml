@@ -25,17 +25,20 @@ rustdoc-args = [
 workspace = true
 
 [features]
-move-type = ["dep:af-move-type", "dep:bcs", "queries"]
+move-type = ["dep:af-move-type", "dep:bcs", "dep:sui-framework-sdk", "queries"]
 mutations = ["dep:af-sui-types", "dep:sui-sdk-types", "scalars"]
 queries = [
+  "dep:af-move-type",
   "dep:af-sui-types",
   "dep:async-stream",
+  "dep:bcs",
   "dep:bimap",
   "dep:enum-as-inner",
   "dep:futures",
   "dep:futures-core",
   "dep:graphql-extract",
   "dep:itertools",
+  "dep:sui-framework-sdk",
   "scalars",
 ]
 raw = ["dep:serde_json"]
@@ -60,6 +63,7 @@ futures-core = { version = "0.3", public = true, optional = true }
 reqwest = { version = "0.12", public = true, default-features = false, optional = true }
 serde = { version = "1", public = true }
 serde_json = { version = "1", public = true, optional = true }
+sui-framework-sdk = { version = "0.15", path = "../sui-framework-sdk", optional = true }
 sui-gql-schema = { version = "0.15.0", public = true, default-features = false, path = "../sui-gql-schema" }
 sui-sdk-types = { version = "0.1", public = true, features = ["hash"], optional = true }
 
@@ -141,10 +145,10 @@ name              = "gql-cached"
 path              = "examples/cached_client.rs"
 required-features = ["queries", "reqwest"]
 
-# [[example]]
-# name              = "gql-transaction-status"
-# path              = "examples/transaction_blocks_status.rs"
-# required-features = ["queries", "reqwest"]
+[[example]]
+name              = "gql-transaction-status"
+path              = "examples/transaction_blocks_status.rs"
+required-features = ["queries", "reqwest"]
 
 [[example]]
 name              = "gql-latest-checkpoint"
@@ -160,6 +164,11 @@ required-features = ["queries", "reqwest"]
 name              = "gql-latest-full-objects"
 path              = "examples/latest_full_objects.rs"
 required-features = ["queries", "reqwest"]
+
+[[example]]
+name              = "gql-owner-gas-coins"
+path              = "examples/owner_gas_coins.rs"
+required-features = ["move-type", "queries", "reqwest"]
 
 [[example]]
 name              = "gql-packages"

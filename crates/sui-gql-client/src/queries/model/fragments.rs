@@ -272,7 +272,7 @@ pub struct MoveObject {
     pub contents: Option<MoveValueGql>,
 }
 
-#[derive(cynic::QueryFragment, Debug)]
+#[derive(cynic::QueryFragment, Debug, Clone)]
 pub struct Checkpoint {
     pub sequence_number: af_sui_types::Version,
 }

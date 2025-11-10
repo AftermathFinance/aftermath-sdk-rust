@@ -1,4 +1,12 @@
-use af_sui_types::{Address as SuiAddress, Address, Object, StructTag, Transaction, Version};
+use af_sui_types::{
+    Address as SuiAddress,
+    Address,
+    Object,
+    ObjectRef,
+    StructTag,
+    Transaction,
+    Version,
+};
 // For `object_args!` macro only
 #[doc(hidden)]
 use futures::Stream;
@@ -14,6 +22,7 @@ mod object_df_by_name;
 mod object_dfs;
 mod object_dof_by_name;
 mod object_type;
+mod owner_gas_coins;
 mod packages;
 pub(crate) mod stream;
 use crate::queries::model::fragments::{EventEdge, EventFilter};
@@ -113,6 +122,24 @@ pub trait GraphQlClientExt: GraphQlClient + Sized {
         page_size: Option<i32>,
     ) -> impl Stream<Item = Result<(RawMoveValue, DynamicField), Self>> + '_ {
         object_dfs::query(self, address, at_checkpoint, page_size)
+    }
+
+    /// The full [`Object`] contents at their latest versions.
+    ///
+    /// Fails if any requested object id is not in the final map.
+    ///
+    /// # Note
+    ///
+    /// The check for returned object ids is just so that the caller can safely do `map[object_id]`
+    /// on the returned map. Keep in mind that the result if an object id is repeated in `objects`
+    /// is undefined. Avoid doing so.
+    fn owner_gas_coins(
+        &self,
+        owner: SuiAddress,
+        type_: Option<String>,
+        page_size: Option<u32>,
+    ) -> impl Stream<Item = Result<(u64, ObjectRef, u64), Self>> + '_ {
+        owner_gas_coins::query(self, owner, type_, page_size)
     }
 
     /// Get all the package ids and versions given either the original package id or
