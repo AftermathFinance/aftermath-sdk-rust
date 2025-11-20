@@ -1,29 +1,6 @@
-use af_sui_types::Address as SuiAddress;
-use sui_gql_schema::scalars;
-
 use super::Error;
-use super::fragments::MoveValueRaw;
+use crate::queries::model::fragments::{EventEdge, EventFilter};
 use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
-
-#[derive(cynic::InputObject, Debug, Clone)]
-pub struct EventFilter {
-    pub sender: Option<SuiAddress>,
-    pub transaction_digest: Option<String>,
-    pub emitting_module: Option<String>,
-    pub event_type: Option<String>,
-}
-
-#[derive(cynic::QueryFragment, Debug, Clone)]
-pub struct EventEdge {
-    pub node: Event,
-    pub cursor: String,
-}
-
-#[derive(cynic::QueryFragment, Debug, Clone)]
-pub struct Event {
-    pub timestamp: Option<scalars::DateTime>,
-    pub contents: Option<MoveValueRaw>,
-}
 
 /// Return a single page of events + cursors and a flag indicating if there's a previous page.
 ///
@@ -47,7 +24,7 @@ pub async fn query<C: GraphQlClient>(
         .map_err(Error::Client)?
         .try_into_data()?;
     graphql_extract::extract!(data => {
-        events {
+        events? {
             edges
             page_info {
                 has_previous_page
@@ -72,7 +49,7 @@ struct Variables {
 #[cynic(graphql_type = "Query", variables = "Variables")]
 struct Query {
     #[arguments(before: $before, filter: $filter, last: $last)]
-    events: EventConnection,
+    events: Option<EventConnection>,
 }
 
 #[cfg(test)]
@@ -82,9 +59,11 @@ fn init_gql_output() {
     use cynic::QueryBuilder as _;
     let filter = EventFilter {
         sender: None,
-        transaction_digest: None,
-        emitting_module: None,
-        event_type: None,
+        after_checkpoint: None,
+        before_checkpoint: None,
+        at_checkpoint: None,
+        type_: None,
+        module: None,
     };
     let vars = Variables {
         filter: Some(filter),

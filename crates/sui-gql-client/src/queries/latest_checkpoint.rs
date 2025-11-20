@@ -1,6 +1,7 @@
 use graphql_extract::extract;
 
 use crate::queries::Error;
+use crate::queries::model::fragments::Checkpoint;
 use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 pub async fn query<C>(client: &C) -> Result<u64, Error<C::Error>>
@@ -29,11 +30,6 @@ struct Variables {}
 #[cynic(variables = "Variables")]
 struct Query {
     checkpoint: Option<Checkpoint>,
-}
-
-#[derive(cynic::QueryFragment, Debug)]
-struct Checkpoint {
-    sequence_number: af_sui_types::Version,
 }
 
 #[cfg(test)]

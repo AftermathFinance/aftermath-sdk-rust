@@ -1,10 +1,11 @@
 use std::str::FromStr;
 
 use af_ptbuilder::ptb;
+use af_sui_types::sui::object::ObjectHelpers as _;
 use af_sui_types::{Address, TypeTag};
 use clap::Parser;
 use color_eyre::Result;
-use sui_gql_client::object_args;
+use sui_gql_client::queries::GraphQlClientExt;
 use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
@@ -37,10 +38,12 @@ async fn main() -> Result<()> {
     let order_ids = vec![1757315054637997671365303735253u128];
 
     // Fetch the required objects to cancel orders
-    object_args!({
-        clearing_house: ch_id,
-        account: account_obj_id,
-    } with { &client });
+    let objs = client
+        .full_objects([(ch_id, None), (account_obj_id, None)], None)
+        .await?;
+
+    let clearing_house = objs[0].object_arg(true);
+    let account = objs[1].object_arg(true);
 
     // Similar function exists for `SubAccount`, named `cancel_orders_subaccount`.
     // To use it, you must fetch your subaccount's `ObjectArg` before and pass it instead

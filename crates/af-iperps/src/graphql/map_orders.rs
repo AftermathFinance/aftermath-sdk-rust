@@ -1,10 +1,9 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, Version};
+use af_sui_types::Address;
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 pub use sui_gql_client::queries::Error;
-use sui_gql_client::queries::GraphQlClientExt as _;
-use sui_gql_client::queries::fragments::{MoveValueRaw, PageInfoForward};
+use sui_gql_client::queries::model::fragments::{MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 use crate::orderbook::Order;
@@ -13,13 +12,13 @@ use crate::ordered_map::Leaf;
 pub(super) fn query<C: GraphQlClient>(
     client: &C,
     map: Address,
-    ch_version: Option<Version>,
+    at_checkpoint: Option<u64>,
 ) -> impl Stream<Item = Result<(u128, Order), Error<C::Error>>> + '_ {
     async_stream::try_stream! {
         let mut vars = Variables {
             map,
-            ch_version,
-            first: Some(client.max_page_size().await?),
+            at_checkpoint,
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -59,7 +58,7 @@ async fn request<C: GraphQlClient>(
 fn extract(data: Option<Query>) -> Result<MapDfsConnection, &'static str> {
     graphql_extract::extract!(data => {
         map? {
-            map_dfs
+            map_dfs?
         }
     });
     Ok(map_dfs)
@@ -73,14 +72,14 @@ fn gql_output() {
 
     let vars = Variables {
         map: Address::ZERO,
-        ch_version: None,
+        at_checkpoint: None,
         first: Some(10),
         after: None,
     };
     let operation = Query::build(vars);
-    insta::assert_snapshot!(operation.query, @r###"
-    query Query($map: SuiAddress!, $chVersion: UInt53, $first: Int, $after: String) {
-      map: owner(address: $map, rootVersion: $chVersion) {
+    insta::assert_snapshot!(operation.query, @r"
+    query Query($map: SuiAddress!, $atCheckpoint: UInt53, $first: Int, $after: String) {
+      map: object(address: $map, atCheckpoint: $atCheckpoint) {
         map_dfs: dynamicFields(first: $first, after: $after) {
           nodes {
             map_df: value {
@@ -100,13 +99,13 @@ fn gql_output() {
         }
       }
     }
-    "###);
+    ");
 }
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
 struct Variables {
     map: Address,
-    ch_version: Option<Version>,
+    at_checkpoint: Option<u64>,
     first: Option<i32>,
     after: Option<String>,
 }
@@ -114,17 +113,17 @@ struct Variables {
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(variables = "Variables")]
 struct Query {
-    #[arguments(address: $map, rootVersion: $ch_version)]
-    #[cynic(alias, rename = "owner")]
+    #[arguments(address: $map, atCheckpoint: $at_checkpoint)]
+    #[cynic(alias, rename = "object")]
     map: Option<MapAsOwner>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
-#[cynic(graphql_type = "Owner", variables = "Variables")]
+#[cynic(graphql_type = "Object", variables = "Variables")]
 struct MapAsOwner {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    map_dfs: MapDfsConnection,
+    map_dfs: Option<MapDfsConnection>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
@@ -158,7 +157,7 @@ impl MapDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum MapDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

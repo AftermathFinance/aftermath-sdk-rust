@@ -1,10 +1,9 @@
 use af_move_type::MoveInstance;
-use af_sui_types::{Address, Version};
+use af_sui_types::Address;
 use enum_as_inner::EnumAsInner;
 use futures::Stream;
 pub use sui_gql_client::queries::Error;
-use sui_gql_client::queries::GraphQlClientExt as _;
-use sui_gql_client::queries::fragments::{MoveValueRaw, PageInfoForward};
+use sui_gql_client::queries::model::fragments::{MoveValueGql, PageInfoForward};
 use sui_gql_client::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 type Position = MoveInstance<crate::position::Position>;
@@ -12,13 +11,13 @@ type Position = MoveInstance<crate::position::Position>;
 pub(super) fn query<C: GraphQlClient>(
     client: &C,
     ch: Address,
-    version: Option<Version>,
+    at_checkpoint: Option<u64>,
 ) -> impl Stream<Item = Result<(u64, Position), Error<C::Error>>> + '_ {
     async_stream::try_stream! {
         let mut vars = Variables {
             ch,
-            version,
-            first: Some(client.max_page_size().await?),
+            at_checkpoint,
+            first: Some(32),
             after: None,
         };
         let mut has_next_page = true;
@@ -58,7 +57,7 @@ async fn request<C: GraphQlClient>(
 fn extract(data: Option<Query>) -> Result<ChDfsConnection, &'static str> {
     graphql_extract::extract!(data => {
         clearing_house? {
-            dfs
+            dfs?
         }
     });
     Ok(dfs)
@@ -80,14 +79,14 @@ fn gql_output() {
 
     let vars = Variables {
         ch: Address::ZERO,
-        version: None,
+        at_checkpoint: None,
         first: Some(10),
         after: None,
     };
     let operation = Query::build(vars);
-    insta::assert_snapshot!(operation.query, @r###"
-    query Query($ch: SuiAddress!, $version: UInt53, $first: Int, $after: String) {
-      clearing_house: object(address: $ch, version: $version) {
+    insta::assert_snapshot!(operation.query, @r"
+    query Query($ch: SuiAddress!, $atCheckpoint: UInt53, $first: Int, $after: String) {
+      clearing_house: object(address: $ch, atCheckpoint: $atCheckpoint) {
         dfs: dynamicFields(first: $first, after: $after) {
           nodes {
             df_name: name {
@@ -113,13 +112,13 @@ fn gql_output() {
         }
       }
     }
-    "###);
+    ");
 }
 
 #[derive(cynic::QueryVariables, Clone, Debug)]
 struct Variables {
     ch: Address,
-    version: Option<Version>,
+    at_checkpoint: Option<u64>,
     first: Option<i32>,
     after: Option<String>,
 }
@@ -127,7 +126,7 @@ struct Variables {
 #[derive(cynic::QueryFragment, Debug)]
 #[cynic(variables = "Variables")]
 struct Query {
-    #[arguments(address: $ch, version: $version)]
+    #[arguments(address: $ch, atCheckpoint: $at_checkpoint)]
     #[cynic(alias, rename = "object")]
     clearing_house: Option<ClearingHouseObject>,
 }
@@ -137,7 +136,7 @@ struct Query {
 struct ClearingHouseObject {
     #[arguments(first: $first, after: $after)]
     #[cynic(alias, rename = "dynamicFields")]
-    dfs: ChDfsConnection,
+    dfs: Option<ChDfsConnection>,
 }
 
 #[derive(cynic::QueryFragment, Debug)]
@@ -151,7 +150,7 @@ struct ChDfsConnection {
 #[cynic(graphql_type = "DynamicField")]
 struct ChDf {
     #[cynic(alias, rename = "name")]
-    df_name: Option<MoveValueRaw>,
+    df_name: Option<MoveValueGql>,
     #[cynic(alias, rename = "value")]
     df_value: Option<ChDfValue>,
 }
@@ -159,7 +158,7 @@ struct ChDf {
 #[derive(cynic::InlineFragments, Debug, EnumAsInner)]
 #[cynic(graphql_type = "DynamicFieldValue")]
 enum ChDfValue {
-    MoveValue(MoveValueRaw),
+    MoveValue(MoveValueGql),
     #[cynic(fallback)]
     Unknown,
 }

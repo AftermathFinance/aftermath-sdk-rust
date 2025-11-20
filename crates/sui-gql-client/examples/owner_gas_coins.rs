@@ -1,11 +1,10 @@
 use std::time::Instant;
 
-use af_iperps::graphql::GraphQlClientExt as _;
-use af_sui_types::Address;
 use clap::Parser;
 use color_eyre::Result;
 use futures::TryStreamExt as _;
 use indicatif::ProgressBar;
+use sui_gql_client::queries::GraphQlClientExt as _;
 use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
@@ -13,12 +12,7 @@ struct Args {
     #[arg(long, default_value = "https://graphql.testnet.sui.io/graphql")]
     rpc: String,
 
-    #[arg(long, default_value_t = Address::from_static(
-        "0x0017963ebb102e24eecd990435d2c8f352d4245b806fc9369213a2a0dd237f38",
-    ))]
-    map: Address,
-
-    /// Only the summary of query time and number of positions.
+    /// Only the summary of query time and number of objects.
     #[arg(long, short)]
     summary: bool,
 }
@@ -26,28 +20,31 @@ struct Args {
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
-    let Args { rpc, map, summary } = Args::parse();
+    let Args { rpc, summary } = Args::parse();
     let client = ReqwestClient::new(reqwest::Client::default(), rpc.to_owned());
+    let owner = "0xb02cad883811f506630fb6dee187496b075b1c3fed62b237a44af9665be5df66".parse()?;
+    let coin_type = Some("0x2::coin::Coin<0x2::sui::SUI>".into());
 
     tokio::pin!(
-        let stream = client.map_orders(map, None);
+        let stream = client.owner_gas_coins(owner, coin_type, None);
     );
 
     let start = Instant::now();
     let spinner = spinner();
     let mut count = 0;
-    while let Some((order_id, order)) = stream.try_next().await? {
+    while let Some((ckpt_num, obj_ref, balance)) = stream.try_next().await? {
         count += 1;
         if summary {
             spinner.tick();
         } else {
-            println!("Order ID: {order_id}");
-            println!("{order}");
+            println!("Ckpt num: {:?}", ckpt_num);
+            println!("Object Ref: {:?}", obj_ref);
+            println!("Coin balance: {:?}", balance);
         }
     }
     spinner.finish_using_style();
     println!("Elapsed: {:?}", Instant::now().duration_since(start));
-    println!("Orders: {count}");
+    println!("Objects count: {count}");
     Ok(())
 }
 

@@ -13,7 +13,7 @@ use sui_gql_client::reqwest::ReqwestClient;
 
 #[derive(Parser)]
 struct Cli {
-    #[arg(long, default_value = "https://sui-testnet.mystenlabs.com/graphql")]
+    #[arg(long, default_value = "https://graphql.testnet.sui.io/graphql")]
     rpc: String,
 }
 

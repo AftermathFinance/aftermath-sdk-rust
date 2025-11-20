@@ -1,19 +1,26 @@
 use futures::StreamExt as _;
 
 use self::stream::UpdatePageInfo;
-use super::fragments::{PageInfoForward, TransactionBlockFilter};
+use super::fragments::{PageInfoForward, TransactionFilter};
 use super::stream;
 use crate::queries::Error;
 use crate::{GraphQlClient, GraphQlResponseExt as _, schema};
 
 type Item = (String, bool);
 
+#[derive(cynic::QueryVariables, Debug, Clone)]
+pub struct Variables {
+    filter: Option<TransactionFilter>,
+    after: Option<String>,
+    first: Option<i32>,
+}
+
 #[expect(deprecated, reason = "Internal `extract` module deprecated")]
 pub(super) async fn query<C: GraphQlClient>(
     client: &C,
     transaction_digests: Vec<String>,
 ) -> super::Result<impl Iterator<Item = Result<Item, crate::extract::Error>> + use<C>, C> {
-    let filter = TransactionBlockFilter {
+    let filter = TransactionFilter {
         transaction_ids: Some(transaction_digests),
         ..Default::default()
     };
@@ -62,13 +69,6 @@ async fn request<C: GraphQlClient>(
         page_info,
         nodes.map(|r| r.map(|(d, s)| (d, s.into())).map_err(super::Error::from)),
     ))
-}
-
-#[derive(cynic::QueryVariables, Debug, Clone)]
-pub struct Variables<'a> {
-    filter: Option<&'a TransactionBlockFilter>,
-    after: Option<String>,
-    first: Option<i32>,
 }
 
 impl UpdatePageInfo for Variables<'_> {
