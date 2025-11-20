@@ -47,21 +47,27 @@ pub type ClearingHouse = self::clearing_house::ClearingHouse<Otw>;
 pub type ClearingHouseTypeTag = self::clearing_house::ClearingHouseTypeTag<Otw>;
 pub type Vault = self::clearing_house::Vault<Otw>;
 pub type VaultTypeTag = self::clearing_house::VaultTypeTag<Otw>;
+pub type MarketInfo = self::registry::MarketInfo<Otw>;
+pub type CollateralInfo = self::registry::CollateralInfo<Otw>;
 
 /// Dynamic field storing a [`Vault`].
-pub type VaultDf = Field<self::keys::MarketVault, Vault>;
+pub type VaultDf = Field<keys::MarketVault, Vault>;
 /// Dynamic field storing a [`Position`].
-pub type PositionDf = Field<self::keys::Position, Position>;
+pub type PositionDf = Field<keys::Position, Position>;
 /// Dynamic field storing a leaf in a [`Map`] of [`Order`]s.
 ///
 /// [`Map`]: self::ordered_map::Map
-pub type OrderLeafDf = Field<u64, self::ordered_map::Leaf<Order>>;
+pub type OrderLeafDf = Field<u64, ordered_map::Leaf<Order>>;
 /// Dynamic object field wrapper for the [`Orderbook`](orderbook::Orderbook) ID.
 pub type OrderbookDofWrapper = Field<Wrapper<keys::Orderbook>, ID>;
 /// Dynamic object field wrapper for the asks [`Map`](ordered_map::Map) ID.
 pub type AsksMapDofWrapper = Field<Wrapper<keys::AsksMap>, ID>;
 /// Dynamic object field wrapper for the bids [`Map`](ordered_map::Map) ID.
 pub type BidsMapDofWrapper = Field<Wrapper<keys::BidsMap>, ID>;
+/// Dynamic field storing a [`MarketInfo`].
+pub type MarketInfoDf = Field<keys::RegistryMarketInfo, MarketInfo>;
+/// Dynamic field storing a [`CollateralInfo`].
+pub type CollateralInfoDf = Field<keys::RegistryCollateralInfo<Otw>, CollateralInfo>;
 
 sui_pkg_sdk!(perpetuals {
     module account {
