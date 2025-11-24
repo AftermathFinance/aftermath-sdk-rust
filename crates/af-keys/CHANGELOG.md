@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.15.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-keys-v0.14.0...af-keys-v0.15.0)
+
+### ⛰️ Features
+
+- *(af-keys)* [**breaking**] Update af-keys to use sui-crypto - ([b8b2138](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/b8b213881f8e4f7645fcc066362cdded15e4d109))
+
+
 ## [0.14.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-keys-v0.13.0...af-keys-v0.14.0)
 
 ### ⛰️ Features
