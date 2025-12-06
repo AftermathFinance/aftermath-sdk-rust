@@ -26,6 +26,7 @@ pub mod stop_order_helpers;
 pub use self::market::{MarketParams, MarketState};
 pub use self::orderbook::Order;
 pub use self::position::Position;
+use crate::authority::{ADMIN, ASSISTANT};
 
 /// Package IDs of the perpetuals contract versions published on testnet, in order of its versions.
 pub const TESTNET_PACKAGE_VERSIONS: &[Address] = &[Address::from_static(
@@ -34,6 +35,8 @@ pub const TESTNET_PACKAGE_VERSIONS: &[Address] = &[Address::from_static(
 
 // Convenient aliases since these types will never exist onchain with a type argument other than an
 // OTW.
+pub type AdminCapability = self::authority::Capability<ADMIN>;
+pub type AssistantCapability = self::authority::Capability<ASSISTANT>;
 pub type AccountCap = self::account::AccountCap<Otw>;
 pub type AccountCapTypeTag = self::account::AccountCapTypeTag<Otw>;
 pub type Account = self::account::Account<Otw>;
@@ -87,20 +90,19 @@ sui_pkg_sdk!(perpetuals {
         }
     }
 
-    module admin {
+    module authority {
         /// Capability object required to perform admin functions.
         ///
         /// Minted once when the module is published and transfered to its creator.
-        struct AdminCapability has key, store {
+        struct Capability<!phantom Role> has key, store {
             id: UID
         }
-    }
 
-    module adl {
-        /// Capability object required to perform auto-deleverage.
-        struct ADLCapability has key, store {
-            id: UID
-        }
+        /// Admin Role
+        struct ADMIN();
+
+        /// Assistant Role
+        struct ASSISTANT();
     }
 
     module clearing_house {
@@ -226,8 +228,8 @@ sui_pkg_sdk!(perpetuals {
             id: UID,
             /// Addresses allowed to execute the order on behalf of the user.
             executors: vector<address>,
-            /// Gas coin that must be provided by the user to cover for one stop order cost.
-            /// This amount of gas is going to be sent to the executor of the order.
+            /// The executor collects the gas in case the order is placed or canceled for any reason.
+            /// The user gets back the gas in case he manually cancels the order.
             gas: Balance<SUI>,
             /// User account id
             account_id: u64,
@@ -330,7 +332,9 @@ sui_pkg_sdk!(perpetuals {
         struct RegisteredMarketInfo<!phantom T> has copy, drop {
             ch_id: ID,
             base_pfs_id: ID,
+            base_pfs_source_id: ID,
             collateral_pfs_id: ID,
+            collateral_pfs_source_id: ID,
             scaling_factor: IFixed
         }
 
@@ -341,6 +345,7 @@ sui_pkg_sdk!(perpetuals {
         struct RegisteredCollateralInfo<!phantom T> has copy, drop {
             ch_id: ID,
             collateral_pfs_id: ID,
+            collateral_pfs_source_id: ID,
             scaling_factor: IFixed
         }
 
@@ -579,7 +584,6 @@ sui_pkg_sdk!(perpetuals {
         struct EditedStopOrderTicketDetails<!phantom T> has copy, drop {
             ticket_id: ID,
             account_id: u64,
-            stop_order_type: u64,
             encrypted_details: vector<u8>
         }
 
@@ -1098,7 +1102,9 @@ sui_pkg_sdk!(perpetuals {
         /// Struct containing all the immutable info about a registered market
         struct MarketInfo<!phantom T> has store {
             base_pfs_id: ID,
+            base_pfs_source_id: ID,
             collateral_pfs_id: ID,
+            collateral_pfs_source_id: ID,
             scaling_factor: IFixed
         }
 
@@ -1106,6 +1112,7 @@ sui_pkg_sdk!(perpetuals {
         /// used in one or more markets
         struct CollateralInfo<!phantom T> has store {
             collateral_pfs_id: ID,
+            collateral_pfs_source_id: ID,
             scaling_factor: IFixed
         }
 

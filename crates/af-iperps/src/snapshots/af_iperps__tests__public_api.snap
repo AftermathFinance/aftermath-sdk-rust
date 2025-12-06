@@ -134,92 +134,132 @@ pub fn af_iperps::account::IntegratorConfigTypeTag::fmt(&self, f: &mut core::fmt
 impl core::str::traits::FromStr for af_iperps::account::IntegratorConfigTypeTag
 pub type af_iperps::account::IntegratorConfigTypeTag::Err = af_move_type::ParseStructTagError
 pub fn af_iperps::account::IntegratorConfigTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
-pub mod af_iperps::adl
-pub struct af_iperps::adl::ADLCapability
-pub af_iperps::adl::ADLCapability::id: sui_framework_sdk::object::UID
-impl af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
-pub fn af_iperps::adl::ADLCapability::type_(address: sui_sdk_types::address::Address) -> af_iperps::adl::ADLCapabilityTypeTag
-impl af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::new(id: sui_framework_sdk::object::UID) -> Self
-impl af_move_type::HasKey for af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::object_id(&self) -> sui_sdk_types::address::Address
-impl af_move_type::MoveStruct for af_iperps::adl::ADLCapability
-pub type af_iperps::adl::ADLCapability::StructTag = af_iperps::adl::ADLCapabilityTypeTag
-impl af_move_type::MoveType for af_iperps::adl::ADLCapability
-pub type af_iperps::adl::ADLCapability::TypeTag = af_iperps::adl::ADLCapabilityTypeTag
-impl af_move_type::StaticModule for af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::module() -> sui_sdk_types::type_tag::Identifier
-impl af_move_type::StaticName for af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::name() -> sui_sdk_types::type_tag::Identifier
-impl af_move_type::StaticTypeParams for af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
-impl core::fmt::Display for af_iperps::adl::ADLCapability
-pub fn af_iperps::adl::ADLCapability::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl tabled::tabled::Tabled for af_iperps::adl::ADLCapability
-pub const af_iperps::adl::ADLCapability::LENGTH: usize
-pub fn af_iperps::adl::ADLCapability::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
-pub fn af_iperps::adl::ADLCapability::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
-pub struct af_iperps::adl::ADLCapabilityTypeTag
-pub af_iperps::adl::ADLCapabilityTypeTag::address: sui_sdk_types::address::Address
-impl core::convert::From<af_iperps::adl::ADLCapabilityTypeTag> for sui_sdk_types::type_tag::StructTag
-pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::adl::ADLCapabilityTypeTag) -> Self
-impl core::convert::From<af_iperps::adl::ADLCapabilityTypeTag> for sui_sdk_types::type_tag::TypeTag
-pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::adl::ADLCapabilityTypeTag) -> Self
-impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::adl::ADLCapabilityTypeTag
-pub type af_iperps::adl::ADLCapabilityTypeTag::Error = af_move_type::StructTagError
-pub fn af_iperps::adl::ADLCapabilityTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
-impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::adl::ADLCapabilityTypeTag
-pub type af_iperps::adl::ADLCapabilityTypeTag::Error = af_move_type::TypeTagError
-pub fn af_iperps::adl::ADLCapabilityTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
-impl core::fmt::Display for af_iperps::adl::ADLCapabilityTypeTag
-pub fn af_iperps::adl::ADLCapabilityTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl core::str::traits::FromStr for af_iperps::adl::ADLCapabilityTypeTag
-pub type af_iperps::adl::ADLCapabilityTypeTag::Err = af_move_type::ParseStructTagError
-pub fn af_iperps::adl::ADLCapabilityTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
-pub mod af_iperps::admin
-pub struct af_iperps::admin::AdminCapability
-pub af_iperps::admin::AdminCapability::id: sui_framework_sdk::object::UID
-impl af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
-pub fn af_iperps::admin::AdminCapability::type_(address: sui_sdk_types::address::Address) -> af_iperps::admin::AdminCapabilityTypeTag
-impl af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::new(id: sui_framework_sdk::object::UID) -> Self
-impl af_move_type::HasKey for af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::object_id(&self) -> sui_sdk_types::address::Address
-impl af_move_type::MoveStruct for af_iperps::admin::AdminCapability
-pub type af_iperps::admin::AdminCapability::StructTag = af_iperps::admin::AdminCapabilityTypeTag
-impl af_move_type::MoveType for af_iperps::admin::AdminCapability
-pub type af_iperps::admin::AdminCapability::TypeTag = af_iperps::admin::AdminCapabilityTypeTag
-impl af_move_type::StaticModule for af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::module() -> sui_sdk_types::type_tag::Identifier
-impl af_move_type::StaticName for af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::name() -> sui_sdk_types::type_tag::Identifier
-impl af_move_type::StaticTypeParams for af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
-impl core::fmt::Display for af_iperps::admin::AdminCapability
-pub fn af_iperps::admin::AdminCapability::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl tabled::tabled::Tabled for af_iperps::admin::AdminCapability
-pub const af_iperps::admin::AdminCapability::LENGTH: usize
-pub fn af_iperps::admin::AdminCapability::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
-pub fn af_iperps::admin::AdminCapability::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
-pub struct af_iperps::admin::AdminCapabilityTypeTag
-pub af_iperps::admin::AdminCapabilityTypeTag::address: sui_sdk_types::address::Address
-impl core::convert::From<af_iperps::admin::AdminCapabilityTypeTag> for sui_sdk_types::type_tag::StructTag
-pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::admin::AdminCapabilityTypeTag) -> Self
-impl core::convert::From<af_iperps::admin::AdminCapabilityTypeTag> for sui_sdk_types::type_tag::TypeTag
-pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::admin::AdminCapabilityTypeTag) -> Self
-impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::admin::AdminCapabilityTypeTag
-pub type af_iperps::admin::AdminCapabilityTypeTag::Error = af_move_type::StructTagError
-pub fn af_iperps::admin::AdminCapabilityTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
-impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::admin::AdminCapabilityTypeTag
-pub type af_iperps::admin::AdminCapabilityTypeTag::Error = af_move_type::TypeTagError
-pub fn af_iperps::admin::AdminCapabilityTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
-impl core::fmt::Display for af_iperps::admin::AdminCapabilityTypeTag
-pub fn af_iperps::admin::AdminCapabilityTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
-impl core::str::traits::FromStr for af_iperps::admin::AdminCapabilityTypeTag
-pub type af_iperps::admin::AdminCapabilityTypeTag::Err = af_move_type::ParseStructTagError
-pub fn af_iperps::admin::AdminCapabilityTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
+pub mod af_iperps::authority
+pub struct af_iperps::authority::ADMIN(_)
+impl af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
+pub fn af_iperps::authority::ADMIN::type_(address: sui_sdk_types::address::Address) -> af_iperps::authority::ADMINTypeTag
+impl af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::new() -> Self
+impl af_move_type::MoveStruct for af_iperps::authority::ADMIN
+pub type af_iperps::authority::ADMIN::StructTag = af_iperps::authority::ADMINTypeTag
+impl af_move_type::MoveType for af_iperps::authority::ADMIN
+pub type af_iperps::authority::ADMIN::TypeTag = af_iperps::authority::ADMINTypeTag
+impl af_move_type::StaticModule for af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::module() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticName for af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::name() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticTypeParams for af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
+impl core::default::Default for af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::default() -> Self
+impl core::fmt::Display for af_iperps::authority::ADMIN
+pub fn af_iperps::authority::ADMIN::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl tabled::tabled::Tabled for af_iperps::authority::ADMIN
+pub const af_iperps::authority::ADMIN::LENGTH: usize
+pub fn af_iperps::authority::ADMIN::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
+pub fn af_iperps::authority::ADMIN::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
+pub struct af_iperps::authority::ADMINTypeTag
+pub af_iperps::authority::ADMINTypeTag::address: sui_sdk_types::address::Address
+impl core::convert::From<af_iperps::authority::ADMINTypeTag> for sui_sdk_types::type_tag::StructTag
+pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::authority::ADMINTypeTag) -> Self
+impl core::convert::From<af_iperps::authority::ADMINTypeTag> for sui_sdk_types::type_tag::TypeTag
+pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::authority::ADMINTypeTag) -> Self
+impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::authority::ADMINTypeTag
+pub type af_iperps::authority::ADMINTypeTag::Error = af_move_type::StructTagError
+pub fn af_iperps::authority::ADMINTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
+impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::authority::ADMINTypeTag
+pub type af_iperps::authority::ADMINTypeTag::Error = af_move_type::TypeTagError
+pub fn af_iperps::authority::ADMINTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
+impl core::fmt::Display for af_iperps::authority::ADMINTypeTag
+pub fn af_iperps::authority::ADMINTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::str::traits::FromStr for af_iperps::authority::ADMINTypeTag
+pub type af_iperps::authority::ADMINTypeTag::Err = af_move_type::ParseStructTagError
+pub fn af_iperps::authority::ADMINTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
+pub struct af_iperps::authority::ASSISTANT(_)
+impl af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
+pub fn af_iperps::authority::ASSISTANT::type_(address: sui_sdk_types::address::Address) -> af_iperps::authority::ASSISTANTTypeTag
+impl af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::new() -> Self
+impl af_move_type::MoveStruct for af_iperps::authority::ASSISTANT
+pub type af_iperps::authority::ASSISTANT::StructTag = af_iperps::authority::ASSISTANTTypeTag
+impl af_move_type::MoveType for af_iperps::authority::ASSISTANT
+pub type af_iperps::authority::ASSISTANT::TypeTag = af_iperps::authority::ASSISTANTTypeTag
+impl af_move_type::StaticModule for af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::module() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticName for af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::name() -> sui_sdk_types::type_tag::Identifier
+impl af_move_type::StaticTypeParams for af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
+impl core::default::Default for af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::default() -> Self
+impl core::fmt::Display for af_iperps::authority::ASSISTANT
+pub fn af_iperps::authority::ASSISTANT::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl tabled::tabled::Tabled for af_iperps::authority::ASSISTANT
+pub const af_iperps::authority::ASSISTANT::LENGTH: usize
+pub fn af_iperps::authority::ASSISTANT::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
+pub fn af_iperps::authority::ASSISTANT::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
+pub struct af_iperps::authority::ASSISTANTTypeTag
+pub af_iperps::authority::ASSISTANTTypeTag::address: sui_sdk_types::address::Address
+impl core::convert::From<af_iperps::authority::ASSISTANTTypeTag> for sui_sdk_types::type_tag::StructTag
+pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::authority::ASSISTANTTypeTag) -> Self
+impl core::convert::From<af_iperps::authority::ASSISTANTTypeTag> for sui_sdk_types::type_tag::TypeTag
+pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::authority::ASSISTANTTypeTag) -> Self
+impl core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::authority::ASSISTANTTypeTag
+pub type af_iperps::authority::ASSISTANTTypeTag::Error = af_move_type::StructTagError
+pub fn af_iperps::authority::ASSISTANTTypeTag::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
+impl core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::authority::ASSISTANTTypeTag
+pub type af_iperps::authority::ASSISTANTTypeTag::Error = af_move_type::TypeTagError
+pub fn af_iperps::authority::ASSISTANTTypeTag::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
+impl core::fmt::Display for af_iperps::authority::ASSISTANTTypeTag
+pub fn af_iperps::authority::ASSISTANTTypeTag::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl core::str::traits::FromStr for af_iperps::authority::ASSISTANTTypeTag
+pub type af_iperps::authority::ASSISTANTTypeTag::Err = af_move_type::ParseStructTagError
+pub fn af_iperps::authority::ASSISTANTTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
+pub struct af_iperps::authority::Capability<Role: af_move_type::MoveType>
+pub af_iperps::authority::Capability::id: sui_framework_sdk::object::UID
+impl<Role: af_move_type::MoveType> af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::move_instance(self, address: sui_sdk_types::address::Address, role: <Role as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
+pub fn af_iperps::authority::Capability<Role>::type_(address: sui_sdk_types::address::Address, role: <Role as af_move_type::MoveType>::TypeTag) -> af_iperps::authority::CapabilityTypeTag<Role>
+impl<Role: af_move_type::MoveType> af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::new(id: sui_framework_sdk::object::UID) -> Self
+impl<Role: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
+impl<Role: af_move_type::MoveType> af_move_type::HasKey for af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::object_id(&self) -> sui_sdk_types::address::Address
+impl<Role: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::authority::Capability<Role>
+pub type af_iperps::authority::Capability<Role>::StructTag = af_iperps::authority::CapabilityTypeTag<Role>
+impl<Role: af_move_type::MoveType> af_move_type::MoveType for af_iperps::authority::Capability<Role>
+pub type af_iperps::authority::Capability<Role>::TypeTag = af_iperps::authority::CapabilityTypeTag<Role>
+impl<Role: af_move_type::MoveType> af_move_type::StaticModule for af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::module() -> sui_sdk_types::type_tag::Identifier
+impl<Role: af_move_type::MoveType> af_move_type::StaticName for af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::name() -> sui_sdk_types::type_tag::Identifier
+impl<Role: af_move_type::MoveType> core::fmt::Display for af_iperps::authority::Capability<Role>
+pub fn af_iperps::authority::Capability<Role>::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl<Role: af_move_type::MoveType> tabled::tabled::Tabled for af_iperps::authority::Capability<Role>
+pub const af_iperps::authority::Capability<Role>::LENGTH: usize
+pub fn af_iperps::authority::Capability<Role>::fields(&self) -> alloc::vec::Vec<alloc::borrow::Cow<'_, str>>
+pub fn af_iperps::authority::Capability<Role>::headers() -> alloc::vec::Vec<alloc::borrow::Cow<'static, str>>
+pub struct af_iperps::authority::CapabilityTypeTag<Role: af_move_type::MoveType>
+pub af_iperps::authority::CapabilityTypeTag::address: sui_sdk_types::address::Address
+pub af_iperps::authority::CapabilityTypeTag::role: <Role as af_move_type::MoveType>::TypeTag
+impl<Role: af_move_type::MoveType> core::convert::From<af_iperps::authority::CapabilityTypeTag<Role>> for sui_sdk_types::type_tag::StructTag
+pub fn sui_sdk_types::type_tag::StructTag::from(value: af_iperps::authority::CapabilityTypeTag<Role>) -> Self
+impl<Role: af_move_type::MoveType> core::convert::From<af_iperps::authority::CapabilityTypeTag<Role>> for sui_sdk_types::type_tag::TypeTag
+pub fn sui_sdk_types::type_tag::TypeTag::from(value: af_iperps::authority::CapabilityTypeTag<Role>) -> Self
+impl<Role: af_move_type::MoveType> core::convert::TryFrom<sui_sdk_types::type_tag::StructTag> for af_iperps::authority::CapabilityTypeTag<Role>
+pub type af_iperps::authority::CapabilityTypeTag<Role>::Error = af_move_type::StructTagError
+pub fn af_iperps::authority::CapabilityTypeTag<Role>::try_from(value: sui_sdk_types::type_tag::StructTag) -> core::result::Result<Self, Self::Error>
+impl<Role: af_move_type::MoveType> core::convert::TryFrom<sui_sdk_types::type_tag::TypeTag> for af_iperps::authority::CapabilityTypeTag<Role>
+pub type af_iperps::authority::CapabilityTypeTag<Role>::Error = af_move_type::TypeTagError
+pub fn af_iperps::authority::CapabilityTypeTag<Role>::try_from(value: sui_sdk_types::type_tag::TypeTag) -> core::result::Result<Self, Self::Error>
+impl<Role: af_move_type::MoveType> core::fmt::Display for af_iperps::authority::CapabilityTypeTag<Role>
+pub fn af_iperps::authority::CapabilityTypeTag<Role>::fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result
+impl<Role: af_move_type::MoveType> core::str::traits::FromStr for af_iperps::authority::CapabilityTypeTag<Role>
+pub type af_iperps::authority::CapabilityTypeTag<Role>::Err = af_move_type::ParseStructTagError
+pub fn af_iperps::authority::CapabilityTypeTag<Role>::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub mod af_iperps::clearing_house
 pub struct af_iperps::clearing_house::ClearingHouse<T: af_move_type::MoveType>
 pub af_iperps::clearing_house::ClearingHouse::id: sui_framework_sdk::object::UID
@@ -1765,13 +1805,12 @@ pub fn af_iperps::events::DonatedToInsuranceFundTypeTag::from_str(s: &str) -> co
 pub struct af_iperps::events::EditedStopOrderTicketDetails<T: af_move_type::MoveType>
 pub af_iperps::events::EditedStopOrderTicketDetails::account_id: u64
 pub af_iperps::events::EditedStopOrderTicketDetails::encrypted_details: af_move_type::vector::MoveVec<u8>
-pub af_iperps::events::EditedStopOrderTicketDetails::stop_order_type: u64
 pub af_iperps::events::EditedStopOrderTicketDetails::ticket_id: sui_framework_sdk::object::ID
 impl<T: af_move_type::MoveType> af_iperps::events::EditedStopOrderTicketDetails<T>
 pub fn af_iperps::events::EditedStopOrderTicketDetails<T>::move_instance(self, address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::EditedStopOrderTicketDetails<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::events::EditedStopOrderTicketDetailsTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::events::EditedStopOrderTicketDetails<T>
-pub fn af_iperps::events::EditedStopOrderTicketDetails<T>::new(ticket_id: sui_framework_sdk::object::ID, account_id: u64, stop_order_type: u64, encrypted_details: af_move_type::vector::MoveVec<u8>) -> Self
+pub fn af_iperps::events::EditedStopOrderTicketDetails<T>::new(ticket_id: sui_framework_sdk::object::ID, account_id: u64, encrypted_details: af_move_type::vector::MoveVec<u8>) -> Self
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::events::EditedStopOrderTicketDetails<T>
 pub fn af_iperps::events::EditedStopOrderTicketDetails<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::events::EditedStopOrderTicketDetails<T>
@@ -2306,12 +2345,13 @@ pub fn af_iperps::events::PostedOrderTypeTag::from_str(s: &str) -> core::result:
 pub struct af_iperps::events::RegisteredCollateralInfo<T: af_move_type::MoveType>
 pub af_iperps::events::RegisteredCollateralInfo::ch_id: sui_framework_sdk::object::ID
 pub af_iperps::events::RegisteredCollateralInfo::collateral_pfs_id: sui_framework_sdk::object::ID
+pub af_iperps::events::RegisteredCollateralInfo::collateral_pfs_source_id: sui_framework_sdk::object::ID
 pub af_iperps::events::RegisteredCollateralInfo::scaling_factor: af_utilities::types::ifixed::IFixed
 impl<T: af_move_type::MoveType> af_iperps::events::RegisteredCollateralInfo<T>
 pub fn af_iperps::events::RegisteredCollateralInfo<T>::move_instance(self, address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::RegisteredCollateralInfo<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::events::RegisteredCollateralInfoTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::events::RegisteredCollateralInfo<T>
-pub fn af_iperps::events::RegisteredCollateralInfo<T>::new(ch_id: sui_framework_sdk::object::ID, collateral_pfs_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
+pub fn af_iperps::events::RegisteredCollateralInfo<T>::new(ch_id: sui_framework_sdk::object::ID, collateral_pfs_id: sui_framework_sdk::object::ID, collateral_pfs_source_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::events::RegisteredCollateralInfo<T>
 pub fn af_iperps::events::RegisteredCollateralInfo<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::events::RegisteredCollateralInfo<T>
@@ -2348,14 +2388,16 @@ pub type af_iperps::events::RegisteredCollateralInfoTypeTag<T>::Err = af_move_ty
 pub fn af_iperps::events::RegisteredCollateralInfoTypeTag<T>::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::events::RegisteredMarketInfo<T: af_move_type::MoveType>
 pub af_iperps::events::RegisteredMarketInfo::base_pfs_id: sui_framework_sdk::object::ID
+pub af_iperps::events::RegisteredMarketInfo::base_pfs_source_id: sui_framework_sdk::object::ID
 pub af_iperps::events::RegisteredMarketInfo::ch_id: sui_framework_sdk::object::ID
 pub af_iperps::events::RegisteredMarketInfo::collateral_pfs_id: sui_framework_sdk::object::ID
+pub af_iperps::events::RegisteredMarketInfo::collateral_pfs_source_id: sui_framework_sdk::object::ID
 pub af_iperps::events::RegisteredMarketInfo::scaling_factor: af_utilities::types::ifixed::IFixed
 impl<T: af_move_type::MoveType> af_iperps::events::RegisteredMarketInfo<T>
 pub fn af_iperps::events::RegisteredMarketInfo<T>::move_instance(self, address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::RegisteredMarketInfo<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::events::RegisteredMarketInfoTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::events::RegisteredMarketInfo<T>
-pub fn af_iperps::events::RegisteredMarketInfo<T>::new(ch_id: sui_framework_sdk::object::ID, base_pfs_id: sui_framework_sdk::object::ID, collateral_pfs_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
+pub fn af_iperps::events::RegisteredMarketInfo<T>::new(ch_id: sui_framework_sdk::object::ID, base_pfs_id: sui_framework_sdk::object::ID, base_pfs_source_id: sui_framework_sdk::object::ID, collateral_pfs_id: sui_framework_sdk::object::ID, collateral_pfs_source_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::events::RegisteredMarketInfo<T>
 pub fn af_iperps::events::RegisteredMarketInfo<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::events::RegisteredMarketInfo<T>
@@ -5198,12 +5240,13 @@ pub fn af_iperps::position::PositionTypeTag::from_str(s: &str) -> core::result::
 pub mod af_iperps::registry
 pub struct af_iperps::registry::CollateralInfo<T: af_move_type::MoveType>
 pub af_iperps::registry::CollateralInfo::collateral_pfs_id: sui_framework_sdk::object::ID
+pub af_iperps::registry::CollateralInfo::collateral_pfs_source_id: sui_framework_sdk::object::ID
 pub af_iperps::registry::CollateralInfo::scaling_factor: af_utilities::types::ifixed::IFixed
 impl<T: af_move_type::MoveType> af_iperps::registry::CollateralInfo<T>
 pub fn af_iperps::registry::CollateralInfo<T>::move_instance(self, address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::registry::CollateralInfo<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::registry::CollateralInfoTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::registry::CollateralInfo<T>
-pub fn af_iperps::registry::CollateralInfo<T>::new(collateral_pfs_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
+pub fn af_iperps::registry::CollateralInfo<T>::new(collateral_pfs_id: sui_framework_sdk::object::ID, collateral_pfs_source_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::registry::CollateralInfo<T>
 pub fn af_iperps::registry::CollateralInfo<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::registry::CollateralInfo<T>
@@ -5280,13 +5323,15 @@ pub type af_iperps::registry::ConfigTypeTag::Err = af_move_type::ParseStructTagE
 pub fn af_iperps::registry::ConfigTypeTag::from_str(s: &str) -> core::result::Result<Self, Self::Err>
 pub struct af_iperps::registry::MarketInfo<T: af_move_type::MoveType>
 pub af_iperps::registry::MarketInfo::base_pfs_id: sui_framework_sdk::object::ID
+pub af_iperps::registry::MarketInfo::base_pfs_source_id: sui_framework_sdk::object::ID
 pub af_iperps::registry::MarketInfo::collateral_pfs_id: sui_framework_sdk::object::ID
+pub af_iperps::registry::MarketInfo::collateral_pfs_source_id: sui_framework_sdk::object::ID
 pub af_iperps::registry::MarketInfo::scaling_factor: af_utilities::types::ifixed::IFixed
 impl<T: af_move_type::MoveType> af_iperps::registry::MarketInfo<T>
 pub fn af_iperps::registry::MarketInfo<T>::move_instance(self, address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::registry::MarketInfo<T>::type_(address: sui_sdk_types::address::Address, t: <T as af_move_type::MoveType>::TypeTag) -> af_iperps::registry::MarketInfoTypeTag<T>
 impl<T: af_move_type::MoveType> af_iperps::registry::MarketInfo<T>
-pub fn af_iperps::registry::MarketInfo<T>::new(base_pfs_id: sui_framework_sdk::object::ID, collateral_pfs_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
+pub fn af_iperps::registry::MarketInfo<T>::new(base_pfs_id: sui_framework_sdk::object::ID, base_pfs_source_id: sui_framework_sdk::object::ID, collateral_pfs_id: sui_framework_sdk::object::ID, collateral_pfs_source_id: sui_framework_sdk::object::ID, scaling_factor: af_utilities::types::ifixed::IFixed) -> Self
 impl<T: af_move_type::MoveType + af_move_type::StaticTypeTag> af_move_type::StaticTypeParams for af_iperps::registry::MarketInfo<T>
 pub fn af_iperps::registry::MarketInfo<T>::type_params() -> alloc::vec::Vec<sui_sdk_types::type_tag::TypeTag>
 impl<T: af_move_type::MoveType> af_move_type::MoveStruct for af_iperps::registry::MarketInfo<T>
@@ -5550,7 +5595,9 @@ pub type af_iperps::Account = af_iperps::account::Account<af_move_type::otw::Otw
 pub type af_iperps::AccountCap = af_iperps::account::AccountCap<af_move_type::otw::Otw>
 pub type af_iperps::AccountCapTypeTag = af_iperps::account::AccountCapTypeTag<af_move_type::otw::Otw>
 pub type af_iperps::AccountTypeTag = af_iperps::account::AccountTypeTag<af_move_type::otw::Otw>
+pub type af_iperps::AdminCapability = af_iperps::authority::Capability<af_iperps::authority::ADMIN>
 pub type af_iperps::AsksMapDofWrapper = sui_framework_sdk::dynamic_field::Field<sui_framework_sdk::dynamic_object_field::Wrapper<af_iperps::keys::AsksMap>, sui_framework_sdk::object::ID>
+pub type af_iperps::AssistantCapability = af_iperps::authority::Capability<af_iperps::authority::ASSISTANT>
 pub type af_iperps::BidsMapDofWrapper = sui_framework_sdk::dynamic_field::Field<sui_framework_sdk::dynamic_object_field::Wrapper<af_iperps::keys::BidsMap>, sui_framework_sdk::object::ID>
 pub type af_iperps::ClearingHouse = af_iperps::clearing_house::ClearingHouse<af_move_type::otw::Otw>
 pub type af_iperps::ClearingHouseTypeTag = af_iperps::clearing_house::ClearingHouseTypeTag<af_move_type::otw::Otw>
