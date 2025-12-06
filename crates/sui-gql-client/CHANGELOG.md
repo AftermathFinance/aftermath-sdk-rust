@@ -38,6 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.23.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-gql-client-v0.23.0...sui-gql-client-v0.23.1)
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated the following local packages: graphql-extract - ([0000000](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0000000))
+
+
 ## [0.23.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-gql-client-v0.22.0...sui-gql-client-v0.23.0)
 
 ### ⛰️ Features
