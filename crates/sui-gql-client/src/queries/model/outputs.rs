@@ -29,7 +29,6 @@ pub struct RawMoveValue {
     pub bcs: Vec<u8>,
 }
 
-#[cfg(feature = "move-type")]
 impl<T: af_move_type::MoveType> TryFrom<RawMoveValue> for af_move_type::MoveInstance<T> {
     type Error = af_move_type::FromRawTypeError;
     fn try_from(RawMoveValue { type_, bcs }: RawMoveValue) -> Result<Self, Self::Error> {
@@ -37,7 +36,6 @@ impl<T: af_move_type::MoveType> TryFrom<RawMoveValue> for af_move_type::MoveInst
     }
 }
 
-#[cfg(feature = "move-type")]
 impl<T: af_move_type::MoveType> TryFrom<af_move_type::MoveInstance<T>> for RawMoveValue {
     type Error = bcs::Error;
     fn try_from(value: af_move_type::MoveInstance<T>) -> Result<Self, Self::Error> {
@@ -56,7 +54,6 @@ pub struct RawMoveStruct {
     pub bcs: Vec<u8>,
 }
 
-#[cfg(feature = "move-type")]
 impl<T: af_move_type::MoveStruct> TryFrom<RawMoveStruct> for af_move_type::MoveInstance<T> {
     type Error = af_move_type::FromRawStructError;
     fn try_from(RawMoveStruct { type_, bcs }: RawMoveStruct) -> Result<Self, Self::Error> {
@@ -64,7 +61,6 @@ impl<T: af_move_type::MoveStruct> TryFrom<RawMoveStruct> for af_move_type::MoveI
     }
 }
 
-#[cfg(feature = "move-type")]
 impl<T: af_move_type::MoveStruct> TryFrom<af_move_type::MoveInstance<T>> for RawMoveStruct {
     type Error = bcs::Error;
     fn try_from(value: af_move_type::MoveInstance<T>) -> Result<Self, Self::Error> {

@@ -55,7 +55,6 @@ pub struct DynamicFieldName {
     pub bcs: scalars::Base64<Vec<u8>>,
 }
 
-#[cfg(feature = "move-type")]
 impl<T: af_move_type::MoveType> TryFrom<af_move_type::MoveInstance<T>> for DynamicFieldName {
     type Error = bcs::Error;
 
@@ -202,7 +201,6 @@ impl TryFrom<MoveValueGql> for super::outputs::RawMoveStruct {
     }
 }
 
-#[cfg(feature = "move-type")]
 impl<T> TryFrom<MoveValueGql> for af_move_type::MoveInstance<T>
 where
     T: af_move_type::MoveType,
@@ -359,7 +357,6 @@ pub struct MovePackage {
 //  Errors
 // ====================================================================================================
 
-#[cfg(feature = "move-type")]
 #[derive(thiserror::Error, Debug)]
 pub enum ToMoveInstanceError {
     #[error("Mismatched types: {0}")]

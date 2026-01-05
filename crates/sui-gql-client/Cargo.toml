@@ -1,7 +1,7 @@
 [package]
 description = "Sui GraphQL RPC client by Aftermath using `cynic`"
 name        = "sui-gql-client"
-version     = "0.23.1"
+version     = "0.24.0"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -24,27 +24,6 @@ rustdoc-args = [
 [lints]
 workspace = true
 
-[features]
-move-type = ["dep:af-move-type", "dep:bcs", "dep:sui-framework-sdk", "queries"]
-mutations = ["dep:af-sui-types", "dep:sui-sdk-types", "scalars"]
-queries = [
-  "dep:af-move-type",
-  "dep:af-sui-types",
-  "dep:async-stream",
-  "dep:bcs",
-  "dep:bimap",
-  "dep:enum-as-inner",
-  "dep:futures",
-  "dep:futures-core",
-  "dep:graphql-extract",
-  "dep:itertools",
-  "dep:sui-framework-sdk",
-  "scalars",
-]
-raw = ["dep:serde_json"]
-reqwest = ["cynic/http-reqwest", "dep:reqwest", "raw"]
-scalars = ["sui-gql-schema/scalars"]
-
 
 [dependencies]
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
@@ -52,39 +31,33 @@ scalars = ["sui-gql-schema/scalars"]
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 # FIXME: this is in dire need of refactoring; see
 # https://github.com/AftermathFinance/aftermath-sdk-rust/issues/181
-af-move-type = { version = "0.16.0", public = true, optional = true, path = "../af-move-type" }
-af-sui-types = { version = "0.16.0", public = true, path = "../af-sui-types", features = [
-  "hash",
-], optional = true }
-bimap = { version = "0.6", public = true, optional = true }
-cynic = { version = "3", public = true }
-enum-as-inner = { version = "0.6", optional = true }
-futures-core = { version = "0.3", public = true, optional = true }
-reqwest = { version = "0.12", public = true, default-features = false, optional = true }
+af-move-type = { version = "0.16.0", public = true, path = "../af-move-type" }
+af-sui-types = { version = "0.16.0", public = true, path = "../af-sui-types", features = ["hash"] }
+bimap = { version = "0.6", public = true }
+cynic = { version = "3", public = true, features = ["http-reqwest"] }
+enum-as-inner = { version = "0.6" }
+futures-core = { version = "0.3", public = true }
+reqwest = { version = "0.12", public = true, default-features = false }
 serde = { version = "1", public = true }
-serde_json = { version = "1", public = true, optional = true }
-sui-framework-sdk = { version = "0.15", path = "../sui-framework-sdk", optional = true }
-sui-gql-schema = { version = "0.15.0", public = true, default-features = false, path = "../sui-gql-schema" }
-sui-sdk-types = { version = "0.1", public = true, features = ["hash"], optional = true }
+serde_json = { version = "1", public = true }
+sui-framework-sdk = { version = "0.15", path = "../sui-framework-sdk" }
+sui-gql-schema = { version = "0.15.0", public = true, default-features = false, path = "../sui-gql-schema", features = [
+  "scalars",
+] }
+sui-sdk-types = { version = "0.1", public = true, features = ["hash"] }
 
-graphql-extract = { version = "0.0.11", path = "../graphql-extract", optional = true }
+graphql-extract = { version = "0.0.11", path = "../graphql-extract" }
 
+async-stream     = { version = "0.3" }
+bcs              = { version = "0.1" }
 clap             = { version = "4", features = ["derive"] }
 derive_more      = { version = "2", features = ["display"] }
 extension-traits = "2"
+futures          = { version = "0.3" }
+itertools        = { version = "0.14" }
 tap              = "1"
 thiserror        = "2"
 trait-variant    = "0.1"
-
-# For stream queries
-async-stream = { version = "0.3", optional = true }
-futures      = { version = "0.3", optional = true }
-
-# For pre-made queries (optional)
-itertools = { version = "0.14", optional = true }
-
-# MoveType compat (optional)
-bcs = { version = "0.1", optional = true }
 
 
 [build-dependencies.sui-gql-schema]

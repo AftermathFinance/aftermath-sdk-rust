@@ -55,15 +55,10 @@ use cynic::serde::Serialize;
 use cynic::serde::de::DeserializeOwned;
 use cynic::{GraphQlError, GraphQlResponse, Operation, QueryFragment, QueryVariables};
 use extension_traits::extension;
-#[cfg(feature = "scalars")]
-pub use sui_gql_schema::scalars;
-pub use sui_gql_schema::schema;
+pub use sui_gql_schema::{scalars, schema};
 
-#[cfg(feature = "queries")]
 pub mod queries;
-#[cfg(feature = "raw")]
 mod raw_client;
-#[cfg(feature = "reqwest")]
 pub mod reqwest;
 
 #[deprecated(since = "0.14.8", note = "use the graphql-extract crate")]
@@ -71,7 +66,6 @@ pub mod extract;
 mod paged;
 
 pub use self::paged::{Paged, PagedResponse, PagesDataResult};
-#[cfg(feature = "raw")]
 pub use self::raw_client::{Error as RawClientError, RawClient};
 
 /// A generic GraphQL client. Agnostic to the backend used.
