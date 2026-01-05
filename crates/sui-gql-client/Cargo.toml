@@ -41,7 +41,7 @@ reqwest = { version = "0.12", public = true, default-features = false }
 serde = { version = "1", public = true }
 serde_json = { version = "1", public = true }
 sui-framework-sdk = { version = "0.15", path = "../sui-framework-sdk" }
-sui-gql-schema = { version = "0.15.0", public = true, default-features = false, path = "../sui-gql-schema", features = [
+sui-gql-schema = { version = "0.16.0", public = true, default-features = false, path = "../sui-gql-schema", features = [
   "scalars",
 ] }
 sui-sdk-types = { version = "0.1", public = true, features = ["hash"] }
@@ -64,7 +64,7 @@ trait-variant    = "0.1"
 default-features = false
 features         = ["build"]
 path             = "../sui-gql-schema"
-version          = "0.15.0"
+version = "0.16.0"
 
 
 [dev-dependencies]
