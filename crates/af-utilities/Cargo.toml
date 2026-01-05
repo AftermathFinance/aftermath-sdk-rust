@@ -30,7 +30,7 @@ workspace = true
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 af-sui-types  = { version = "0.16.0", public = true, features = ["u256"], path = "../af-sui-types" }
 num-traits    = { version = "0.2", public = true }
-sui-sdk-types = { version = "0.1", public = true }
+sui-sdk-types = { version = "0.2", public = true }
 
 serde     = "1"
 thiserror = "2"

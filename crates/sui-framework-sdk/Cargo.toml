@@ -32,7 +32,7 @@ af-move-type    = { version = "0.16.0", public = true, path = "../af-move-type" 
 af-sui-pkg-sdk  = { version = "0.13.0", public = true, path = "../af-sui-pkg-sdk" }
 af-sui-types    = { version = "0.16.0", public = true, path = "../af-sui-types" }
 move-stdlib-sdk = { version = "0.14.0", public = true, path = "../move-stdlib-sdk" }
-sui-sdk-types   = { version = "0.1", public = true }
+sui-sdk-types   = { version = "0.2", public = true }
 
 derive_more = { version = "2", features = ["from"] }
 

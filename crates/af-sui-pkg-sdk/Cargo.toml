@@ -34,7 +34,7 @@ af-sui-types = { version = "0.16.0", public = true, features = ["u256"], path = 
 tabled       = { version = "0.16", public = true }
 # Because of `tabled`
 papergrid     = { version = "0.17", public = true }
-sui-sdk-types = { version = "0.1", public = true }
+sui-sdk-types = { version = "0.2", public = true }
 
 derive-new = "0.7.0"
 serde      = "1"

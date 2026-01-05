@@ -44,7 +44,7 @@ sui-framework-sdk = { version = "0.15", path = "../sui-framework-sdk" }
 sui-gql-schema = { version = "0.16.0", public = true, default-features = false, path = "../sui-gql-schema", features = [
   "scalars",
 ] }
-sui-sdk-types = { version = "0.1", public = true, features = ["hash"] }
+sui-sdk-types = { version = "0.2", public = true, features = ["hash"] }
 
 graphql-extract = { version = "0.0.11", path = "../graphql-extract" }
 
