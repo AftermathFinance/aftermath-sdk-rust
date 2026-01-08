@@ -1,7 +1,7 @@
 [package]
 description = "Move types for Aftermath's `AfOracle` package"
 name        = "af-oracle"
-version     = "0.25.0"
+version     = "0.26.0"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -43,14 +43,14 @@ graphql = [
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-move-type      = { version = "0.16", public = true, path = "../af-move-type" }
-af-sui-pkg-sdk    = { version = "0.13", public = true, path = "../af-sui-pkg-sdk" }
-sui-framework-sdk = { version = "0.15", public = true, path = "../sui-framework-sdk" }
-sui-gql-client    = { version = "0.24", public = true, optional = true, default-features = false, path = "../sui-gql-client" }
+af-move-type      = { version = "0.17", public = true, path = "../af-move-type" }
+af-sui-pkg-sdk    = { version = "0.14", public = true, path = "../af-sui-pkg-sdk" }
+sui-framework-sdk = { version = "0.16", public = true, path = "../sui-framework-sdk" }
+sui-gql-client    = { version = "0.25", public = true, optional = true, default-features = false, path = "../sui-gql-client" }
 sui-sdk-types     = { version = "0.2", public = true }
 
-af-sui-types = { version = "0.16.0", path = "../af-sui-types" }
-af-utilities = { version = "0.13.0", path = "../af-utilities" }
+af-sui-types = { version = "0.17.0", path = "../af-sui-types" }
+af-utilities = { version = "0.14.0", path = "../af-utilities" }
 
 derive_more = { version = "2", features = ["display", "from", "is_variant", "try_into"] }
 remain      = "0.2"
@@ -74,7 +74,7 @@ default-features = false
 features         = ["build"]
 optional         = true
 path             = "../sui-gql-schema"
-version = "0.16"
+version = "0.17"
 
 
 [dev-dependencies]

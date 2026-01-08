@@ -1,7 +1,7 @@
 [package]
 description = "SDK for Pyth's Sui package; maintained by Aftermath"
 name        = "pyth-sui-sdk"
-version     = "0.24.0"
+version     = "0.25.0"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -33,20 +33,20 @@ pyth-sdk = ["dep:af-utilities", "dep:pyth-sdk"]
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-ptbuilder   = { version = "11.0.0", public = true, optional = true, path = "../af-ptbuilder" }
-af-sui-types   = { version = "0.16.0", public = true, path = "../af-sui-types" }
-af-utilities   = { version = "0.13", public = true, optional = true, path = "../af-utilities" }
+af-ptbuilder   = { version = "12.0.0", public = true, optional = true, path = "../af-ptbuilder" }
+af-sui-types   = { version = "0.17.0", public = true, path = "../af-sui-types" }
+af-utilities   = { version = "0.14", public = true, optional = true, path = "../af-utilities" }
 bytes          = { version = "1", public = true, optional = true }
 hex            = { version = "0.4", public = true }
 jsonrpsee-core = { version = "0.26", public = true, optional = true }
 pyth-sdk       = { version = "0.8", public = true, optional = true }
-sui-jsonrpc    = { version = "0.23.0", public = true, default-features = false, optional = true, path = "../sui-jsonrpc" }
+sui-jsonrpc    = { version = "0.24.0", public = true, default-features = false, optional = true, path = "../sui-jsonrpc" }
 sui-sdk-types  = { version = "0.2", public = true }
 
-af-move-type      = { version = "0.16", path = "../af-move-type" }
-af-sui-pkg-sdk    = { version = "0.13", path = "../af-sui-pkg-sdk" }
-sui-framework-sdk = { version = "0.15", path = "../sui-framework-sdk" }
-wormhole-sui-sdk  = { version = "0.15", path = "../wormhole-sui-sdk" }
+af-move-type      = { version = "0.17", path = "../af-move-type" }
+af-sui-pkg-sdk    = { version = "0.14", path = "../af-sui-pkg-sdk" }
+sui-framework-sdk = { version = "0.16", path = "../sui-framework-sdk" }
+wormhole-sui-sdk  = { version = "0.16", path = "../wormhole-sui-sdk" }
 
 serde     = "1"
 thiserror = "2"

@@ -2,7 +2,7 @@
 autotests   = false
 description = "Macro for generating `MoveStruct`s from Move source code"
 name        = "af-sui-pkg-sdk"
-version     = "0.13.0"
+version     = "0.14.0"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -29,8 +29,8 @@ workspace = true
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-move-type = { version = "0.16.0", public = true, path = "../af-move-type" }
-af-sui-types = { version = "0.16.0", public = true, features = ["u256"], path = "../af-sui-types" }
+af-move-type = { version = "0.17.0", public = true, path = "../af-move-type" }
+af-sui-types = { version = "0.17.0", public = true, features = ["u256"], path = "../af-sui-types" }
 tabled       = { version = "0.16", public = true }
 # Because of `tabled`
 papergrid     = { version = "0.17", public = true }

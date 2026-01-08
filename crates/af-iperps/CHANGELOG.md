@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.43.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.42.0...af-iperps-v0.43.0)
+
+### ⛰️ Features
+
+- [**breaking**] Update Sui SDK to 0.2 - ([9d7d5d8](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/9d7d5d8dba5770bfbd9de9276c395b0c46a4a1c9))
+
+
 ## [0.41.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.40.0...af-iperps-v0.41.0)
 
 ### ⛰️ Features
