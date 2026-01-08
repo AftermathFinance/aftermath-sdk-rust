@@ -19,10 +19,10 @@ pub use sui_sdk_types::Identifier;
 pub use sui_sdk_types::Input;
 #[doc(no_inline)]
 pub use sui_sdk_types::MoveCall;
-use sui_sdk_types::ProgrammableTransaction;
 #[doc(no_inline)]
 pub use sui_sdk_types::TypeTag;
 use sui_sdk_types::bcs::ToBcs;
+use sui_sdk_types::{Mutability, ProgrammableTransaction, SharedInput};
 
 #[cfg(test)]
 mod tests;
@@ -43,7 +43,7 @@ pub enum Error {
     #[error(transparent)]
     MismatchedObjArgKinds(Box<MismatchedObjArgKindsError>),
 
-    #[error("tried to use a pure argument as an object argument")]
+    #[error("tried to use a pure or funds withdrawal argument as an object argument")]
     NotAnObjectArg,
 }
 
@@ -101,7 +101,7 @@ impl ProgrammableTransactionBuilder {
         } else {
             BuilderArg::Pure(bytes.clone())
         };
-        let (i, _) = self.inputs.insert_full(key, Input::Pure { value: bytes });
+        let (i, _) = self.inputs.insert_full(key, Input::Pure(bytes));
         Argument::Input(i as u16)
     }
 
@@ -114,8 +114,9 @@ impl ProgrammableTransactionBuilder {
         let id = match &obj_arg {
             Input::Pure { .. } => return Err(Error::NotAnObjectArg),
             Input::ImmutableOrOwned(object_reference) => *object_reference.object_id(),
-            Input::Shared { object_id, .. } => *object_id,
+            Input::Shared(shared) => shared.object_id(),
             Input::Receiving(object_reference) => *object_reference.object_id(),
+            Input::FundsWithdrawal(_) => return Err(Error::NotAnObjectArg),
             _ => panic!("unknown Input variant"),
         };
         let key = BuilderArg::Object(id);
@@ -129,26 +130,19 @@ impl ProgrammableTransactionBuilder {
 
             input_arg = match (old_value, input_arg) {
                 // The only update allowed: changing the `mutable` flag for a shared object input
-                (
-                    Input::Shared {
-                        object_id: id1,
-                        initial_shared_version: v1,
-                        mutable: mut1,
-                    },
-                    Input::Shared {
-                        object_id: id2,
-                        initial_shared_version: v2,
-                        mutable: mut2,
-                    },
-                ) if v1 == &v2 => {
-                    if id1 != &id2 {
+                (Input::Shared(shared1), Input::Shared(shared2))
+                    if shared1.version() == shared2.version() =>
+                {
+                    if shared1.object_id() != shared2.object_id() {
                         return Err(Error::InvalidObjArgUpdate);
                     }
-                    Input::Shared {
-                        object_id: id2,
-                        initial_shared_version: v2,
-                        mutable: *mut1 || mut2,
-                    }
+                    let mutable =
+                        shared1.mutability().is_mutable() || shared2.mutability().is_mutable();
+                    Input::Shared(SharedInput::new(
+                        shared2.object_id(),
+                        shared2.version(),
+                        Mutability::from(mutable),
+                    ))
                 }
 
                 // Changing anything else about an existing object input is disallowed
@@ -226,25 +220,23 @@ impl TryFrom<ProgrammableTransaction> for ProgrammableTransactionBuilder {
         let mut self_ = Self::new();
         for input in inputs {
             match input {
-                Pure { value } => {
+                Pure(value) => {
                     self_.pure_bytes(value, true);
                 }
                 ImmutableOrOwned(object_reference) => {
                     self_.obj(Input::ImmutableOrOwned(object_reference))?;
                 }
-                Shared {
-                    object_id,
-                    initial_shared_version,
-                    mutable,
-                } => {
-                    self_.obj(Input::Shared {
-                        object_id,
-                        initial_shared_version,
-                        mutable,
-                    })?;
+                Shared(shared) => {
+                    self_.obj(Input::Shared(shared.clone()))?;
                 }
                 Receiving(object_reference) => {
                     self_.obj(Input::Receiving(object_reference))?;
+                }
+                FundsWithdrawal(funds_withdrawal) => {
+                    let key = BuilderArg::ForcedNonUniquePure(self_.inputs.len());
+                    self_
+                        .inputs
+                        .insert_full(key, Input::FundsWithdrawal(funds_withdrawal));
                 }
                 _ => panic!("unknown Input variant"),
             }
@@ -436,17 +428,17 @@ impl Command {
 /// [`ProgrammableTransaction`]s need all their inputs declared upfront. One can
 /// declare the two types of inputs using the syntax
 /// ```no_run
-/// # use sui_sdk_types::{Address, Input};
-/// let clock = Input::Shared {
-///     object_id: Address::from_static("0x6"),
-///     initial_shared_version: 1,
-///     mutable: false
-/// };
-/// let object = Input::Shared {
-///     object_id: Address::new(rand::random()),
-///     initial_shared_version: 1,
-///     mutable: true
-/// };
+/// # use sui_sdk_types::{Address, Input, Mutability, SharedInput};
+/// let clock = Input::Shared(SharedInput::new(
+///     Address::from_static("0x6"),
+///     1,
+///     Mutability::from(false),
+/// ));
+/// let object = Input::Shared(SharedInput::new(
+///     Address::new(rand::random()),
+///     1,
+///     Mutability::from(true),
+/// ));
 /// let count = &0_u64;
 /// af_ptbuilder::ptb!(
 ///     input obj clock;
@@ -482,12 +474,12 @@ impl Command {
 ///
 /// Functions that return can have their results assigned to a value or unpacked into several ones:
 /// ```no_run
-/// # use sui_sdk_types::{Address, Input};
-/// # let clock = Input::Shared {
-/// #     object_id: Address::from_static("0x6"),
-/// #     initial_shared_version: 1,
-/// #     mutable: false
-/// # };
+/// # use sui_sdk_types::{Address, Input, SharedInput, Mutability};
+/// # let clock = Input::Shared(SharedInput::new(
+/// #     Address::from_static("0x6"),
+/// #     1,
+/// #     Mutability::from(false),
+/// # ));
 /// # let clock2 = clock.clone();
 /// # let clock3 = clock.clone();
 /// # af_ptbuilder::ptb!(
@@ -518,15 +510,15 @@ impl Command {
 ///
 /// ```no_run
 /// use af_ptbuilder::ptb;
-/// use sui_sdk_types::{Address, Input, TypeTag};
+/// use sui_sdk_types::{Address, Input, Mutability, SharedInput, TypeTag};
 ///
 /// let foo = Address::from_static("0xbeef");
 /// let otw: TypeTag = "0x2::sui::SUI".parse()?;
-/// let registry = Input::Shared {
-///     object_id: Address::from_static("0xdeed"),
-///     initial_shared_version: 1,
-///     mutable: true,
-/// };
+/// let registry = Input::Shared(SharedInput::new(
+///     Address::from_static("0xdeed"),
+///     1,
+///     Mutability::from(true),
+/// ));
 /// let sender = Address::from_static("0xabcd");
 ///
 /// ptb!(

@@ -387,7 +387,6 @@ impl TransactionEffectsAPI for TransactionEffectsV2 {
                         UnchangedConsensusKind::Canceled { version } => {
                             Some(InputSharedObject::Canceled(u.object_id, version))
                         }
-                        UnchangedConsensusKind::PerEpochConfigWithSequenceNumber { .. } => None,
                         // We can not expose the per epoch config object as input shared object,
                         // since it does not require sequencing, and hence shall not be considered
                         // as a normal input shared object.

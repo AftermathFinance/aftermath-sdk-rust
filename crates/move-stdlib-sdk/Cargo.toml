@@ -29,6 +29,6 @@ workspace = true
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 af-sui-pkg-sdk = { version = "0.13.0", public = true, path = "../af-sui-pkg-sdk" }
-sui-sdk-types  = { version = "0.1", public = true }
+sui-sdk-types  = { version = "0.2", public = true }
 
 thiserror = "2"

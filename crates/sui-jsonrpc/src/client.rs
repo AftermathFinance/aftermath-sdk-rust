@@ -623,7 +623,7 @@ impl SuiClient {
                 .iter()
                 .filter_map(|i| match i {
                     Pure { .. } => None,
-                    Shared { object_id, .. } => Some(*object_id),
+                    Shared(shared) => Some(shared.object_id()),
                     ImmutableOrOwned(oref) | Receiving(oref) => Some(*oref.object_id()),
                     _ => panic!("unknown Input type"),
                 })

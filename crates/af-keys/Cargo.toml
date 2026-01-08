@@ -30,8 +30,8 @@ workspace = true
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 anyhow        = { version = "1", public = true }
 serde         = { version = "1", public = true, features = ["derive"] }
-sui-sdk-types = { version = "0.1", public = true, features = ["hash", "serde"] }
-sui-crypto    = { version = "0.1", public = true, features = [
+sui-sdk-types = { version = "0.2", public = true, features = ["hash", "serde"] }
+sui-crypto    = { version = "0.2", public = true, features = [
   "ed25519",
   "passkey",
   "secp256k1",

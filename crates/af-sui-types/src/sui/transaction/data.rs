@@ -5,7 +5,7 @@
 //! A lot of the types here are for compatibility with older APIs.
 
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::{Input, ObjectReference, Version};
+use sui_sdk_types::{Input, Mutability, ObjectReference, SharedInput, Version};
 
 use crate::{Address, ObjectRef};
 
@@ -45,11 +45,12 @@ impl From<ObjectArg> for Input {
                 id,
                 initial_shared_version,
                 mutable,
-            } => Self::Shared {
-                object_id: id,
+            } => Self::Shared(SharedInput::new(
+                id,
                 initial_shared_version,
-                mutable,
-            },
+                Mutability::from(mutable),
+            )),
+
             ObjectArg::Receiving((i, v, d)) => Self::Receiving(ObjectReference::new(i, v, d)),
         }
     }

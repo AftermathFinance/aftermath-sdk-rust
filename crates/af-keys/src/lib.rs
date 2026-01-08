@@ -6,6 +6,7 @@ pub mod keystore;
 pub mod multisig;
 pub mod public_key;
 pub mod utils;
+pub mod verifier;
 
 pub use self::keystore::{Alias, Keystore};
 pub use self::public_key::PublicKey;

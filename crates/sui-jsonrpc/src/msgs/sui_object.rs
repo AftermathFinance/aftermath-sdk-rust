@@ -17,8 +17,10 @@ use sui_sdk_types::{
     Digest,
     Identifier,
     Input,
+    Mutability,
     Object,
     ObjectReference,
+    SharedInput,
     StructTag,
     TypeOrigin,
     TypeTag,
@@ -322,11 +324,11 @@ impl SuiObjectData {
         else {
             return Err(SuiObjectDataError::NotShared);
         };
-        Ok(Input::Shared {
-            object_id: self.object_id,
+        Ok(Input::Shared(SharedInput::new(
+            self.object_id,
             initial_shared_version,
-            mutable,
-        })
+            Mutability::from(mutable),
+        )))
     }
 
     pub fn imm_or_owned_object_arg(&self) -> Result<Input, SuiObjectDataError> {
@@ -354,11 +356,11 @@ impl SuiObjectData {
             | O::ConsensusAddressOwner {
                 start_version: initial_shared_version,
                 ..
-            } => Input::Shared {
-                object_id: self.object_id,
+            } => Input::Shared(SharedInput::new(
+                self.object_id,
                 initial_shared_version,
-                mutable,
-            },
+                Mutability::from(mutable),
+            )),
         })
     }
 
