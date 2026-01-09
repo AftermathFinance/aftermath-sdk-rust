@@ -64,7 +64,7 @@ trait-variant    = "0.1"
 default-features = false
 features         = ["build"]
 path             = "../sui-gql-schema"
-version = "0.17.0"
+version          = "0.17.0"
 
 
 [dev-dependencies]
@@ -84,76 +84,61 @@ sui-gql-schema = { path = "../sui-gql-schema", features = ["build", "scalars"] }
 
 
 [[example]]
-name              = "gql-object-type"
-path              = "examples/object_type.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-object-type"
+path = "examples/object_type.rs"
 
 [[example]]
-name              = "gql-object-dfs"
-path              = "examples/object_dfs.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-object-dfs"
+path = "examples/object_dfs.rs"
 
 [[example]]
-name              = "gql-object-df-by-name"
-path              = "examples/object_df_by_name.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-object-df-by-name"
+path = "examples/object_df_by_name.rs"
 
 [[example]]
-name              = "gql-object-dof-by-name"
-path              = "examples/object_dof_by_name.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-object-dof-by-name"
+path = "examples/object_dof_by_name.rs"
 
 [[example]]
-name              = "gql-current-epoch"
-path              = "examples/current_epoch.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-current-epoch"
+path = "examples/current_epoch.rs"
 
 [[example]]
-name              = "gql-events-backward"
-path              = "examples/events_backward.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-events-backward"
+path = "examples/events_backward.rs"
 
 [[example]]
-name              = "gql-cached"
-path              = "examples/cached_client.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-cached"
+path = "examples/cached_client.rs"
 
 [[example]]
-name              = "gql-transaction-status"
-path              = "examples/transaction_blocks_status.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-transaction-status"
+path = "examples/transaction_blocks_status.rs"
 
 [[example]]
-name              = "gql-latest-checkpoint"
-path              = "examples/latest_checkpoint.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-latest-checkpoint"
+path = "examples/latest_checkpoint.rs"
 
 [[example]]
-name              = "gql-full-objects"
-path              = "examples/full_objects.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-full-objects"
+path = "examples/full_objects.rs"
 
 [[example]]
-name              = "gql-latest-full-objects"
-path              = "examples/latest_full_objects.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-latest-full-objects"
+path = "examples/latest_full_objects.rs"
 
 [[example]]
-name              = "gql-owner-gas-coins"
-path              = "examples/owner_gas_coins.rs"
-required-features = ["move-type", "queries", "reqwest"]
+name = "gql-owner-gas-coins"
+path = "examples/owner_gas_coins.rs"
 
 [[example]]
-name              = "gql-packages"
-path              = "examples/packages.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-packages"
+path = "examples/packages.rs"
 
 [[example]]
-name              = "gql-transactions-by-digests"
-path              = "examples/transactions_by_digests.rs"
-required-features = ["hash", "queries", "reqwest"]
+name = "gql-transactions-by-digests"
+path = "examples/transactions_by_digests.rs"
 
 [[example]]
-name              = "gql-coin-metadata"
-path              = "examples/coin_metadata.rs"
-required-features = ["queries", "reqwest"]
+name = "gql-coin-metadata"
+path = "examples/coin_metadata.rs"
