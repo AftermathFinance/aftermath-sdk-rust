@@ -42,7 +42,7 @@ eventsource-stream = { version = "0.2", public = true, optional = true }
 futures-core       = { version = "0.3", public = true, optional = true }
 hex                = { version = "0.4", public = true }
 pyth-sdk           = { version = "0.8", public = true }
-reqwest            = { version = "0.12", public = true, default-features = false, features = ["json"] }
+reqwest            = { version = "0.13", public = true, default-features = false, features = ["json"] }
 serde_json         = { version = "1", public = true, optional = true }
 url                = { version = "2", public = true }
 
