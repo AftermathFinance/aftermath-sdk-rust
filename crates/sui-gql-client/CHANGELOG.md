@@ -38,6 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.25.1]
+
+### ⚙️ Miscellaneous Tasks
+
+- *(sui-gql-client)* Fix examples - ([ea18897](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/ea18897e866fb647f4a5b678ff17fab8a20408aa))
+
+
 ## [0.25.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-gql-client-v0.25.0...sui-gql-client-v0.25.1)
 
 ### ⚙️ Miscellaneous Tasks
