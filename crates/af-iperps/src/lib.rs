@@ -548,6 +548,7 @@ sui_pkg_sdk!(perpetuals {
             ch_id: ID,
             bad_debt_account_id: u64,
             size_reduced: u64,
+            collateral_transferred: IFixed,
             adl_price: u64,
             counterparty_account_id: u64,
             bad_debt_is_long: bool,

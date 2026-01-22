@@ -2208,13 +2208,14 @@ pub af_iperps::events::PerformedADL::adl_price: u64
 pub af_iperps::events::PerformedADL::bad_debt_account_id: u64
 pub af_iperps::events::PerformedADL::bad_debt_is_long: bool
 pub af_iperps::events::PerformedADL::ch_id: sui_framework_sdk::object::ID
+pub af_iperps::events::PerformedADL::collateral_transferred: af_utilities::types::ifixed::IFixed
 pub af_iperps::events::PerformedADL::counterparty_account_id: u64
 pub af_iperps::events::PerformedADL::size_reduced: u64
 impl af_iperps::events::PerformedADL
 pub fn af_iperps::events::PerformedADL::move_instance(self, address: sui_sdk_types::address::Address) -> af_move_type::MoveInstance<Self>
 pub fn af_iperps::events::PerformedADL::type_(address: sui_sdk_types::address::Address) -> af_iperps::events::PerformedADLTypeTag
 impl af_iperps::events::PerformedADL
-pub fn af_iperps::events::PerformedADL::new(ch_id: sui_framework_sdk::object::ID, bad_debt_account_id: u64, size_reduced: u64, adl_price: u64, counterparty_account_id: u64, bad_debt_is_long: bool) -> Self
+pub fn af_iperps::events::PerformedADL::new(ch_id: sui_framework_sdk::object::ID, bad_debt_account_id: u64, size_reduced: u64, collateral_transferred: af_utilities::types::ifixed::IFixed, adl_price: u64, counterparty_account_id: u64, bad_debt_is_long: bool) -> Self
 impl af_move_type::MoveStruct for af_iperps::events::PerformedADL
 pub type af_iperps::events::PerformedADL::StructTag = af_iperps::events::PerformedADLTypeTag
 impl af_move_type::MoveType for af_iperps::events::PerformedADL
