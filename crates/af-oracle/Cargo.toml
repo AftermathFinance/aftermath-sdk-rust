@@ -82,7 +82,7 @@ clap             = { version = "4", features = ["derive"] }
 color-eyre       = "0.6"
 indicatif        = "0.17"
 insta            = "1"
-reqwest          = "0.12"
+reqwest          = "0.13"
 rustdoc-json     = "0.9.5"
 rustup-toolchain = "0.1.10"
 sui-gql-client   = { path = "../sui-gql-client" }
