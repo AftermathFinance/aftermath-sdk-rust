@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.44.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.43.0...af-iperps-v0.44.0)
+
+### 🐛 Bug Fixes
+
+- *(af-iperps)* [**breaking**] Add missing field in PerformedADL event - ([821866f](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/821866f87b5b5685cb8311c7ff7dcafec0d0599e))
+
+
 ## [0.43.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.42.0...af-iperps-v0.43.0)
 
 ### ⛰️ Features
