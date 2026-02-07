@@ -26,19 +26,13 @@ pub mod stop_order_helpers;
 pub use self::market::{MarketParams, MarketState};
 pub use self::orderbook::Order;
 pub use self::position::Position;
-use crate::authority::{ADMIN, ASSISTANT};
-
-/// Package IDs of the perpetuals contract versions published on testnet, in order of its versions.
-pub const TESTNET_PACKAGE_VERSIONS: &[Address] = &[Address::from_static(
-    "0x1fc71972750d0d81567183a8500befef94d7699aac76edffcca253fe541367fd",
-)];
 
 // Convenient aliases since these types will never exist onchain with a type argument other than an
 // OTW.
-pub type AdminCapability = self::authority::Capability<ADMIN>;
-pub type AssistantCapability = self::authority::Capability<ASSISTANT>;
-pub type AccountCap = self::account::AccountCap<Otw>;
-pub type AccountCapTypeTag = self::account::AccountCapTypeTag<Otw>;
+pub type AdminCapability = self::authority::Capability<self::authority::ADMIN>;
+pub type AssistantCapability = self::authority::Capability<self::authority::ASSISTANT>;
+pub type AdminAccountCap = self::account::AccountCap<self::account::ADMIN>;
+pub type AssistantAccountCap = self::account::AccountCap<self::account::ASSISTANT>;
 pub type Account = self::account::Account<Otw>;
 pub type AccountTypeTag = self::account::AccountTypeTag<Otw>;
 pub type StopOrderTicket = self::stop_orders::StopOrderTicket<Otw>;
@@ -71,8 +65,14 @@ pub type CollateralInfoDf = Field<keys::RegistryCollateralInfo<Otw>, CollateralI
 
 sui_pkg_sdk!(perpetuals {
     module account {
+        /// Admin Role
+        struct ADMIN();
+
+        /// Assistant Role
+        struct ASSISTANT();
+
         /// The AccountCap is used to check ownership of `Account` with the same `account_id`.
-        struct AccountCap<!phantom T> has key, store {
+        struct AccountCap<!phantom Role> has key, store {
             id: UID,
             // Account object id
             account_obj_id: ID,
@@ -87,6 +87,10 @@ sui_pkg_sdk!(perpetuals {
             account_id: u64,
             /// Balance available to be allocated to markets.
             collateral: Balance<T>,
+            /// Tracks the `ID`s of all `AccountCap<ASSISTANT>`s that have the authority
+            /// to interact with thie `Account`. Appended to in `new_assistant_account_cap`
+            /// and reduced in `revoke_assistant_account_cap`.
+            active_assistants: vector<ID>,
         }
 
         struct IntegratorConfig has store {
@@ -768,6 +772,16 @@ sui_pkg_sdk!(perpetuals {
             open_interest: IFixed,
             fees_accrued: IFixed
         }
+
+        struct CreatedAssistantAccountCap has copy, drop {
+            account_id: u64,
+            assistant_cap_id: ID,
+        }
+
+        struct RevokedAssistantAccountCap has copy, drop {
+            account_id: u64,
+            assistant_cap_id: ID,
+        }
     }
 
     module keys {
@@ -1147,20 +1161,6 @@ impl<T: af_move_type::MoveType> clearing_house::ClearingHouse<T> {
             Wrapper::type_(keys::Orderbook::type_(package)),
             ID::type_(SUI_FRAMEWORK_ADDRESS, IdentStr::cast("object").to_owned()),
         )
-    }
-
-    /// The ID of the package that governs this clearing house's logic.
-    ///
-    /// This may be different than the package defining the clearing house's type because a package
-    /// upgrade + `interface::upgrade_clearing_house_version` call can change
-    /// [`ClearingHouse::version`] so that the upgraded package is the one that is allowed to make
-    /// changes to it.
-    ///
-    /// Attempting to make a PTB Move call that mutates this clearing house but is not defined in
-    /// this package version will fail.
-    pub const fn governing_package_testnet(&self) -> Address {
-        // NOTE: we published the most recent testnet contracts starting with `VERSION = 1`
-        TESTNET_PACKAGE_VERSIONS[self.version as usize - 1]
     }
 }
 

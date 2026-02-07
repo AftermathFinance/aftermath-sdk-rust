@@ -210,6 +210,12 @@ module perpetuals::errors {
     /// When trying to change a map configuration, but the map has
     /// length less than 4
     const MapTooSmall: u64 = 3007;
+
+    // Account ---------------------------------------------------------------
+
+    /// When trying to create another `AccountCap<ASSISTANT>` for an `Account` that already
+    /// has `constants::MAX_ASSISTANTS_PER_ACCOUNT` active assistants.
+    const TooManyAssistantsPerAccount: u64 = 4000;
 }
 }
 
