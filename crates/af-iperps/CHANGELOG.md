@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.45.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.44.0...af-iperps-v0.45.0)
+
+### ⛰️ Features
+
+- *(af-iperps)* [**breaking**] Add role for AccountCap - ([815fd58](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/815fd588f1871d39e1a01e614678eb5bdfdbb19c))
+
+
 ## [0.44.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.43.0...af-iperps-v0.44.0)
 
 ### 🐛 Bug Fixes
