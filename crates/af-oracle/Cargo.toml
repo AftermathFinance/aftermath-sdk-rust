@@ -64,7 +64,7 @@ trait-variant    = { version = "0.1", optional = true }
 # GraphQL RPC (optional)
 async-stream    = { version = "0.3", optional = true }
 cynic           = { version = "3", optional = true }
-enum-as-inner   = { version = "0.6", optional = true }
+enum-as-inner   = { version = "0.7", optional = true }
 futures         = { version = "0.3", optional = true }
 graphql-extract = { version = "0.0.11", path = "../graphql-extract", optional = true }
 
