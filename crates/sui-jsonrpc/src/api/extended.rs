@@ -4,11 +4,7 @@
 use jsonrpsee::proc_macros::rpc;
 
 use crate::msgs::{
-    CheckpointedObjectId,
-    EpochInfo,
-    EpochPage,
-    QueryObjectsPage,
-    SuiObjectResponseQuery,
+    CheckpointedObjectId, EpochInfo, EpochPage, QueryObjectsPage, SuiObjectResponseQuery,
 };
 use crate::serde::BigInt;
 

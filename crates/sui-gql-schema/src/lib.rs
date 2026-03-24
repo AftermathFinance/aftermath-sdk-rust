@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Sui's GraphQL schema to use with `cynic`. Synchronized at `testnet-v1.42.0.`
 //!
 //! Read more about schemas in <https://cynic-rs.dev/schemas> and why this crate is separate in

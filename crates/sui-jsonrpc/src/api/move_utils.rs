@@ -7,9 +7,7 @@ use jsonrpsee::proc_macros::rpc;
 use sui_sdk_types::Address;
 
 use crate::msgs::{
-    MoveFunctionArgType,
-    SuiMoveNormalizedFunction,
-    SuiMoveNormalizedModule,
+    MoveFunctionArgType, SuiMoveNormalizedFunction, SuiMoveNormalizedModule,
     SuiMoveNormalizedStruct,
 };
 

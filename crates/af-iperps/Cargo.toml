@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
     # Generate links to definition in rustdoc source code pages
     # https://github.com/rust-lang/rust/pull/84176
     "--generate-link-to-definition",
-    "-Zunstable-options",
 ]
 
 [lints]
@@ -44,10 +43,10 @@ stop-orders = ["dep:fastcrypto"]
 af-sui-pkg-sdk    = { version = "0.14.0", public = true, path = "../af-sui-pkg-sdk" }
 af-utilities      = { version = "0.14.0", public = true, path = "../af-utilities" }
 num_enum          = { version = "0.7", public = true }
-strum             = { version = "0.27", public = true, features = ["derive"] }
+strum             = { version = "0.28", public = true, features = ["derive"] }
 sui-framework-sdk = { version = "0.16.0", public = true, path = "../sui-framework-sdk" }
 sui-gql-client    = { version = "0.25", public = true, default-features = false, optional = true, path = "../sui-gql-client" }
-sui-sdk-types     = { version = "0.2", public = true }
+sui-sdk-types     = { version = "0.3", public = true }
 
 # TODO: remove this after using Rust's `Option` (see TODO in `lib.rs`)
 move-stdlib-sdk = { version = "0.15.0", public = true, path = "../move-stdlib-sdk" }
@@ -66,7 +65,7 @@ thiserror   = "2"
 # GraphQL RPC (optional)
 async-stream    = { version = "0.3", optional = true }
 cynic           = { version = "3", optional = true }
-enum-as-inner   = { version = "0.6", optional = true }
+enum-as-inner   = { version = "0.7", optional = true }
 futures         = { version = "0.3", optional = true }
 graphql-extract = { version = "0.0.11", path = "../graphql-extract", optional = true }
 
@@ -78,29 +77,26 @@ default-features = false
 features         = ["build"]
 optional         = true
 path             = "../sui-gql-schema"
-version = "0.17.0"
+version          = "0.17.0"
 
 
 [dev-dependencies]
-af-ptbuilder     = { path = "../af-ptbuilder" }
-af-sui-types     = { path = "../af-sui-types", features = ["hash"] }
-clap             = { version = "4", features = ["derive"] }
-color-eyre       = "0.6"
-indicatif        = "0.17"
-insta            = "1"
-nonempty         = "0.11"
-num_enum         = "0.7"
-proptest         = "1"
-public-api       = "0.50.1"
-reqwest          = "0.12"
-rgb              = "0.8"
-rustdoc-json     = "0.9.5"
-rustup-toolchain = "0.1.10"
-sui-gql-client   = { path = "../sui-gql-client" }
-test-strategy    = "0.4"
-textplots        = "0.8"
-tokio            = { version = "1", features = ["full"] }
-tokio-test       = "0.4"
+af-ptbuilder   = { path = "../af-ptbuilder" }
+af-sui-types   = { path = "../af-sui-types", features = ["hash"] }
+clap           = { version = "4", features = ["derive"] }
+color-eyre     = "0.6"
+indicatif      = "0.18"
+insta          = "1"
+nonempty       = "0.12"
+num_enum       = "0.7"
+proptest       = "1"
+reqwest        = "0.13"
+rgb            = "0.8"
+sui-gql-client = { path = "../sui-gql-client" }
+test-strategy  = "0.4"
+textplots      = "0.8"
+tokio          = { version = "1", features = ["full"] }
+tokio-test     = "0.4"
 
 
 [[example]]

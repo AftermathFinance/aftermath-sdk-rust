@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Move types for the core `sui` Sui package located at "0x2" onchain.
 
 pub use af_move_type;

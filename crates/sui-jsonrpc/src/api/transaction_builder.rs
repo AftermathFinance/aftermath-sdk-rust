@@ -6,10 +6,7 @@ use jsonrpsee::proc_macros::rpc;
 use sui_sdk_types::Address;
 
 use crate::msgs::{
-    RPCTransactionRequestParams,
-    SuiTransactionBlockBuilderMode,
-    SuiTypeTag,
-    TransactionBlockBytes,
+    RPCTransactionRequestParams, SuiTransactionBlockBuilderMode, SuiTypeTag, TransactionBlockBytes,
 };
 use crate::serde::BigInt;
 

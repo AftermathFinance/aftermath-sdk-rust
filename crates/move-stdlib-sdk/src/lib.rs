@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Move types for the core `std` Sui package located at "0x1" onchain.
 
 af_sui_pkg_sdk::sui_pkg_sdk!(std @ "0x1" {

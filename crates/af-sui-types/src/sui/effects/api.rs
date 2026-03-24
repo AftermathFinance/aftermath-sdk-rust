@@ -3,16 +3,8 @@
 
 //! Common interface for all transaction effect versions.
 use sui_sdk_types::{
-    Address,
-    Digest,
-    EpochId,
-    ExecutionStatus,
-    GasCostSummary,
-    IdOperation,
-    ObjectReference as ObjectRef,
-    Owner,
-    UnchangedConsensusKind,
-    Version,
+    Address, Digest, EpochId, ExecutionStatus, GasCostSummary, IdOperation,
+    ObjectReference as ObjectRef, Owner, UnchangedConsensusKind, Version,
 };
 
 /// Common interface for all transaction effect versions.

@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -35,16 +34,16 @@ af-move-type = { version = "0.17.0", public = true, path = "../af-move-type" }
 af-sui-types = { version = "0.17.0", public = true, path = "../af-sui-types", features = ["hash"] }
 bimap = { version = "0.6", public = true }
 cynic = { version = "3", public = true, features = ["http-reqwest"] }
-enum-as-inner = { version = "0.6" }
+enum-as-inner = { version = "0.7" }
 futures-core = { version = "0.3", public = true }
-reqwest = { version = "0.12", public = true, default-features = false }
+reqwest = { version = "0.13", public = true, default-features = false }
 serde = { version = "1", public = true }
 serde_json = { version = "1", public = true }
 sui-framework-sdk = { version = "0.16", path = "../sui-framework-sdk" }
 sui-gql-schema = { version = "0.17.0", public = true, default-features = false, path = "../sui-gql-schema", features = [
   "scalars",
 ] }
-sui-sdk-types = { version = "0.2", public = true, features = ["hash"] }
+sui-sdk-types = { version = "0.3", public = true, features = ["hash"] }
 
 graphql-extract = { version = "0.0.11", path = "../graphql-extract" }
 
@@ -71,10 +70,10 @@ version          = "0.17.0"
 bcs        = "0.1"
 clap       = { version = "4", features = ["derive"] }
 color-eyre = "0.6"
-indicatif  = "0.17"
+indicatif  = "0.18"
 insta      = "1"
-rand       = "0.9"
-reqwest    = { version = "0.12", default-features = false, features = ["rustls-tls"] }
+rand       = "0.10"
+reqwest    = { version = "0.13", default-features = false, features = ["rustls"] }
 serde_json = "1"
 tokio      = { version = "1", features = ["full"] }
 tokio-test = "0.4"

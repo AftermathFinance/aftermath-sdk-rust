@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Sdk for Switchboard's Sui package.
 
 use af_sui_pkg_sdk::sui_pkg_sdk;

@@ -10,15 +10,8 @@ use serde::{Deserialize, Serialize};
 use serde_with::base64::Base64;
 use serde_with::{DeserializeAs, DisplayFromStr, IfIsHumanReadable, SerializeAs, serde_as};
 use sui_sdk_types::{
-    Address,
-    ConsensusDeterminedVersionAssignments,
-    Digest,
-    EpochId,
-    GasCostSummary,
-    MoveLocation,
-    TypeTag,
-    UserSignature,
-    Version,
+    Address, ConsensusDeterminedVersionAssignments, Digest, EpochId, GasCostSummary, MoveLocation,
+    TypeTag, UserSignature, Version,
 };
 use tabled::builder::Builder as TableBuilder;
 use tabled::settings::style::HorizontalLine;
@@ -292,12 +285,12 @@ impl SuiTransactionBlockResponse {
     }
 
     pub fn try_check_execution_status(&self) -> Result<(), SuiTransactionBlockResponseError> {
-        if let Some(SuiTransactionBlockEffects::V1(effects)) = &self.effects {
-            if let SuiExecutionStatus::Failure { error } = &effects.status {
-                return Err(SuiTransactionBlockResponseError::ExecutionFailure(
-                    error.clone(),
-                ));
-            }
+        if let Some(SuiTransactionBlockEffects::V1(effects)) = &self.effects
+            && let SuiExecutionStatus::Failure { error } = &effects.status
+        {
+            return Err(SuiTransactionBlockResponseError::ExecutionFailure(
+                error.clone(),
+            ));
         }
         Ok(())
     }
@@ -414,10 +407,10 @@ impl Display for SuiTransactionBlockResponse {
 
             let mut table = builder.build();
             table.with(TablePanel::header("Object Changes"));
-            table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-                1,
-                TableStyle::modern().get_horizontal(),
-            )]));
+            table.with(
+                TableStyle::rounded()
+                    .horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+            );
             writeln!(writer, "{}", table)?;
         }
 
@@ -428,10 +421,10 @@ impl Display for SuiTransactionBlockResponse {
             }
             let mut table = builder.build();
             table.with(TablePanel::header("Balance Changes"));
-            table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-                1,
-                TableStyle::modern().get_horizontal(),
-            )]));
+            table.with(
+                TableStyle::rounded()
+                    .horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+            );
             writeln!(writer, "{}", table)?;
         }
         Ok(())
@@ -919,10 +912,9 @@ impl Display for SuiTransactionBlockEffects {
 
         let mut table = builder.build();
         table.with(TablePanel::header("Transaction Effects"));
-        table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-            1,
-            TableStyle::modern().get_horizontal(),
-        )]));
+        table.with(
+            TableStyle::rounded().horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+        );
         write!(f, "{}", table)
     }
 }
@@ -961,10 +953,10 @@ impl Display for SuiTransactionBlockEvents {
 
             let mut table = builder.build();
             table.with(TablePanel::header("Transaction Block Events"));
-            table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-                1,
-                TableStyle::modern().get_horizontal(),
-            )]));
+            table.with(
+                TableStyle::rounded()
+                    .horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+            );
             write!(f, "{}", table)
         }
     }
@@ -1222,10 +1214,9 @@ impl Display for SuiTransactionBlock {
 
         let mut table = builder.build();
         table.with(TablePanel::header("Transaction Data"));
-        table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-            1,
-            TableStyle::modern().get_horizontal(),
-        )]));
+        table.with(
+            TableStyle::rounded().horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+        );
         write!(f, "{}", table)
     }
 }

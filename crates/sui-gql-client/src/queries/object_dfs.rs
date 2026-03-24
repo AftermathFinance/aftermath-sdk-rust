@@ -5,11 +5,7 @@ use super::model::fragments;
 use super::model::outputs::{DynamicField as OutputDf, RawMoveValue};
 use super::{Error, stream};
 use crate::queries::model::fragments::{
-    DynamicField,
-    DynamicFieldConnection,
-    DynamicFieldValue,
-    MoveObject,
-    ObjectKey,
+    DynamicField, DynamicFieldConnection, DynamicFieldValue, MoveObject, ObjectKey,
 };
 use crate::{GraphQlClient, GraphQlResponseExt as _, missing_data, schema};
 

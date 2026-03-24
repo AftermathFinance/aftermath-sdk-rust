@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Move types for `AftermathFaucet` used in development
 
 use af_sui_pkg_sdk::sui_pkg_sdk;

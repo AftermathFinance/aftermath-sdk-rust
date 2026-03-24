@@ -12,14 +12,8 @@ use sui_crypto::secp256r1::Secp256r1PrivateKey;
 use sui_crypto::simple::SimpleKeypair;
 use sui_sdk_types::bcs::FromBcs;
 use sui_sdk_types::{
-    Address,
-    MultisigAggregatedSignature,
-    MultisigCommittee,
-    MultisigMemberPublicKey,
-    MultisigMemberSignature,
-    SignatureScheme,
-    SimpleSignature,
-    Transaction,
+    Address, MultisigAggregatedSignature, MultisigCommittee, MultisigMemberPublicKey,
+    MultisigMemberSignature, SignatureScheme, SimpleSignature, Transaction,
 };
 
 use crate::PublicKey;

@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Light-weight, read-only version of Sui's file-based keystore.
 
 pub mod keystore;

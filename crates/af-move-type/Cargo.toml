@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -38,6 +37,6 @@ derive-where  = "1"
 derive_more   = { version = "2", features = ["deref", "deref_mut", "from", "into"] }
 serde         = "1"
 serde_with    = "3"
-sui-sdk-types = { version = "0.2", public = true }
-tabled        = "0.16"
+sui-sdk-types = { version = "0.3", public = true }
+tabled        = "0.20"
 thiserror     = "2"

@@ -4,13 +4,8 @@
 use serde::{Deserialize, Serialize};
 use serde_with::serde_as;
 use sui_sdk_types::{
-    CheckpointCommitment,
-    CheckpointSequenceNumber,
-    CheckpointTimestamp,
-    Digest,
-    EndOfEpochData,
-    EpochId,
-    GasCostSummary,
+    CheckpointCommitment, CheckpointSequenceNumber, CheckpointTimestamp, Digest, EndOfEpochData,
+    EpochId, GasCostSummary,
 };
 
 use super::Page;

@@ -138,7 +138,7 @@ Over time, a lot of JSON-RPC methods used above will be available through GraphQ
 
 #### Programmable Transaction Blocks (PTBs)
 
-PTBs define what actually will be executed onchain. The recommended way to build programmable transactions is using the [`ptb!`] macro. 
+PTBs define what actually will be executed onchain. The recommended way to build programmable transactions is using the [`ptb!`] macro.
 
 ```rust
 use af_sui_types::ProgrammableTransaction;
@@ -207,9 +207,7 @@ Of course, displaying is just a toy example of what you can do with the converte
 
 To build the documentation locally, use
 ```
-RUSTDOCFLAGS="-D warnings -Zunstable-options --generate-link-to-definition" cargo +nightly doc \
-  -Zunstable-options \
-  -Zrustdoc-map \
+RUSTDOCFLAGS="-D warnings --generate-link-to-definition" cargo doc \
   --no-deps \
   --all-features
 ```

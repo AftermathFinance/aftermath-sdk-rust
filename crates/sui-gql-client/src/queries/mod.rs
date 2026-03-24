@@ -1,11 +1,5 @@
 use af_sui_types::{
-    Address as SuiAddress,
-    Address,
-    Object,
-    ObjectRef,
-    StructTag,
-    Transaction,
-    Version,
+    Address as SuiAddress, Address, Object, ObjectRef, StructTag, Transaction, Version,
 };
 // For `object_args!` macro only
 #[doc(hidden)]

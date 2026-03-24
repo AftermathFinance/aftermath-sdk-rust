@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Move types for Aftermath's `SwitchboardWrapper` package that extends `AfOracle`
 
 use af_sui_pkg_sdk::sui_pkg_sdk;

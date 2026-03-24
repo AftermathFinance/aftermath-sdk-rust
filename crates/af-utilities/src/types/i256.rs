@@ -1,16 +1,6 @@
 use std::cmp::Ordering;
 use std::ops::{
-    Add,
-    AddAssign,
-    Div,
-    DivAssign,
-    Mul,
-    MulAssign,
-    Neg,
-    Rem,
-    RemAssign,
-    Sub,
-    SubAssign,
+    Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign,
 };
 
 use af_sui_types::u256::U256;

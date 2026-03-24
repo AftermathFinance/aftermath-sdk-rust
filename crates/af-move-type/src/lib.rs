@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Defines the core standard for representing Move types off-chain and their type tags.
 //!
 //! The core items are [`MoveType`](crate::MoveType) and [`MoveTypeTag`](crate::MoveTypeTag). These
@@ -31,13 +29,7 @@ mod string;
 pub mod vector;
 
 pub use self::primitives::{
-    AddressTypeTag,
-    BoolTypeTag,
-    U8TypeTag,
-    U16TypeTag,
-    U32TypeTag,
-    U64TypeTag,
-    U128TypeTag,
+    AddressTypeTag, BoolTypeTag, U8TypeTag, U16TypeTag, U32TypeTag, U64TypeTag, U128TypeTag,
     U256TypeTag,
 };
 pub use self::string::StringTypeTag;

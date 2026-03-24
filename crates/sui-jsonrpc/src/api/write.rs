@@ -7,12 +7,8 @@ use jsonrpsee::proc_macros::rpc;
 use sui_sdk_types::Address;
 
 use crate::msgs::{
-    DevInspectArgs,
-    DevInspectResults,
-    DryRunTransactionBlockResponse,
-    ExecuteTransactionRequestType,
-    SuiTransactionBlockResponse,
-    SuiTransactionBlockResponseOptions,
+    DevInspectArgs, DevInspectResults, DryRunTransactionBlockResponse,
+    ExecuteTransactionRequestType, SuiTransactionBlockResponse, SuiTransactionBlockResponseOptions,
 };
 use crate::serde::BigInt;
 

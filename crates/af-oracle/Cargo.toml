@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -47,7 +46,7 @@ af-move-type      = { version = "0.17", public = true, path = "../af-move-type" 
 af-sui-pkg-sdk    = { version = "0.14", public = true, path = "../af-sui-pkg-sdk" }
 sui-framework-sdk = { version = "0.16", public = true, path = "../sui-framework-sdk" }
 sui-gql-client    = { version = "0.25", public = true, optional = true, default-features = false, path = "../sui-gql-client" }
-sui-sdk-types     = { version = "0.2", public = true }
+sui-sdk-types     = { version = "0.3", public = true }
 
 af-sui-types = { version = "0.17.0", path = "../af-sui-types" }
 af-utilities = { version = "0.14.0", path = "../af-utilities" }
@@ -64,7 +63,7 @@ trait-variant    = { version = "0.1", optional = true }
 # GraphQL RPC (optional)
 async-stream    = { version = "0.3", optional = true }
 cynic           = { version = "3", optional = true }
-enum-as-inner   = { version = "0.6", optional = true }
+enum-as-inner   = { version = "0.7", optional = true }
 futures         = { version = "0.3", optional = true }
 graphql-extract = { version = "0.0.11", path = "../graphql-extract", optional = true }
 
@@ -74,15 +73,15 @@ default-features = false
 features         = ["build"]
 optional         = true
 path             = "../sui-gql-schema"
-version = "0.17"
+version          = "0.17"
 
 
 [dev-dependencies]
 clap             = { version = "4", features = ["derive"] }
 color-eyre       = "0.6"
-indicatif        = "0.17"
+indicatif        = "0.18"
 insta            = "1"
-reqwest          = "0.12"
+reqwest          = "0.13"
 rustdoc-json     = "0.9.5"
 rustup-toolchain = "0.1.10"
 sui-gql-client   = { path = "../sui-gql-client" }

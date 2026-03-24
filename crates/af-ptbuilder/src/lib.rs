@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Builder for programmable transactions.
 //!
 //! Check out the [`ptb`](crate::ptb) and [`ptbuilder`](crate::ptbuilder) macros for an ergonomic
@@ -13,6 +11,8 @@ use serde::{Deserialize, Serialize};
 pub use sui_sdk_types::Address;
 #[doc(no_inline)]
 pub use sui_sdk_types::Argument;
+#[doc(no_inline)]
+pub use sui_sdk_types::FundsWithdrawal;
 #[doc(hidden)]
 pub use sui_sdk_types::Identifier;
 #[doc(inline)]
@@ -21,8 +21,13 @@ pub use sui_sdk_types::Input;
 pub use sui_sdk_types::MoveCall;
 #[doc(no_inline)]
 pub use sui_sdk_types::TypeTag;
+#[doc(no_inline)]
+pub use sui_sdk_types::WithdrawFrom;
 use sui_sdk_types::bcs::ToBcs;
-use sui_sdk_types::{Mutability, ProgrammableTransaction, SharedInput};
+use sui_sdk_types::{
+    Digest, GasPayment, Mutability, ProgrammableTransaction, SharedInput, Transaction,
+    TransactionExpiration, TransactionKind,
+};
 
 #[cfg(test)]
 mod tests;
@@ -176,6 +181,81 @@ impl ProgrammableTransactionBuilder {
     }
 }
 
+/// Address-balance helpers.
+impl ProgrammableTransactionBuilder {
+    /// Adds a [`FundsWithdrawal`] input to the PTB.
+    pub fn funds_withdrawal(&mut self, withdrawal: FundsWithdrawal) -> Argument {
+        let key = BuilderArg::ForcedNonUniquePure(self.inputs.len());
+        let (i, _) = self
+            .inputs
+            .insert_full(key, Input::FundsWithdrawal(withdrawal));
+        Argument::Input(i as u16)
+    }
+
+    /// Adds a [`FundsWithdrawal`] input withdrawing `amount` of `coin_type` from the sender's
+    /// balance.
+    pub fn balance_from_sender(&mut self, amount: u64, coin_type: TypeTag) -> Argument {
+        self.funds_withdrawal(FundsWithdrawal::new(
+            amount,
+            coin_type,
+            WithdrawFrom::Sender,
+        ))
+    }
+
+    /// Adds a [`FundsWithdrawal`] input withdrawing `amount` of `coin_type` from the sponsor's
+    /// balance.
+    pub fn balance_from_sponsor(&mut self, amount: u64, coin_type: TypeTag) -> Argument {
+        self.funds_withdrawal(FundsWithdrawal::new(
+            amount,
+            coin_type,
+            WithdrawFrom::Sponsor,
+        ))
+    }
+
+    /// Consumes the builder and wraps the resulting [`ProgrammableTransaction`] in a
+    /// [`Transaction`] that pays gas from an address balance rather than from explicit gas coin
+    /// objects.
+    ///
+    /// `sponsor` is the address whose balance covers gas; pass the same value as `sender` for the
+    /// common self-sponsored case.
+    ///
+    /// The resulting transaction has:
+    /// - An empty `gas_payment.objects` list (balance-based payment)
+    /// - `gas_payment.owner` set to `sponsor`
+    /// - A [`TransactionExpiration::ValidDuring`] window of `[current_epoch, current_epoch + 1]`
+    ///   anchored to `chain_identifier` with the given `nonce`
+    #[allow(clippy::too_many_arguments)]
+    pub fn finish_address_balance(
+        self,
+        sender: Address,
+        sponsor: Address,
+        chain_identifier: Digest,
+        nonce: u32,
+        gas_price: u64,
+        gas_budget: u64,
+        current_epoch: u64,
+    ) -> Transaction {
+        Transaction {
+            kind: TransactionKind::ProgrammableTransaction(self.finish()),
+            sender,
+            gas_payment: GasPayment {
+                objects: vec![],
+                owner: sponsor,
+                price: gas_price,
+                budget: gas_budget,
+            },
+            expiration: TransactionExpiration::ValidDuring {
+                min_epoch: Some(current_epoch),
+                max_epoch: Some(current_epoch.saturating_add(1)),
+                min_timestamp: None,
+                max_timestamp: None,
+                chain: chain_identifier,
+                nonce,
+            },
+        }
+    }
+}
+
 /// Extensions to the base API.
 impl ProgrammableTransactionBuilder {
     /// Like `.command(Command::SplitCoins(coin_arg, balances))`, but also takes care of unpacking
@@ -315,12 +395,7 @@ impl From<Command> for sui_sdk_types::Command {
     fn from(value: Command) -> Self {
         use Command::*;
         use sui_sdk_types::{
-            MakeMoveVector,
-            MergeCoins,
-            Publish,
-            SplitCoins,
-            TransferObjects,
-            Upgrade,
+            MakeMoveVector, MergeCoins, Publish, SplitCoins, TransferObjects, Upgrade,
         };
         match value {
             MoveCall(move_call) => Self::MoveCall(*move_call),

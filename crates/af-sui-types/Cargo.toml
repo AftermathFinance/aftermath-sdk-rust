@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -36,10 +35,10 @@ u256    = ["dep:primitive-types", "dep:rand", "dep:uint"]
 base64        = { version = "0.22", public = true }
 bs58          = { version = "0.5", public = true }
 proptest      = { version = "1", public = true, optional = true }
-rand          = { version = "0.9", public = true, optional = true }
+rand          = { version = "0.10", public = true, optional = true }
 serde         = { version = "1", public = true }
 serde_with    = { version = "3", public = true, features = ["base64"] }
-sui-sdk-types = { version = "0.2", features = ["serde"], public = true }
+sui-sdk-types = { version = "0.3", features = ["serde"], public = true }
 
 hex       = "0.4"
 ref-cast  = "1"
@@ -55,7 +54,7 @@ uint            = { version = "0.10", optional = true }
 insta         = "1"
 proptest      = "1"
 serde_json    = "1"
-sui-sdk-types = { version = "0.2", features = ["proptest"] }
+sui-sdk-types = { version = "0.3", features = ["proptest"] }
 test-strategy = "0.4"
 
 [[test]]

@@ -13,13 +13,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -31,10 +30,10 @@ workspace = true
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 af-move-type = { version = "0.17.0", public = true, path = "../af-move-type" }
 af-sui-types = { version = "0.17.0", public = true, features = ["u256"], path = "../af-sui-types" }
-tabled       = { version = "0.16", public = true }
+tabled       = { version = "0.20", public = true }
 # Because of `tabled`
 papergrid     = { version = "0.17", public = true }
-sui-sdk-types = { version = "0.2", public = true }
+sui-sdk-types = { version = "0.3", public = true }
 
 derive-new = "0.7.0"
 serde      = "1"

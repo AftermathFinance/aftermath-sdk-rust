@@ -1,15 +1,5 @@
 use std::ops::{
-    Add,
-    AddAssign,
-    Div,
-    DivAssign,
-    Mul,
-    MulAssign,
-    Neg,
-    Rem,
-    RemAssign,
-    Sub,
-    SubAssign,
+    Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign,
 };
 use std::str::FromStr;
 

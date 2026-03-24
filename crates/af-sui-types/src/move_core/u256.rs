@@ -4,31 +4,17 @@
 use std::fmt;
 use std::mem::size_of;
 use std::ops::{
-    Add,
-    AddAssign,
-    BitAnd,
-    BitAndAssign,
-    BitOr,
-    BitXor,
-    Div,
-    DivAssign,
-    Mul,
-    MulAssign,
-    Rem,
-    RemAssign,
-    Shl,
-    Shr,
-    Sub,
-    SubAssign,
+    Add, AddAssign, BitAnd, BitAndAssign, BitOr, BitXor, Div, DivAssign, Mul, MulAssign, Rem,
+    RemAssign, Shl, Shr, Sub, SubAssign,
 };
 
 // This U256 impl was chosen for now but we are open to changing it as needed
 use primitive_types::U256 as PrimitiveU256;
 #[cfg(any(test, feature = "fuzzing"))]
 use proptest::strategy::BoxedStrategy;
-use rand::Rng;
 use rand::distr::uniform::{SampleUniform, UniformSampler};
 use rand::distr::{Distribution, StandardUniform};
+use rand::{Rng, RngExt};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use uint::FromStrRadixErr;
 

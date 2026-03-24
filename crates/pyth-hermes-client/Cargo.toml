@@ -12,19 +12,18 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [features]
 default = ["rustls-tls"]
 native-tls = ["reqwest/native-tls"]
-rustls-tls = ["reqwest/rustls-tls"]
+rustls-tls = ["reqwest/rustls"]
 stream = [
   "dep:eventsource-stream",
   "dep:futures-core",
@@ -37,17 +36,20 @@ stream = [
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-base64             = { version = "0.22", public = true }
+base64 = { version = "0.22", public = true }
 eventsource-stream = { version = "0.2", public = true, optional = true }
-futures-core       = { version = "0.3", public = true, optional = true }
-hex                = { version = "0.4", public = true }
-pyth-sdk           = { version = "0.8", public = true }
-reqwest            = { version = "0.12", public = true, default-features = false, features = ["json"] }
-serde_json         = { version = "1", public = true, optional = true }
-url                = { version = "2", public = true }
+futures-core = { version = "0.3", public = true, optional = true }
+hex = { version = "0.4", public = true }
+pyth-sdk = { version = "0.8", public = true }
+reqwest = { version = "0.13", public = true, default-features = false, features = [
+  "json",
+  "query",
+] }
+serde_json = { version = "1", public = true, optional = true }
+url = { version = "2", public = true }
 
 serde     = { version = "1", features = ["derive"] }
-strum     = { version = "0.27", features = ["derive"] }
+strum     = { version = "0.28", features = ["derive"] }
 thiserror = "2"
 
 futures-util = { version = "0.3", optional = true }

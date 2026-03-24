@@ -1,6 +1,5 @@
 // Copyright (c) Mysten Labs, Inc.
 // SPDX-License-Identifier: Apache-2.0
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
 
 //! A fork of Mysten's `sui-json-rpc-api` and `sui-json-rpc-types` with minimal dependencies for client applications.
 

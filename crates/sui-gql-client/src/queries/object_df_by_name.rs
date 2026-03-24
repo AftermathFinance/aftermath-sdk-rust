@@ -4,11 +4,7 @@ use cynic::GraphQlResponse;
 use super::Error;
 use super::model::outputs::RawMoveValue;
 use crate::queries::model::fragments::{
-    DynamicFieldByName,
-    DynamicFieldName,
-    DynamicFieldValue,
-    MoveObject,
-    ObjectKey,
+    DynamicFieldByName, DynamicFieldName, DynamicFieldValue, MoveObject, ObjectKey,
 };
 use crate::queries::model::outputs::DynamicField as OutputDf;
 use crate::{GraphQlClient, GraphQlResponseExt, missing_data, scalars, schema};

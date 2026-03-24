@@ -4,22 +4,9 @@
 use std::collections::{BTreeMap, HashSet};
 
 use sui_sdk_types::{
-    Address,
-    Digest,
-    EpochId,
-    ExecutionStatus,
-    GasCostSummary,
-    IdOperation,
-    ObjectIn,
-    ObjectOut,
-    ObjectReference,
-    ObjectReferenceWithOwner,
-    Owner,
-    TransactionEffects,
-    TransactionEffectsV1,
-    TransactionEffectsV2,
-    UnchangedConsensusKind,
-    Version,
+    Address, Digest, EpochId, ExecutionStatus, GasCostSummary, IdOperation, ObjectIn, ObjectOut,
+    ObjectReference, ObjectReferenceWithOwner, Owner, TransactionEffects, TransactionEffectsV1,
+    TransactionEffectsV2, UnchangedConsensusKind, Version,
 };
 
 use crate::{OBJECT_DIGEST_DELETED, OBJECT_DIGEST_WRAPPED};

@@ -8,11 +8,7 @@ use tabled::settings::style::HorizontalLine;
 use tabled::settings::{Panel as TablePanel, Style as TableStyle};
 
 use crate::msgs::{
-    SuiArgument,
-    SuiCallArg,
-    SuiCommand,
-    SuiObjectArg,
-    SuiProgrammableMoveCall,
+    SuiArgument, SuiCallArg, SuiCommand, SuiObjectArg, SuiProgrammableMoveCall,
     SuiProgrammableTransactionBlock,
 };
 
@@ -57,10 +53,10 @@ impl Display for Pretty<'_, SuiProgrammableTransactionBlock> {
 
             let mut table = builder.build();
             table.with(TablePanel::header("Input Objects"));
-            table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-                1,
-                TableStyle::modern().get_horizontal(),
-            )]));
+            table.with(
+                TableStyle::rounded()
+                    .horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+            );
             write!(f, "\n{}", table)?;
         } else {
             write!(f, "\n  No input objects for this transaction")?;
@@ -77,10 +73,10 @@ impl Display for Pretty<'_, SuiProgrammableTransactionBlock> {
             }
             let mut table = builder.build();
             table.with(TablePanel::header("Commands"));
-            table.with(TableStyle::rounded().horizontals([HorizontalLine::new(
-                1,
-                TableStyle::modern().get_horizontal(),
-            )]));
+            table.with(
+                TableStyle::rounded()
+                    .horizontals([(1, HorizontalLine::inherit(TableStyle::modern()))]),
+            );
             write!(f, "\n{}", table)
         } else {
             write!(f, "\n  No commands for this transaction")

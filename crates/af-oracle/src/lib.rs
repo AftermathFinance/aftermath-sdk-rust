@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Move types for Aftermath's `AfOracle` package
 
 use af_sui_types::Address;

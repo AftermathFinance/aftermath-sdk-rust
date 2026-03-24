@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Exports the [`sui_pkg_sdk!`](crate::sui_pkg_sdk) macro for generating Rust types from Move
 //! source code and implementing relevant [`af_move_type`] traits.
 //!
@@ -198,7 +196,7 @@ pub use af_move_type::{HasKey, MoveStruct, MoveType};
 pub use af_sui_types::u256::U256;
 pub use af_sui_types::{self, Address, TypeTag};
 use tabled::grid::config::ColoredConfig;
-use tabled::grid::dimension::CompleteDimensionVecRecords;
+use tabled::grid::dimension::CompleteDimension;
 use tabled::grid::records::vec_records::{Text, VecRecords};
 use tabled::settings::panel::Header;
 use tabled::settings::style::Style;
@@ -742,8 +740,7 @@ macro_rules! sui_pkg_sdk {
 
 pub fn move_struct_table_option<S: AsRef<str>>(
     name: S,
-) -> impl for<'a> TableOption<VecRecords<Text<String>>, ColoredConfig, CompleteDimensionVecRecords<'a>>
-{
+) -> impl TableOption<VecRecords<Text<String>>, ColoredConfig, CompleteDimension> {
     Settings::default()
         .with(Rotate::Left)
         .with(Rotate::Top)

@@ -5,20 +5,9 @@ use jsonrpsee::proc_macros::rpc;
 use sui_sdk_types::{Address, Digest};
 
 use crate::msgs::{
-    DynamicFieldName,
-    DynamicFieldPage,
-    EventFilter,
-    EventID,
-    EventPage,
-    ObjectsPage,
-    Page,
-    SuiEvent,
-    SuiObjectResponse,
-    SuiObjectResponseQuery,
-    SuiTransactionBlockEffects,
-    SuiTransactionBlockResponseQuery,
-    TransactionBlocksPage,
-    TransactionFilter,
+    DynamicFieldName, DynamicFieldPage, EventFilter, EventID, EventPage, ObjectsPage, Page,
+    SuiEvent, SuiObjectResponse, SuiObjectResponseQuery, SuiTransactionBlockEffects,
+    SuiTransactionBlockResponseQuery, TransactionBlocksPage, TransactionFilter,
 };
 
 #[rpc(client, namespace = "suix")]

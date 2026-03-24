@@ -2,7 +2,7 @@
 
 use anyhow::{Context, Error};
 use serde::{Deserialize, Serialize};
-use sui_sdk_types::{Address, MultisigCommittee, Transaction, UserSignature};
+use sui_sdk_types::{Address, MultisigCommittee, SignedTransaction, Transaction, UserSignature};
 
 use crate::Keystore;
 
@@ -39,6 +39,23 @@ pub fn sign_for_address(
         UserSignature::Simple(keystore.sign_tx(transaction, address)?)
     };
     Ok(signature)
+}
+
+/// Signs a transaction for all required signers and assembles a [`SignedTransaction`].
+///
+/// This is a convenience wrapper around [`signatures`] that bundles the transaction data with
+/// the collected signatures into a ready-to-submit [`SignedTransaction`].
+pub fn signed_transaction(
+    transaction: Transaction,
+    multisig_sender: Option<MultisigIntent>,
+    multisig_sponsor: Option<MultisigIntent>,
+    keystore: &Keystore,
+) -> Result<SignedTransaction, Error> {
+    let sigs = signatures(&transaction, multisig_sender, multisig_sponsor, keystore)?;
+    Ok(SignedTransaction {
+        transaction,
+        signatures: sigs,
+    })
 }
 
 /// Computes the required signatures for a transaction's data.

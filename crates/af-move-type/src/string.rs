@@ -4,17 +4,8 @@ use af_sui_types::{Address, IdentStr, Identifier, StructTag, TypeTag};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    MoveStruct,
-    MoveType,
-    ParseStructTagError,
-    StaticAddress,
-    StaticModule,
-    StaticName,
-    StaticStructTag as _,
-    StaticTypeParams,
-    StaticTypeTag,
-    StructTagError,
-    TypeParamsError,
+    MoveStruct, MoveType, ParseStructTagError, StaticAddress, StaticModule, StaticName,
+    StaticStructTag as _, StaticTypeParams, StaticTypeTag, StructTagError, TypeParamsError,
     TypeTagError,
 };
 

@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! # Sui GraphQL client
 //!
 //! First version of Aftermath's Sui GraphQL client using [`cynic`].
@@ -137,10 +135,10 @@ impl<T> GraphQlResponse<T> {
     /// Extract the `data` field from the response, if any, or fail if the `errors` field contains
     /// any errors.
     fn try_into_data(self) -> Result<Option<T>, GraphQlErrors> {
-        if let Some(errors) = self.errors {
-            if !errors.is_empty() {
-                return Err(GraphQlErrors { errors, page: None });
-            }
+        if let Some(errors) = self.errors
+            && !errors.is_empty()
+        {
+            return Err(GraphQlErrors { errors, page: None });
         }
 
         let Some(data) = self.data else {

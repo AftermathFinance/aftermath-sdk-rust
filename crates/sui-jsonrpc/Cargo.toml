@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -53,7 +52,7 @@ jsonrpsee-http-client = { version = "0.26", public = true, optional = true }
 jsonrpsee-types       = { version = "0.26", public = true, optional = true }
 serde                 = { version = "1", public = true }
 serde_json            = { version = "1", public = true }
-sui-sdk-types         = { version = "0.2", public = true, features = ["hash", "serde"] }
+sui-sdk-types         = { version = "0.3", public = true, features = ["hash", "serde"] }
 
 base64ct      = "1"
 bs58          = "0.5"
@@ -61,10 +60,10 @@ colored       = "3"
 derive_more   = { version = "2", features = ["from"] }
 enum_dispatch = "0.3"
 itertools     = "0.14"
-json_to_table = "0.6"
+json_to_table = "0.12"
 regex         = "1"
 serde_with    = { version = "3", features = ["base64"] }
-tabled        = "0.12"
+tabled        = "0.20"
 thiserror     = "2"
 
 async-stream     = { version = "0.3", optional = true }

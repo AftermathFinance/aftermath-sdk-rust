@@ -13,19 +13,8 @@ use serde_json::Value;
 use serde_with::base64::Base64;
 use serde_with::{DisplayFromStr, serde_as};
 use sui_sdk_types::{
-    Address,
-    Digest,
-    Identifier,
-    Input,
-    Mutability,
-    Object,
-    ObjectReference,
-    SharedInput,
-    StructTag,
-    TypeOrigin,
-    TypeTag,
-    UpgradeInfo,
-    Version,
+    Address, Digest, Identifier, Input, Mutability, Object, ObjectReference, SharedInput,
+    StructTag, TypeOrigin, TypeTag, UpgradeInfo, Version,
 };
 
 use super::{Page, SuiMoveStruct, SuiMoveValue};
@@ -1016,7 +1005,7 @@ pub enum SuiPastObjectResponseError {
     },
 }
 
-#[rustversion::attr(nightly, expect(clippy::large_enum_variant))]
+#[allow(clippy::large_enum_variant)]
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
 #[serde(tag = "status", content = "details", rename = "ObjectRead")]
 pub enum SuiPastObjectResponse {

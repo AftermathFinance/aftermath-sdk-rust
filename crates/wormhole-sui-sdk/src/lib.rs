@@ -1,5 +1,3 @@
-#![cfg_attr(all(doc, not(doctest)), feature(doc_cfg))]
-
 //! Move types for the `Wormhole` Sui package.
 
 use sui_framework_sdk::table::Table;

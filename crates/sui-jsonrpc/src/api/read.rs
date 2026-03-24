@@ -5,17 +5,9 @@ use jsonrpsee::proc_macros::rpc;
 use sui_sdk_types::{Address, Digest, Version};
 
 use crate::msgs::{
-    Checkpoint,
-    CheckpointId,
-    CheckpointPage,
-    ProtocolConfigResponse,
-    SuiEvent,
-    SuiGetPastObjectRequest,
-    SuiObjectDataOptions,
-    SuiObjectResponse,
-    SuiPastObjectResponse,
-    SuiTransactionBlockResponse,
-    SuiTransactionBlockResponseOptions,
+    Checkpoint, CheckpointId, CheckpointPage, ProtocolConfigResponse, SuiEvent,
+    SuiGetPastObjectRequest, SuiObjectDataOptions, SuiObjectResponse, SuiPastObjectResponse,
+    SuiTransactionBlockResponse, SuiTransactionBlockResponseOptions,
 };
 use crate::serde::BigInt;
 

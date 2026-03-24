@@ -1,9 +1,5 @@
 use af_sui_types::{
-    Address as SuiAddress,
-    Object as ObjectSdk,
-    Transaction as TransactionSdk,
-    TypeTag,
-    Version,
+    Address as SuiAddress, Object as ObjectSdk, Transaction as TransactionSdk, TypeTag, Version,
 };
 use cynic::QueryFragment;
 use enum_as_inner::EnumAsInner;

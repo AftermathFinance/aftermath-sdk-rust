@@ -12,13 +12,12 @@ rust-version.workspace = true
 
 [package.metadata.docs.rs]
 # To build locally:
-# RUSTDOCFLAGS="-Zunstable-options --generate-link-to-definition" RUSTC_BOOTSTRAP=1 cargo +nightly doc --all-features --no-deps --open
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
 all-features = true
 rustdoc-args = [
   # Generate links to definition in rustdoc source code pages
   # https://github.com/rust-lang/rust/pull/84176
   "--generate-link-to-definition",
-  "-Zunstable-options",
 ]
 
 [lints]
@@ -41,7 +40,7 @@ hex            = { version = "0.4", public = true }
 jsonrpsee-core = { version = "0.26", public = true, optional = true }
 pyth-sdk       = { version = "0.8", public = true, optional = true }
 sui-jsonrpc    = { version = "0.24.0", public = true, default-features = false, optional = true, path = "../sui-jsonrpc" }
-sui-sdk-types  = { version = "0.2", public = true }
+sui-sdk-types  = { version = "0.3", public = true }
 
 af-move-type      = { version = "0.17", path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.14", path = "../af-sui-pkg-sdk" }
