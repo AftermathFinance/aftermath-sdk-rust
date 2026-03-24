@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.34](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-switchboard-wrapper-v0.0.33...af-switchboard-wrapper-v0.0.34)
+
+### ⛰️ Features
+
+- [**breaking**] Use stable Rust, update dependencies - ([1592fab](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/1592fab34eec5a2b67b1386471c037f034d1f8b4))
+
+
 ## [0.0.33](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-switchboard-wrapper-v0.0.32...af-switchboard-wrapper-v0.0.33)
 
 ### ⛰️ Features

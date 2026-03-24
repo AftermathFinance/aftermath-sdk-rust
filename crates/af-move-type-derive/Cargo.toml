@@ -2,7 +2,7 @@
 autotests   = false
 description = "Derive macros for traits defined in af-move-type."
 name        = "af-move-type-derive"
-version     = "0.4.0"
+version     = "0.5.0"
 
 authors.workspace      = true
 categories.workspace   = true
