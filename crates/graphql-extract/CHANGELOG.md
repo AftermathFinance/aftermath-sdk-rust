@@ -32,6 +32,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12]
+
+### ⛰️ Features
+
+- [**breaking**] Use stable Rust, update dependencies - ([1592fab](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/1592fab34eec5a2b67b1386471c037f034d1f8b4))
+
+
 ## [0.0.12](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/graphql-extract-v0.0.11...graphql-extract-v0.0.12)
 
 ### ⛰️ Features

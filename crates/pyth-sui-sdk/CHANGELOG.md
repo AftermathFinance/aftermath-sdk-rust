@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.26.0]
+
+### ⛰️ Features
+
+- [**breaking**] Use stable Rust, update dependencies - ([1592fab](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/1592fab34eec5a2b67b1386471c037f034d1f8b4))
+
+
 ## [0.26.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/pyth-sui-sdk-v0.25.0...pyth-sui-sdk-v0.26.0)
 
 ### ⛰️ Features
