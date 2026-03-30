@@ -17,7 +17,7 @@ jobs:
     steps:
       # Generating a GitHub token, so that fast-forwards can trigger actions workflows.
       - name: Generate GitHub token
-        uses: actions/create-github-app-token@v2
+        uses: actions/create-github-app-token@v3
         id: generate-token
         with:
           app-id: ${{ secrets.RELEASE_PLZ_APP_ID }}
