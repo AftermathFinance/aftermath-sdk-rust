@@ -48,7 +48,7 @@ sui-sdk-types = { version = "0.3", public = true, features = ["hash"] }
 graphql-extract = { version = "0.0.12", path = "../graphql-extract" }
 
 async-stream     = { version = "0.3" }
-bcs              = { version = "0.1" }
+bcs              = { version = "0.2" }
 clap             = { version = "4", features = ["derive"] }
 derive_more      = { version = "2", features = ["display"] }
 extension-traits = "2"
@@ -67,7 +67,7 @@ version = "0.18.0"
 
 
 [dev-dependencies]
-bcs        = "0.1"
+bcs        = "0.2"
 clap       = { version = "4", features = ["derive"] }
 color-eyre = "0.6"
 indicatif  = "0.18"
