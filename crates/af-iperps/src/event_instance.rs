@@ -85,7 +85,6 @@ event_instance!(EventInstance {
     EditedTWAPOrderTicketDetails<Otw>,
     EditedTWAPOrderTicketExecutors<Otw>,
     ExecutedStopOrderTicket<Otw>,
-    ExecutedTWAPOrderTicket<Otw>,
     FilledMakerOrder,
     FilledMakerOrders,
     FilledTakerOrder,

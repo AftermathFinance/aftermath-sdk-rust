@@ -20,11 +20,13 @@ pub mod order_helpers;
 pub mod order_id;
 #[cfg(feature = "stop-orders")]
 pub mod stop_order_helpers;
+#[cfg(feature = "stop-orders")]
+pub mod twap_order_helpers;
 
 pub use self::market::{MarketParams, MarketState};
 pub use self::orderbook::Order;
 pub use self::position::Position;
-pub use self::twap_orders_details::TWAPOrderDetails;
+pub use self::twap_orders::TWAPOrderDetails;
 
 // Convenient aliases since these types will never exist onchain with a type argument other than an
 // OTW.
@@ -279,63 +281,57 @@ sui_pkg_sdk!(perpetuals {
         }
     }
 
-    module twap_orders_details {
+    module twap_orders {
         /// The details to be hashed for the `encrypted_details` argument of
         /// `create_twap_order_ticket`.
         struct TWAPOrderDetails has drop {
-            clearing_house_id: ID,
             /// Exclusive deadline for the first valid TWAP execution attempt.
-            start_expire_timestamp: Option<u64>,
+            first_run_expire_timestamp: Option<u64>,
             /// Exclusive deadline for any TWAP execution attempt.
-            end_expire_timestamp: Option<u64>,
+            expire_timestamp: Option<u64>,
             /// Expected time between two consecutive valid TWAP execution attempts.
             execution_gap_ms: u64,
             /// Maximum amount by which a valid attempt may happen earlier than
             /// `execution_gap_ms`.
             execution_time_uncertainty_ms: u64,
-            /// Target amount for one TWAP execution before uncertainty and remainder
-            /// adjustments.
-            one_execution_amount: u64,
+            /// Amount of chunks the TWAP order is split into.
+            chunks_amount: u64,
+            /// Maximum size of the final fresh tail, expressed in basis points of
+            /// one execution amount, that may be merged into the previous chunk.
+            small_tail_merge_threshold_bps: u64,
             /// Maximum additional delay after the nominal execution gap before the TWAP
             /// becomes spoiled.
             time_for_retry_ms: u64,
             /// Maximum deviation allowed between the caller-requested amount and
-            /// `one_execution_amount`.
-            amount_uncertainty: u64,
-            /// Maximum allowed amount for one execution after backlog adjustments.
-            max_one_execution_amount: u64,
+            /// one execution amount, expressed in basis points.
+            amount_uncertainty_bps: u64,
+            /// Maximum allowed amount for one execution after backlog adjustments,
+            /// expressed in basis points of the total order size.
+            max_one_execution_amount_bps: u64,
             side: bool,
             size: u64,
             max_slippage_bps: u64,
             reduce_only: bool,
             salt: vector<u8>
         }
-    }
 
-    module twap_orders {
         /// Object that allows off-chain executors to process a TWAP order in multiple
         /// executions until it is finalized or canceled.
         struct TWAPOrderTicket<!phantom T> has key, store {
             id: UID,
+            /// Clearing house for which the TWAP order is placed.
+            clearing_house_id: ID,
             /// Addresses allowed to execute the order on behalf of the user.
             executors: vector<address>,
-            /// Address that funded the ticket gas and must receive unearned execution gas
-            /// back.
-            refund_address: address,
             /// Gas coin that must be provided by the user to cover the whole TWAP
             /// lifecycle.
             gas: Balance<SUI>,
-            /// Portion of `gas` reserved for chunk executions.
-            execution_gas_budget: u64,
-            /// Portion of `execution_gas_budget` already paid out.
-            paid_execution_gas: u64,
-            /// Portion of `gas` reserved for delete/finalize.
-            finalization_gas: u64,
+            /// Total gas budget for the entire TWAP execution.
+            gas_execution_budget: u64,
             /// User account id.
             account_id: u64,
             /// Hash of the off-chain order details. See `TWAPOrderDetails`.
             encrypted_details: vector<u8>,
-
             /// Amount of the order that has already been executed.
             processed_amount: u64,
             /// Amount of the TWAP target that has already been scheduled into
@@ -347,6 +343,8 @@ sui_pkg_sdk!(perpetuals {
             retry_anchor_timestamp_ms: u64,
             /// Timestamp of the last successful fill.
             last_execution_timestamp_ms: u64,
+            /// Portion of `gas_execution_budget` already paid out.
+            paid_execution_gas: u64,
         }
     }
 
@@ -698,7 +696,6 @@ sui_pkg_sdk!(perpetuals {
             ticket_id: ID,
             account_id: u64,
             executor: address,
-            executed: bool,
             deallocated_collateral: u64,
         }
 
@@ -707,12 +704,7 @@ sui_pkg_sdk!(perpetuals {
             account_id: u64,
             sender: address,
             deallocated_collateral: u64,
-        }
-
-        struct ExecutedTWAPOrderTicket<!phantom T> has copy, drop {
-            ticket_id: ID,
-            account_id: u64,
-            executor: address
+            partial_fill: bool,
         }
 
         struct DeletedTWAPOrderTicket<!phantom T> has copy, drop {
