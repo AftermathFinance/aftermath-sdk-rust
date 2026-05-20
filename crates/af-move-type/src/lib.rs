@@ -21,6 +21,7 @@ use af_sui_types::u256::U256;
 use af_sui_types::{Address, Identifier, StructTag, TypeTag};
 use serde::{Deserialize, Serialize};
 
+pub mod any;
 #[doc(hidden)]
 pub mod external;
 pub mod otw;
