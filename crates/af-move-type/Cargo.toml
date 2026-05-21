@@ -28,7 +28,7 @@ workspace = true
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 af-sui-types = { version = "0.18.0", public = true, features = ["u256"], path = "../af-sui-types" }
-bcs          = { version = "0.1", public = true }
+bcs          = { version = "0.2", public = true }
 serde_json   = { version = "1", public = true }
 
 af-move-type-derive = { version = "0.5.0", path = "../af-move-type-derive" }
