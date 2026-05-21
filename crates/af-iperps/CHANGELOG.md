@@ -48,6 +48,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.46.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.46.0...af-iperps-v0.46.1)
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated the following local packages: af-move-type, af-sui-pkg-sdk, move-stdlib-sdk, sui-framework-sdk - ([0000000](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0000000))
+
+
 ## [0.46.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-iperps-v0.45.0...af-iperps-v0.46.0)
 
 ### ⛰️ Features

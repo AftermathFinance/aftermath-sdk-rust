@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/move-stdlib-sdk-v0.16.0...move-stdlib-sdk-v0.16.1)
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated the following local packages: af-sui-pkg-sdk - ([0000000](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0000000))
+
+
 ## [0.16.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/move-stdlib-sdk-v0.15.0...move-stdlib-sdk-v0.16.0)
 
 ### ⛰️ Features

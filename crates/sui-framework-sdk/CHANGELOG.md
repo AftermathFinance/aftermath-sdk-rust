@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-framework-sdk-v0.17.0...sui-framework-sdk-v0.17.1)
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated the following local packages: af-move-type, af-sui-pkg-sdk, move-stdlib-sdk - ([0000000](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0000000))
+
+
 ## [0.17.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-framework-sdk-v0.16.0...sui-framework-sdk-v0.17.0)
 
 ### ⛰️ Features
