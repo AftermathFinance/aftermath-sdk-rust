@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.1]
+
+### ⛰️ Features
+
+- *(af-move-type)* Add AnyT - ([95dd0d4](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/95dd0d40b0be4e942a51591a5950c757c6650e5f))
+
+
 ## [0.18.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.18.0...af-move-type-v0.18.1)
 
 ### ⛰️ Features
