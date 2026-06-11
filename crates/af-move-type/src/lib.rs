@@ -103,22 +103,13 @@ pub trait MoveTypeTag:
     + Ord
     + Serialize
 {
-}
-
-impl<T> MoveTypeTag for T where
-    T: Into<TypeTag>
-        + TryFrom<TypeTag, Error = TypeTagError>
-        + FromStr
-        + Clone
-        + Debug
-        + PartialEq
-        + Eq
-        + Hash
-        + for<'de> Deserialize<'de>
-        + PartialOrd
-        + Ord
-        + Serialize
-{
+    /// Returns whether `tag` is the runtime representation of `Self`.
+    ///
+    /// Equivalent to `Self::try_from(tag.clone()).is_ok()` but implementors are
+    /// expected to override this to avoid materializing `Self` or cloning `tag`.
+    fn matches(tag: &TypeTag) -> bool {
+        Self::try_from(tag.clone()).is_ok()
+    }
 }
 
 // =============================================================================

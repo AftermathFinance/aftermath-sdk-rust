@@ -5,7 +5,7 @@ use std::str::FromStr;
 use af_sui_types::TypeTag;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
-use crate::{MoveType, ParseTypeTagError, TypeTagError};
+use crate::{MoveType, MoveTypeTag, ParseTypeTagError, TypeTagError};
 
 /// Generic type that accepts **any** Move type argument in its slot,
 /// including phantom-paramed generics such as `VENDOR<X>` as well as
@@ -68,6 +68,8 @@ impl TryFrom<TypeTag> for AnyTTypeTag {
         Ok(Self(value))
     }
 }
+
+impl MoveTypeTag for AnyTTypeTag {}
 
 impl FromStr for AnyTTypeTag {
     type Err = ParseTypeTagError;

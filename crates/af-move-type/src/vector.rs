@@ -3,7 +3,7 @@ use derive_more::{Deref, DerefMut, From, Into};
 use derive_where::derive_where;
 use serde::{Deserialize, Serialize};
 
-use crate::{MoveType, ParseTypeTagError, StaticTypeTag, TypeTagError};
+use crate::{MoveType, MoveTypeTag, ParseTypeTagError, StaticTypeTag, TypeTagError};
 
 #[derive(
     Clone, Debug, Deref, DerefMut, Deserialize, From, Into, Serialize, PartialEq, Eq, Hash,
@@ -69,6 +69,15 @@ impl<T: MoveType> TryFrom<TypeTag> for VecTypeTag<T> {
                 got: value,
             }),
         }
+    }
+}
+
+impl<T: MoveType> MoveTypeTag for VecTypeTag<T> {
+    fn matches(tag: &TypeTag) -> bool {
+        let TypeTag::Vector(inner) = tag else {
+            return false;
+        };
+        T::TypeTag::matches(inner)
     }
 }
 

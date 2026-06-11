@@ -3,10 +3,12 @@ use std::str::FromStr;
 use af_sui_types::{Address, IdentStr, Identifier, StructTag, TypeTag};
 use serde::{Deserialize, Serialize};
 
+use af_sui_types::MOVE_STDLIB_ADDRESS;
+
 use crate::{
-    MoveStruct, MoveType, ParseStructTagError, StaticAddress, StaticModule, StaticName,
-    StaticStructTag as _, StaticTypeParams, StaticTypeTag, StructTagError, TypeParamsError,
-    TypeTagError,
+    MoveStruct, MoveType, MoveTypeTag, ParseStructTagError, StaticAddress, StaticModule,
+    StaticName, StaticStructTag as _, StaticTypeParams, StaticTypeTag, StructTagError,
+    TypeParamsError, TypeTagError,
 };
 
 #[derive(Clone, Debug, PartialEq, Eq, Hash, Deserialize, PartialOrd, Ord, Serialize)]
@@ -69,6 +71,18 @@ impl TryFrom<StructTag> for StringTypeTag {
             }));
         }
         Ok(Self)
+    }
+}
+
+impl MoveTypeTag for StringTypeTag {
+    fn matches(tag: &TypeTag) -> bool {
+        let TypeTag::Struct(stag) = tag else {
+            return false;
+        };
+        stag.address() == &MOVE_STDLIB_ADDRESS
+            && stag.module().as_str() == "string"
+            && stag.name().as_str() == "String"
+            && stag.type_params().is_empty()
     }
 }
 

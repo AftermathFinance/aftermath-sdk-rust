@@ -101,6 +101,9 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
         struct_tag_const_vals,
         struct_tag_consts_checks,
         mut type_param_idents,
+        address_const,
+        module_const,
+        name_const,
     } = type_tag_params;
 
     let attr_declarations: Vec<_> = attr_idents
@@ -112,6 +115,17 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
         .iter()
         .zip(&struct_tag_const_vals)
         .map(|(ident, val)| quote!(#ident: #val))
+        .collect();
+
+    // Pascal-cased generic type param idents (e.g. `T`), in declaration order.
+    // Needed BEFORE we reverse `type_param_idents` below for `unpack_type_params`.
+    let type_param_pascals: Vec<Ident> = generics
+        .params
+        .iter()
+        .filter_map(|p| match p {
+            GenericParam::Type(t) => Some(t.ident.clone()),
+            _ => None,
+        })
         .collect();
 
     type_param_idents.reverse();
@@ -142,6 +156,48 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
         quote!(#[derive(PartialOrd, Ord)])
     };
     let serde_with_crate = quote!(#thecrate::external::serde_with).to_string();
+
+    // Emit a non-allocating `matches` override when address, module, and name
+    // are all compile-time constants. Otherwise fall back to the default body
+    // (which delegates to `TryFrom`).
+    let move_type_tag_impl = match (&address_const, &module_const, &name_const) {
+        (Some(addr), Some(module), Some(name)) => {
+            let n_type_params = type_param_pascals.len();
+            let type_param_checks = type_param_pascals.iter().enumerate().map(|(i, t)| {
+                quote!(
+                    <<#t as #thecrate::MoveType>::TypeTag as #thecrate::MoveTypeTag>::matches(
+                        &type_params[#i]
+                    )
+                )
+            });
+            quote! {
+                impl #impl_generics #thecrate::MoveTypeTag for #ident #type_generics
+                #where_clause
+                {
+                    fn matches(tag: &#type_tag_type) -> bool {
+                        const EXPECTED_ADDRESS: #thecrate::external::Address =
+                            <#thecrate::external::Address>::from_static(#addr);
+                        let #type_tag_type::Struct(stag) = tag else {
+                            return false;
+                        };
+                        let type_params = stag.type_params();
+                        if type_params.len() != #n_type_params {
+                            return false;
+                        }
+                        stag.address() == &EXPECTED_ADDRESS
+                            && stag.module().as_str() == #module
+                            && stag.name().as_str() == #name
+                            #(&& #type_param_checks)*
+                    }
+                }
+            }
+        }
+        _ => quote! {
+            impl #impl_generics #thecrate::MoveTypeTag for #ident #type_generics
+            #where_clause
+            {}
+        },
+    };
 
     quote! {
         #[derive(
@@ -239,6 +295,8 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
                 #result_type::Ok(stag.try_into()?)
             }
         }
+
+        #move_type_tag_impl
     }
 }
 
@@ -310,6 +368,9 @@ struct TypeTagParameters {
     struct_tag_const_vals: Vec<TokenStream>,
     struct_tag_consts_checks: TokenStream,
     type_param_idents: Vec<Ident>,
+    address_const: Option<String>,
+    module_const: Option<String>,
+    name_const: Option<String>,
 }
 
 fn type_tag_parameters(
@@ -330,6 +391,9 @@ fn type_tag_parameters(
         struct_tag_const_vals: vec![],
         struct_tag_consts_checks: quote!(),
         type_param_idents: vec![],
+        address_const: None,
+        module_const: None,
+        name_const: None,
     };
 
     let address_check = if let Some(address) = address {
@@ -342,6 +406,7 @@ fn type_tag_parameters(
             }
         );
         params.struct_tag_const_vals.push(value);
+        params.address_const = Some(address);
         check
     } else {
         params.attr_idents.push(quote!(address));
@@ -360,6 +425,7 @@ fn type_tag_parameters(
             }
         );
         params.struct_tag_const_vals.push(value);
+        params.module_const = Some(module);
         check
     } else {
         params.attr_idents.push(quote!(module));
@@ -388,6 +454,7 @@ fn type_tag_parameters(
             }
         );
         params.struct_tag_const_vals.push(value);
+        params.name_const = Some(name);
         check
     };
 

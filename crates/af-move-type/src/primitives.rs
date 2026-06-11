@@ -3,7 +3,7 @@ use std::str::FromStr;
 use af_sui_types::{Address, TypeTag, U256};
 use serde::{Deserialize, Serialize};
 
-use crate::{MoveType, ParseTypeTagError, StaticTypeTag, TypeTagError};
+use crate::{MoveType, MoveTypeTag, ParseTypeTagError, StaticTypeTag, TypeTagError};
 
 macro_rules! impl_primitive_type_tags {
     ($($typ:ty: ($type_:ident, $variant:ident)),*) => {
@@ -38,6 +38,12 @@ macro_rules! impl_primitive_type_tags {
                             got: value }
                         )
                     }
+                }
+            }
+
+            impl MoveTypeTag for $type_ {
+                fn matches(tag: &TypeTag) -> bool {
+                    matches!(tag, TypeTag::$variant)
                 }
             }
 
