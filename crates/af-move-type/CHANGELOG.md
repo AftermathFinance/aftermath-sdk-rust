@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.19.0...af-move-type-v0.19.1)
+
+### ⛰️ Features
+
+- *(af-move-type)* More allocationless type matching - ([bdf51a3](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/bdf51a3eabcedc99ab5055398ab9e0a223c64999))
+
+
 ## [0.19.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.18.1...af-move-type-v0.19.0)
 
 ### ⛰️ Features
