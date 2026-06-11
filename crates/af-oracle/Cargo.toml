@@ -1,7 +1,7 @@
 [package]
 description = "Move types for Aftermath's `AfOracle` package"
 name        = "af-oracle"
-version     = "0.27.0"
+version     = "0.27.1"
 
 authors.workspace      = true
 categories.workspace   = true
@@ -42,7 +42,7 @@ graphql = [
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-af-move-type      = { version = "0.18", public = true, path = "../af-move-type" }
+af-move-type      = { version = "0.19", public = true, path = "../af-move-type" }
 af-sui-pkg-sdk    = { version = "0.15", public = true, path = "../af-sui-pkg-sdk" }
 sui-framework-sdk = { version = "0.17", public = true, path = "../sui-framework-sdk" }
 sui-gql-client    = { version = "0.26", public = true, optional = true, default-features = false, path = "../sui-gql-client" }
