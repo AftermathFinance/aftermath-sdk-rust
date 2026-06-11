@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.0]
+
+### ⛰️ Features
+
+- *(af-move-type)* [**breaking**] Add non-allocating `MoveTypeTag::matches` - ([64b668c](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/64b668c77c5b66634cd5578ac998d920bb825b84))
+
+
 ## [0.19.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-move-type-v0.18.1...af-move-type-v0.19.0)
 
 ### ⛰️ Features
