@@ -69,7 +69,15 @@ impl TryFrom<TypeTag> for AnyTTypeTag {
     }
 }
 
-impl MoveTypeTag for AnyTTypeTag {}
+impl MoveTypeTag for AnyTTypeTag {
+    fn matches(_tag: &TypeTag) -> bool {
+        true
+    }
+
+    fn matches_instance(&self, _tag: &TypeTag) -> bool {
+        true
+    }
+}
 
 impl FromStr for AnyTTypeTag {
     type Err = ParseTypeTagError;

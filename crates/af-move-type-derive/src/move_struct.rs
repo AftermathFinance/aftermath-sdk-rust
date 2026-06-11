@@ -127,6 +127,9 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
             _ => None,
         })
         .collect();
+    // Snake-cased type-param idents in declaration order — these are the field
+    // names on the marker (e.g. `self.t`). Captured before the reverse below.
+    let type_param_snakes: Vec<Ident> = type_param_idents.clone();
 
     type_param_idents.reverse();
     let unpack_type_params = quote!(
@@ -157,19 +160,45 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
     };
     let serde_with_crate = quote!(#thecrate::external::serde_with).to_string();
 
-    // Emit a non-allocating `matches` override when address, module, and name
-    // are all compile-time constants. Otherwise fall back to the default body
-    // (which delegates to `TryFrom`).
+    // Emit a non-allocating override appropriate to the marker's identity shape:
+    //   - All three of address/module/name are compile-time literals →
+    //     override both `matches` (static, recurses via static
+    //     `T::TypeTag::matches`) AND `matches_instance` (recurses via
+    //     `self.<snake>.matches_instance`). The instance-based override exists
+    //     so that fully-static outer markers wrapping runtime-identity inner
+    //     type params (e.g. `Field<K, Leaf<RuntimeAddrStruct>>`) stay
+    //     non-allocating when callers have a marker instance.
+    //   - Module and name are literals but address is a runtime field →
+    //     override `matches_instance` (uses `self.address`). Type-param
+    //     recursion uses `self.<snake>.matches_instance(...)`.
+    //   - Address and module are literals but name is a runtime field (i.e.
+    //     nameless markers like `Otw`) → override `matches_instance` (uses
+    //     `self.name`). Same instance-based type-param recursion.
+    //   - Anything else → empty impl, both methods fall through to the default
+    //     `try_from(tag.clone()).is_ok()`.
+    let n_type_params = type_param_pascals.len();
+    let type_param_checks_static: Vec<_> = type_param_pascals
+        .iter()
+        .enumerate()
+        .map(|(i, t)| {
+            quote!(
+                <<#t as #thecrate::MoveType>::TypeTag as #thecrate::MoveTypeTag>::matches(
+                    &type_params[#i]
+                )
+            )
+        })
+        .collect();
+    let type_param_checks_instance: Vec<_> = type_param_snakes
+        .iter()
+        .enumerate()
+        .map(|(i, snake)| {
+            quote!(
+                #thecrate::MoveTypeTag::matches_instance(&self.#snake, &type_params[#i])
+            )
+        })
+        .collect();
     let move_type_tag_impl = match (&address_const, &module_const, &name_const) {
         (Some(addr), Some(module), Some(name)) => {
-            let n_type_params = type_param_pascals.len();
-            let type_param_checks = type_param_pascals.iter().enumerate().map(|(i, t)| {
-                quote!(
-                    <<#t as #thecrate::MoveType>::TypeTag as #thecrate::MoveTypeTag>::matches(
-                        &type_params[#i]
-                    )
-                )
-            });
             quote! {
                 impl #impl_generics #thecrate::MoveTypeTag for #ident #type_generics
                 #where_clause
@@ -187,7 +216,67 @@ fn impl_type_tag(type_tag_params: TypeTagParameters, thecrate: Path) -> TokenStr
                         stag.address() == &EXPECTED_ADDRESS
                             && stag.module().as_str() == #module
                             && stag.name().as_str() == #name
-                            #(&& #type_param_checks)*
+                            #(&& #type_param_checks_static)*
+                    }
+
+                    fn matches_instance(&self, tag: &#type_tag_type) -> bool {
+                        const EXPECTED_ADDRESS: #thecrate::external::Address =
+                            <#thecrate::external::Address>::from_static(#addr);
+                        let #type_tag_type::Struct(stag) = tag else {
+                            return false;
+                        };
+                        let type_params = stag.type_params();
+                        if type_params.len() != #n_type_params {
+                            return false;
+                        }
+                        stag.address() == &EXPECTED_ADDRESS
+                            && stag.module().as_str() == #module
+                            && stag.name().as_str() == #name
+                            #(&& #type_param_checks_instance)*
+                    }
+                }
+            }
+        }
+        (None, Some(module), Some(name)) => {
+            quote! {
+                impl #impl_generics #thecrate::MoveTypeTag for #ident #type_generics
+                #where_clause
+                {
+                    fn matches_instance(&self, tag: &#type_tag_type) -> bool {
+                        let #type_tag_type::Struct(stag) = tag else {
+                            return false;
+                        };
+                        let type_params = stag.type_params();
+                        if type_params.len() != #n_type_params {
+                            return false;
+                        }
+                        stag.address() == &self.address
+                            && stag.module().as_str() == #module
+                            && stag.name().as_str() == #name
+                            #(&& #type_param_checks_instance)*
+                    }
+                }
+            }
+        }
+        (Some(addr), Some(module), None) => {
+            quote! {
+                impl #impl_generics #thecrate::MoveTypeTag for #ident #type_generics
+                #where_clause
+                {
+                    fn matches_instance(&self, tag: &#type_tag_type) -> bool {
+                        const EXPECTED_ADDRESS: #thecrate::external::Address =
+                            <#thecrate::external::Address>::from_static(#addr);
+                        let #type_tag_type::Struct(stag) = tag else {
+                            return false;
+                        };
+                        let type_params = stag.type_params();
+                        if type_params.len() != #n_type_params {
+                            return false;
+                        }
+                        stag.address() == &EXPECTED_ADDRESS
+                            && stag.module().as_str() == #module
+                            && stag.name() == &self.name
+                            #(&& #type_param_checks_instance)*
                     }
                 }
             }

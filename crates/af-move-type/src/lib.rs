@@ -110,6 +110,17 @@ pub trait MoveTypeTag:
     fn matches(tag: &TypeTag) -> bool {
         Self::try_from(tag.clone()).is_ok()
     }
+
+    /// Like [`Self::matches`] but for markers whose identity depends on runtime
+    /// fields (e.g. a package address resolved at construction time).
+    ///
+    /// The default delegates to [`Self::matches`], which is correct for markers
+    /// whose identity is fully compile-time. Implementors that store identity
+    /// fields on the marker should override this to compare against `self`
+    /// without cloning `tag` or materializing a fresh marker.
+    fn matches_instance(&self, tag: &TypeTag) -> bool {
+        Self::matches(tag)
+    }
 }
 
 // =============================================================================
