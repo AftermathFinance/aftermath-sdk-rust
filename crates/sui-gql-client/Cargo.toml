@@ -53,7 +53,7 @@ clap             = { version = "4", features = ["derive"] }
 derive_more      = { version = "2", features = ["display"] }
 extension-traits = "2"
 futures          = { version = "0.3" }
-itertools        = { version = "0.14" }
+itertools        = { version = "0.15" }
 tap              = "1"
 thiserror        = "2"
 trait-variant    = "0.1"
