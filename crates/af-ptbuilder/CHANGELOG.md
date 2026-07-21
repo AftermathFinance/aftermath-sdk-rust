@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [13.1.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-ptbuilder-v13.0.0...af-ptbuilder-v13.1.0)
+
+### ⛰️ Features
+
+- Update dependencies, fix clippy warnings - ([a3fa27f](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/a3fa27f8472853312f0611f97508232d51a3a0ce))
+
+
 ## [13.0.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-ptbuilder-v12.0.0...af-ptbuilder-v13.0.0)
 
 ### ⛰️ Features

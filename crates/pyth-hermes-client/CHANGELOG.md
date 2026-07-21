@@ -8,6 +8,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/pyth-hermes-client-v0.6.0...pyth-hermes-client-v0.6.1)
+
+### ⛰️ Features
+
+- Update dependencies, fix clippy warnings - ([a3fa27f](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/a3fa27f8472853312f0611f97508232d51a3a0ce))
+
+
 ## [0.6.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/pyth-hermes-client-v0.5.3...pyth-hermes-client-v0.6.0)
 
 ### ⛰️ Features
