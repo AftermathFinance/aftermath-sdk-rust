@@ -30,6 +30,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.26.2](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/pyth-sui-sdk-v0.26.1...pyth-sui-sdk-v0.26.2)
+
+### ⚙️ Miscellaneous Tasks
+
+- Updated the following local packages: af-sui-types, af-ptbuilder, sui-jsonrpc - ([0000000](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0000000))
+
+
 ## [0.26.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/pyth-sui-sdk-v0.26.0...pyth-sui-sdk-v0.26.1)
 
 ### ⚙️ Miscellaneous Tasks
