@@ -4,8 +4,8 @@ Macro to extract data from deeply nested types representing GraphQL results
 
 # Suggested workflow
 
-1. Generate query types using [cynic] and its [generator]
-1. Use [insta] to define an inline snapshot test so that the query string is visible in the
+1. Generate query types using `cynic` and its `generator`
+1. Use `insta` to define an inline snapshot test so that the query string is visible in the
    module that defines the query types
 1. Define an `extract` function that takes the root query type and returns the data of interest
 1. Inside `extract`, use `extract!` as `extract!(data => { ... })`
@@ -16,7 +16,7 @@ Macro to extract data from deeply nested types representing GraphQL results
 
 # Examples
 
-The following omits the `derive`s for [cynic] traits that are usually implemented for GraphQL
+The following omits the `derive`s for `cynic` traits that are usually implemented for GraphQL
 queries. This is so that we can focus on the nesting of the structures and how the macro helps
 to 'extract' the leaves.
 

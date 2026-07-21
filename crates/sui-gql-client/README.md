@@ -9,21 +9,21 @@ interface for clients interacting with an RPC. See the `reqwest` feature for a p
 implementation.
 
 The queries inclued here (under feature `queries`) were constructed with the help of `cynic`s
-[generator] and use the scalars defined in [`sui_gql_schema`].
+`generator` and use the scalars defined in `sui_gql_schema`.
 
 ## Custom queries
 
 Users building their own queries should first:
-1. add [`sui_gql_schema`] as a build dependency
+1. add `sui_gql_schema` as a build dependency
 1. register its schema in a `build.rs` file;
 1. import the `schema` module in any module defining new fragments
 
 For steps 1 and 2, you can check this crate's `[build-dependencies]` and `build.rs` for an
 example of how to do so. Read more about schema crates in <https://cynic-rs.dev/large-apis>.
 
-Then, to create query structs, we recommend using the [generator] with Sui's GraphQL
+Then, to create query structs, we recommend using the `generator` with Sui's GraphQL
 [schema][sui_schema] and to try reusing the scalars defined in `scalars`
-as those automatically convert opaque types to more useful ones like [`af_sui_types`].
+as those automatically convert opaque types to more useful ones like `af_sui_types`.
 
 ## Features
 
@@ -32,7 +32,7 @@ as those automatically convert opaque types to more useful ones like [`af_sui_ty
 - `queries`: enables the `queries` submodule with pre-made queries
 - `reqwest`: enables the `reqwest` submodule with an implementation of
   `GraphQlClient`
-- `scalars`: re-exports the `scalars` module of [`sui_gql_schema`]
+- `scalars`: re-exports the `scalars` module of `sui_gql_schema`
 
 ## Handy links:
 

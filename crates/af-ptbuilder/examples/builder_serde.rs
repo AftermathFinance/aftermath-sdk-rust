@@ -30,11 +30,16 @@ pub struct Payload {
 #[derive(serde::Deserialize, serde::Serialize)]
 struct Base64BcsPtb(#[serde_as(as = "Base64")] Vec<u8>);
 
-/// For [`TryFromInto`]
+/// For [`TryFromInto`], which requires an infallible `From` in this direction; BCS
+/// serialization of a valid [`ProgrammableTransaction`] cannot fail.
+#[allow(clippy::fallible_impl_from)]
 impl From<ProgrammableTransactionBuilder> for Base64BcsPtb {
     fn from(value: ProgrammableTransactionBuilder) -> Self {
         let pt = ProgrammableTransaction::from(value);
-        Self(pt.to_bcs().unwrap())
+        Self(
+            pt.to_bcs()
+                .expect("BCS serialization of a programmable transaction cannot fail"),
+        )
     }
 }
 

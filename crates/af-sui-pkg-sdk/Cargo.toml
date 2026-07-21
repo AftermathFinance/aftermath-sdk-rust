@@ -30,9 +30,9 @@ workspace = true
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
 af-move-type = { version = "0.19.1", public = true, path = "../af-move-type" }
 af-sui-types = { version = "0.18.0", public = true, features = ["u256"], path = "../af-sui-types" }
-tabled       = { version = "0.20", public = true }
+tabled       = { version = "0.21", public = true }
 # Because of `tabled`
-papergrid     = { version = "0.17", public = true }
+papergrid     = { version = "0.18", public = true }
 sui-sdk-types = { version = "0.3", public = true }
 
 derive-new = "0.7.0"

@@ -34,7 +34,7 @@ graphql = [
     "dep:sui-gql-schema",
     "sui-gql-schema/build",
 ]
-stop-orders = ["dep:fastcrypto"]
+stop-orders = []
 
 [dependencies]
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
@@ -46,7 +46,7 @@ num_enum          = { version = "0.7", public = true }
 strum             = { version = "0.28", public = true, features = ["derive"] }
 sui-framework-sdk = { version = "0.17.3", public = true, path = "../sui-framework-sdk" }
 sui-gql-client    = { version = "0.26", public = true, default-features = false, optional = true, path = "../sui-gql-client" }
-sui-sdk-types     = { version = "0.3", public = true }
+sui-sdk-types     = { version = "0.3", public = true, features = ["hash"] }
 
 # TODO: remove this after using Rust's `Option` (see TODO in `lib.rs`)
 move-stdlib-sdk = { version = "0.16.3", public = true, path = "../move-stdlib-sdk" }
@@ -68,9 +68,6 @@ cynic           = { version = "3", optional = true }
 enum-as-inner   = { version = "0.7", optional = true }
 futures         = { version = "0.3", optional = true }
 graphql-extract = { version = "0.0.12", path = "../graphql-extract", optional = true }
-
-# Stop Orders
-fastcrypto = { version = "0.1", optional = true }
 
 [build-dependencies.sui-gql-schema]
 default-features = false

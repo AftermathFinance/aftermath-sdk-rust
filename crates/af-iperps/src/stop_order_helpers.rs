@@ -1,9 +1,9 @@
 //! Helpers for stop orders.
 
 use af_utilities::IFixed;
-use fastcrypto::hash::{Blake2b256, HashFunction};
 use serde::{Deserialize, Serialize};
 use sui_framework_sdk::object::ID;
+use sui_sdk_types::hash::Hasher;
 
 use crate::order_helpers::{OrderType, Side};
 
@@ -15,7 +15,7 @@ pub trait StopOrderTicketDetails {
     {
         let mut bytes = sui_sdk_types::bcs::ToBcs::to_bcs(&self)?;
         bytes.extend(salt);
-        Ok(Blake2b256::digest(bytes).to_vec())
+        Ok(Hasher::digest(bytes).into_inner().to_vec())
     }
 }
 

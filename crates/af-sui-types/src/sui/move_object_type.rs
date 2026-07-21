@@ -248,7 +248,6 @@ enum MoveObjectType_ {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::CLOCK_ID;
 
     #[test]
@@ -268,7 +267,7 @@ mod tests {
     fn sui_address_display_pads() {
         assert_eq!(
             "0x0000000000000000000000000000000000000000000000000000000000000006",
-            format!("{}", Address::from(CLOCK_ID))
+            format!("{}", CLOCK_ID)
         );
     }
 

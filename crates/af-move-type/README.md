@@ -10,7 +10,7 @@ and defining a pretty `Display`.
 
 For Move structs (objects), `MoveStruct` should be used as it has an
 associated `MoveStructTag`. The
-[`MoveStruct`](af_move_type_derive::MoveStruct) derive macro is exported for automatically
+`MoveStruct` derive macro is exported for automatically
 creating a `MoveStructTag` implementation from normal Rust struct declarations.
 
 A specific instance of a Move type is represented by `MoveInstance`.

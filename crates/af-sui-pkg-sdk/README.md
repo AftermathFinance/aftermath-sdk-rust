@@ -6,7 +6,7 @@ source code and implementing relevant `af_move_type` traits.
 Automates the conversion of Sui Move types to Rust. The goal is to extract as much information
 as possible at compile time about the Move types of a Sui package, generating equivalent Rust
 types that:
-- are [BCS]-compatible with their on-chain counterparts, so that their contents can be
+- are `BCS`-compatible with their on-chain counterparts, so that their contents can be
   deserialized from BCS bytes returned by RPCs
 - embed type information based on their location (path) in a Move package + type parameters, so
   that a corresponding type tag can be easily constructed with just the missing information
@@ -15,7 +15,7 @@ types that:
 
 See also:
 - `af_move_type`
-- [`af_move_type_derive`] for how the type tag information for a struct is derived from its
+- `af_move_type_derive` for how the type tag information for a struct is derived from its
   declaration
 
 <div class="warning">
@@ -30,13 +30,13 @@ Rust types. Some additional steps may be necessary however:
 - Struct fields should be Rust types. That means they must be in scope. Special Move types like
   `address`, `vector<T>` and `u256` are automatically converted to equivalent Rust types.
 
-The only requirement for a struct field type is that it has the same [BCS] representation as
+The only requirement for a struct field type is that it has the same `BCS` representation as
 the Move type for that field. You may use that to your advantage. For instance, if a
 `u256` is supposed to be interpreted as a fixed point number, you may define a custom
 `FixedP(U256)` type that (de)serializes to/from `u256` bytes but behaves like a fixed point
 number.
 
-Additionally, you may add any outter [attributes], e.g. docs, to structs and their fields.
+Additionally, you may add any outter `attributes`, e.g. docs, to structs and their fields.
 
 All `MoveStruct`s created by this macro will have a pretty `Display`
 using `tabled` as a backend.

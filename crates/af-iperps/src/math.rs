@@ -280,13 +280,13 @@ mod tests {
         ifixed = 0.1.try_into().unwrap();
         insta::assert_snapshot!(ifixed, @"0.1");
         let ok = units.ifixed_to_price(ifixed).unwrap();
-        assert_eq!(ok, 0_100000000);
+        assert_eq!(ok, 100_000_000);
 
         // `ifixed_to_price` truncates
         ifixed = 0.15.try_into().unwrap();
         insta::assert_snapshot!(ifixed, @"0.15");
         let ok = units.ifixed_to_price(ifixed).unwrap();
-        assert_eq!(ok, 0_150000000);
+        assert_eq!(ok, 150_000_000);
 
         ifixed = units.price_to_ifixed(0);
         insta::assert_snapshot!(ifixed, @"0.0");

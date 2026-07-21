@@ -94,7 +94,7 @@ fn gql_output() {
     use cynic::QueryBuilder as _;
 
     let vars = Variables {
-        address: Address::new(rand::random()).into(),
+        address: Address::new(rand::random()),
         first: None,
         after: None,
     };
