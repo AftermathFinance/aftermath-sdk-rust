@@ -38,6 +38,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.27.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-gql-client-v0.26.4...sui-gql-client-v0.27.0)
+
+### ⛰️ Features
+
+- [**breaking**] Update dependencies, fix clippy warnings - ([103edc1](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/103edc1a7c67e49a0e0f0bab90c6dc334ec3dc2b))
+
+
 ## [0.26.4](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/sui-gql-client-v0.26.3...sui-gql-client-v0.26.4)
 
 ### ⛰️ Features

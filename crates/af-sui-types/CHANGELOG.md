@@ -26,6 +26,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.19.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-sui-types-v0.18.1...af-sui-types-v0.19.0)
+
+### ⛰️ Features
+
+- [**breaking**] Update dependencies, fix clippy warnings - ([103edc1](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/103edc1a7c67e49a0e0f0bab90c6dc334ec3dc2b))
+
+
 ## [0.18.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-sui-types-v0.18.0...af-sui-types-v0.18.1)
 
 ### ⛰️ Features

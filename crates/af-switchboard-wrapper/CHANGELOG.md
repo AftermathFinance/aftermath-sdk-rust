@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.39](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-switchboard-wrapper-v0.0.38...af-switchboard-wrapper-v0.0.39)
+
+### ⛰️ Features
+
+- [**breaking**] Update dependencies, fix clippy warnings - ([103edc1](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/103edc1a7c67e49a0e0f0bab90c6dc334ec3dc2b))
+
+
 ## [0.0.38](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-switchboard-wrapper-v0.0.37...af-switchboard-wrapper-v0.0.38)
 
 ### ⚙️ Miscellaneous Tasks
