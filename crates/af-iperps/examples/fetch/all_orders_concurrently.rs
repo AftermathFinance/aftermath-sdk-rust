@@ -51,8 +51,8 @@ async fn main() -> Result<()> {
         .order_maps(*ch_struct.object_type().address(), ch)
         .await?;
     let ch_inst = MoveInstance::<ClearingHouse>::from_raw_struct(
-        ch_struct.object_type().clone(),
-        ch_struct.contents(),
+        ch_struct.object_type().clone().into(),
+        &ch_struct.contents(),
     )?;
 
     tokio::pin!(

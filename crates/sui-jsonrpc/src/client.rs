@@ -512,10 +512,6 @@ impl SuiClient {
     /// Estimate a budget for the transaction by dry-running it.
     ///
     /// Uses default [`GasBudgetOptions`] to compute the cost estimate.
-    #[expect(
-        clippy::result_large_err,
-        reason = "Boxing DryRunError would break backwards compatibility"
-    )]
     pub async fn gas_budget(
         &self,
         tx_kind: &TransactionKind,
@@ -527,10 +523,6 @@ impl SuiClient {
     }
 
     /// Estimate a budget for the transaction by dry-running it.
-    #[expect(
-        clippy::result_large_err,
-        reason = "Boxing DryRunError would break backwards compatibility"
-    )]
     pub async fn gas_budget_with_options(
         &self,
         tx_kind: &TransactionKind,

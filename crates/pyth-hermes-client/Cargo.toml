@@ -36,7 +36,7 @@ stream = [
 # Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
 # to this crate
 # https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
-base64 = { version = "0.23", public = true }
+base64 = { version = "0.22", public = true }
 eventsource-stream = { version = "0.2", public = true, optional = true }
 futures-core = { version = "0.3", public = true, optional = true }
 hex = { version = "0.4", public = true }

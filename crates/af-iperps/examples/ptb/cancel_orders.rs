@@ -51,7 +51,7 @@ async fn main() -> Result<()> {
     let ptb = ptb!(
         package perpetuals: perpetuals_package;
 
-        type T = otw;
+        type T = otw.into();
 
         input obj clearing_house: clearing_house;
         input obj account: account;

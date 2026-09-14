@@ -27,7 +27,7 @@ async fn main() -> Result<()> {
         Address::from_str("0x8ae8b5a9517644be751ecf10aa83c10fe3dfe32849b7d682c570d7a8215cd942")?;
     // Account's collateral type
     let otw = TypeTag::from_str(
-        "0x457049371f5b5dc2bda857bb804ca6e93c5a3cae1636d0cd17bb6b6070d19458::usdc::USDC",
+        &"0x457049371f5b5dc2bda857bb804ca6e93c5a3cae1636d0cd17bb6b6070d19458::usdc::USDC",
     )?;
     // Address that is going to receive the created account
     let recipient =
@@ -44,7 +44,7 @@ async fn main() -> Result<()> {
     let ptb = ptb!(
         package perpetuals: perpetuals_package;
 
-        type T = otw;
+        type T = otw.into();
 
         input obj registry;
         input pure to: &recipient;
