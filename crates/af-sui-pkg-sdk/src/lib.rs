@@ -254,7 +254,7 @@ macro_rules! sui_pkg_sdk {
     (@Module $(#[$meta:meta])* $($address:literal::)?$module:ident
         $($tt:tt)*
     ) => {
-        #[allow(clippy::too_many_arguments)]
+        #[allow(clippy::too_many_arguments, clippy::redundant_field_names)]
         $(#[$meta])*
         pub mod $module {
             #[allow(unused_imports)]
