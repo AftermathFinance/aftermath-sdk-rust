@@ -98,30 +98,43 @@ impl TryFrom<IFixed> for f64 {
     }
 }
 
-fn scaled_to_f64(raw: u128) -> f64 {
-    const SCALE: u128 = 1_000_000_000_000_000_000;
-    if raw == 0 {
+// magnitude / 10^DECIMALS rounded to the nearest f64 (ties to even) with integer arithmetic only.
+// The magnitude is scaled by a power of two so that the integer quotient against 10^DECIMALS has
+// 54 or 55 bits: the 53 significand bits, one guard bit and, in the 55-bit case, one more bit that
+// is folded into the sticky bit together with the division remainder. A 114-bit numerator
+// guarantees it, because 2^113 / 10^18 > 2^53 and 2^114 / 10^18 < 2^55. Bits dropped from a
+// magnitude wider than 114 bits only feed the sticky bit, which is all that rounding needs.
+fn scaled_to_f64(magnitude: U256) -> f64 {
+    const NUMERATOR_BITS: u32 = 114;
+    const SIGNIFICAND_BITS: u32 = f64::MANTISSA_DIGITS;
+    const EXPONENT_BIAS: u32 = 1023;
+    const SCALE: u128 = 10_u128.pow(IFixed::DECIMALS as u32);
+    if magnitude == U256::zero() {
         return 0.0;
     }
-    let leading_zeros = raw.leading_zeros();
-    let (numerator, denominator) = if leading_zeros >= 14 {
-        (raw << (leading_zeros - 14), SCALE)
+    let bits = 256 - magnitude.leading_zeros();
+    let (numerator, mut sticky) = if bits <= NUMERATOR_BITS {
+        (magnitude << (NUMERATOR_BITS - bits), false)
     } else {
-        (raw, SCALE << (14 - leading_zeros))
+        let dropped = (bits - NUMERATOR_BITS) as u8;
+        let top = magnitude >> dropped;
+        (top, top << dropped != magnitude)
     };
-    let mut quotient = numerator / denominator;
-    let mut sticky = numerator % denominator != 0;
-    let mut biased_exponent = 1038 - u64::from(leading_zeros);
-    if quotient >> 54 != 0 {
+    let numerator = numerator.unchecked_as_u128();
+    let mut quotient = numerator / SCALE;
+    sticky |= numerator % SCALE != 0;
+    // magnitude / 10^DECIMALS = quotient * 2^(bits - NUMERATOR_BITS), and the significand is quotient / 2.
+    let mut exponent = EXPONENT_BIAS + bits + 1 - NUMERATOR_BITS;
+    if quotient >> (SIGNIFICAND_BITS + 1) != 0 {
         sticky |= quotient & 1 != 0;
         quotient >>= 1;
-        biased_exponent += 1;
+        exponent += 1;
     }
     let mut significand = quotient >> 1;
     if quotient & 1 != 0 && (sticky || significand & 1 != 0) {
         significand += 1;
     }
-    significand as f64 * f64::from_bits(biased_exponent << 52)
+    significand as f64 * f64::from_bits(u64::from(exponent) << (SIGNIFICAND_BITS - 1))
 }
 
 impl From<Balance9> for IFixed {
@@ -270,19 +283,12 @@ impl Zero for IFixed {
 impl IFixed {
     pub const DECIMALS: u8 = 18;
 
-    /// The nearest `f64`: the same value as `f64::try_from`, computed with integer arithmetic
-    /// instead of a decimal string round trip.
-    ///
-    /// # Errors
-    ///
-    /// A magnitude above `u128::MAX` takes the decimal string path of `f64::try_from`, whose
-    /// parse error is passed on.
-    pub fn to_f64(self) -> Result<f64, <f64 as FromStr>::Err> {
-        let Ok(magnitude) = u128::try_from(self.0.uabs()) else {
-            return self.to_string().parse();
-        };
-        let float = scaled_to_f64(magnitude);
-        Ok(if self.is_neg() { -float } else { float })
+    /// The nearest `f64` (ties to even): the value `f64::try_from` gives, computed with integer
+    /// arithmetic instead of a decimal string round trip.
+    #[must_use]
+    pub fn to_f64(self) -> f64 {
+        let float = scaled_to_f64(self.0.uabs());
+        if self.is_neg() { -float } else { float }
     }
 
     /// Create an `u64` from a `IFixed` applying the specified scaling factor.
@@ -413,7 +419,18 @@ mod tests {
         #[test]
         fn f64_matches_the_parsed_decimal_string(raw in any::<u128>(), shift in 0..128_u32, neg in any::<bool>()) {
             let value = signed(raw >> shift, neg);
-            let float = value.to_f64().unwrap();
+            let float = value.to_f64();
+            prop_assert_eq!(float.to_bits(), parsed_decimal_string(value).to_bits());
+        }
+
+        #[test]
+        fn f64_matches_the_parsed_decimal_string_above_u128(
+            high in 1..(1_u128 << 127),
+            low in any::<u128>(),
+            neg in any::<bool>(),
+        ) {
+            let value = signed_wide(high, low, neg);
+            let float = value.to_f64();
             prop_assert_eq!(float.to_bits(), parsed_decimal_string(value).to_bits());
         }
 
@@ -426,7 +443,7 @@ mod tests {
         ) {
             let tie = ((odd * 2 + 1) * 5_u128.pow(18)) << power;
             let value = signed(tie + offset - 1, neg);
-            let float = value.to_f64().unwrap();
+            let float = value.to_f64();
             prop_assert_eq!(float.to_bits(), parsed_decimal_string(value).to_bits());
         }
 
@@ -441,6 +458,11 @@ mod tests {
 
     fn signed(magnitude: u128, neg: bool) -> IFixed {
         let inner = I256::from(magnitude);
+        IFixed::from_inner(if neg { -inner } else { inner })
+    }
+
+    fn signed_wide(high: u128, low: u128, neg: bool) -> IFixed {
+        let inner = I256::from_inner((U256::from(high) << 128_u32) | U256::from(low));
         IFixed::from_inner(if neg { -inner } else { inner })
     }
 
@@ -481,8 +503,20 @@ mod tests {
             edges.push(signed(10_u128.pow(power), false));
             edges.push(signed(10_u128.pow(power), true));
         }
+        let mut power_of_ten = U256::from(10_u128.pow(38));
+        for _ in 39..77 {
+            power_of_ten *= U256::from(10_u8);
+            edges.push(IFixed::from_inner(I256::from_inner(power_of_ten)));
+            edges.push(IFixed::from_inner(-I256::from_inner(power_of_ten)));
+        }
+        for low in [0, 1, u128::MAX] {
+            edges.push(signed_wide(1, low, false));
+            edges.push(signed_wide(1, low, true));
+            edges.push(signed_wide((1 << 127) - 1, low, false));
+            edges.push(signed_wide((1 << 127) - 1, low, true));
+        }
         for value in edges {
-            let float = value.to_f64().unwrap();
+            let float = value.to_f64();
             assert_eq!(
                 float.to_bits(),
                 parsed_decimal_string(value).to_bits(),
