@@ -98,6 +98,32 @@ impl TryFrom<IFixed> for f64 {
     }
 }
 
+fn scaled_to_f64(raw: u128) -> f64 {
+    const SCALE: u128 = 1_000_000_000_000_000_000;
+    if raw == 0 {
+        return 0.0;
+    }
+    let leading_zeros = raw.leading_zeros();
+    let (numerator, denominator) = if leading_zeros >= 14 {
+        (raw << (leading_zeros - 14), SCALE)
+    } else {
+        (raw, SCALE << (14 - leading_zeros))
+    };
+    let mut quotient = numerator / denominator;
+    let mut sticky = numerator % denominator != 0;
+    let mut biased_exponent = 1038 - u64::from(leading_zeros);
+    if quotient >> 54 != 0 {
+        sticky |= quotient & 1 != 0;
+        quotient >>= 1;
+        biased_exponent += 1;
+    }
+    let mut significand = quotient >> 1;
+    if quotient & 1 != 0 && (sticky || significand & 1 != 0) {
+        significand += 1;
+    }
+    significand as f64 * f64::from_bits(biased_exponent << 52)
+}
+
 impl From<Balance9> for IFixed {
     fn from(value: Balance9) -> Self {
         let balance_u256: U256 = value.into_inner().into();
@@ -244,6 +270,21 @@ impl Zero for IFixed {
 impl IFixed {
     pub const DECIMALS: u8 = 18;
 
+    /// The nearest `f64`: the same value as `f64::try_from`, computed with integer arithmetic
+    /// instead of a decimal string round trip.
+    ///
+    /// # Errors
+    ///
+    /// A magnitude above `u128::MAX` takes the decimal string path of `f64::try_from`, whose
+    /// parse error is passed on.
+    pub fn to_f64(self) -> Result<f64, <f64 as FromStr>::Err> {
+        let Ok(magnitude) = u128::try_from(self.0.uabs()) else {
+            return self.to_string().parse();
+        };
+        let float = scaled_to_f64(magnitude);
+        Ok(if self.is_neg() { -float } else { float })
+    }
+
     /// Create an `u64` from a `IFixed` applying the specified scaling factor.
     pub fn try_into_balance_with_scaling(self, scaling_factor: U256) -> Result<u64, Error> {
         if self.is_neg() {
@@ -370,11 +411,83 @@ mod tests {
         }
 
         #[test]
+        fn f64_matches_the_parsed_decimal_string(raw in any::<u128>(), shift in 0..128_u32, neg in any::<bool>()) {
+            let value = signed(raw >> shift, neg);
+            let float = value.to_f64().unwrap();
+            prop_assert_eq!(float.to_bits(), parsed_decimal_string(value).to_bits());
+        }
+
+        #[test]
+        fn f64_rounds_ties_like_the_parsed_decimal_string(
+            odd in (1_u128 << 52)..(1_u128 << 53),
+            power in 0..32_u32,
+            offset in 0..3_u128,
+            neg in any::<bool>(),
+        ) {
+            let tie = ((odd * 2 + 1) * 5_u128.pow(18)) << power;
+            let value = signed(tie + offset - 1, neg);
+            let float = value.to_f64().unwrap();
+            prop_assert_eq!(float.to_bits(), parsed_decimal_string(value).to_bits());
+        }
+
+        #[test]
         fn trunc_is_le_to_original(x in i128::MIN..=i128::MAX, y in i128::MIN..=i128::MAX) {
             let x: IFixed = x.into();
             let y: IFixed = y.into();
             let z = x / y;
             assert!(z.trunc().abs() <= z.abs())
+        }
+    }
+
+    fn signed(magnitude: u128, neg: bool) -> IFixed {
+        let inner = I256::from(magnitude);
+        IFixed::from_inner(if neg { -inner } else { inner })
+    }
+
+    fn parsed_decimal_string(value: IFixed) -> f64 {
+        value.to_string().parse().unwrap()
+    }
+
+    #[test]
+    fn f64_matches_the_parsed_decimal_string_at_the_edges() {
+        let mut edges = vec![
+            IFixed::zero(),
+            IFixed::from_inner(I256::from_inner(U256::max_value())),
+            IFixed::from_inner(I256::from_inner(U256::one() << 255_u8)),
+            IFixed::from_inner(I256::from_inner((U256::one() << 255_u8) - U256::one())),
+        ];
+        for magnitude in [
+            1,
+            u128::MAX,
+            u128::MAX - 1,
+            1 << 127,
+            (1 << 114) - 1,
+            1 << 114,
+            (1 << 114) + 1,
+            (1 << 53) - 1,
+            1 << 53,
+            (1 << 53) + 1,
+            295_147_905_179_352_809_472_000_000_000_000_000_000 - 1,
+            295_147_905_179_352_809_472_000_000_000_000_000_000,
+            295_147_905_179_352_809_472_000_000_000_000_000_000 + 1,
+            295_147_905_179_352_858_624_000_000_000_000_000_000 - 1,
+            295_147_905_179_352_858_624_000_000_000_000_000_000,
+            295_147_905_179_352_858_624_000_000_000_000_000_000 + 1,
+        ] {
+            edges.push(signed(magnitude, false));
+            edges.push(signed(magnitude, true));
+        }
+        for power in 0..39 {
+            edges.push(signed(10_u128.pow(power), false));
+            edges.push(signed(10_u128.pow(power), true));
+        }
+        for value in edges {
+            let float = value.to_f64().unwrap();
+            assert_eq!(
+                float.to_bits(),
+                parsed_decimal_string(value).to_bits(),
+                "{value}"
+            );
         }
     }
 
