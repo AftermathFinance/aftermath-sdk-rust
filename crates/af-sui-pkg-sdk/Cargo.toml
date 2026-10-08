@@ -2,7 +2,7 @@
 autotests   = false
 description = "Macro for generating `MoveStruct`s from Move source code"
 name        = "af-sui-pkg-sdk"
-version     = "0.16.0"
+version     = "0.16.1"
 
 authors.workspace      = true
 categories.workspace   = true

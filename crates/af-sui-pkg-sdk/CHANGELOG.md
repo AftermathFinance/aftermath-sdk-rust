@@ -23,6 +23,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-sui-pkg-sdk-v0.16.0...af-sui-pkg-sdk-v0.16.1)
+
+### 🐛 Bug Fixes
+
+- *(af-sui-pkg-sdk)* Allow redundant_field_names in generated modules - ([f5a4b7b](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/f5a4b7b408fd95428503e8d2f1c51ce21f2c10d0))
+
+
 ## [0.16.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-sui-pkg-sdk-v0.15.4...af-sui-pkg-sdk-v0.16.0)
 
 ### ⛰️ Features

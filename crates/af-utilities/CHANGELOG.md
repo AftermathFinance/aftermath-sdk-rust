@@ -23,6 +23,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.16.1](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-utilities-v0.16.0...af-utilities-v0.16.1)
+
+### ⛰️ Features
+
+- *(af-utilities)* Add IFixed::to_f64 computed with integer arithmetic - ([0a71ed9](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/0a71ed9f2ac788054a00302be713035cb39dca48))
+
+### 🚜 Refactor
+
+- *(af-utilities)* Make IFixed::to_f64 infallible over the whole I256 range - ([8d35f86](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/8d35f867e5bf34770a5d1a083363298f43512100))
+
+### ⚡ Performance
+
+- *(af-utilities)* Keep IFixed::to_f64 on u128 arithmetic for magnitudes below 2^128 - ([49d33ff](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/49d33ff67fe31ddf64ef131f5092a7f8b486895d))
+- *(af-utilities)* Cache the I256 sign masks - ([654b9c9](https://github.com/AftermathFinance/aftermath-sdk-rust/commit/654b9c99ebfeb73b434e15d24f2d5f12b3672863))
+
+
 ## [0.16.0](https://github.com/AftermathFinance/aftermath-sdk-rust/compare/af-utilities-v0.15.1...af-utilities-v0.16.0)
 
 ### ⛰️ Features
