@@ -104,25 +104,34 @@ impl TryFrom<IFixed> for f64 {
 // is folded into the sticky bit together with the division remainder. A 114-bit numerator
 // guarantees it, because 2^113 / 10^18 > 2^53 and 2^114 / 10^18 < 2^55. Bits dropped from a
 // magnitude wider than 114 bits only feed the sticky bit, which is all that rounding needs.
+// Magnitudes that fit in a u128 (every value seen in practice) stay in u128 arithmetic.
 fn scaled_to_f64(magnitude: U256) -> f64 {
     const NUMERATOR_BITS: u32 = 114;
     const SIGNIFICAND_BITS: u32 = f64::MANTISSA_DIGITS;
     const EXPONENT_BIAS: u32 = 1023;
     const SCALE: u128 = 10_u128.pow(IFixed::DECIMALS as u32);
-    if magnitude == U256::zero() {
-        return 0.0;
-    }
-    let bits = 256 - magnitude.leading_zeros();
-    let (numerator, mut sticky) = if bits <= NUMERATOR_BITS {
-        (magnitude << (NUMERATOR_BITS - bits), false)
-    } else {
-        let dropped = (bits - NUMERATOR_BITS) as u8;
-        let top = magnitude >> dropped;
-        (top, top << dropped != magnitude)
+    // Normalise to a 114-bit numerator; the dropped low bits only feed the sticky bit.
+    let (numerator, mut sticky, bits) = match u128::try_from(magnitude) {
+        Ok(0) => return 0.0,
+        Ok(narrow) => {
+            let bits = u128::BITS - narrow.leading_zeros();
+            if bits <= NUMERATOR_BITS {
+                (narrow << (NUMERATOR_BITS - bits), false, bits)
+            } else {
+                let dropped = bits - NUMERATOR_BITS;
+                let top = narrow >> dropped;
+                (top, top << dropped != narrow, bits)
+            }
+        }
+        Err(_) => {
+            let bits = 256 - magnitude.leading_zeros();
+            let dropped = (bits - NUMERATOR_BITS) as u8;
+            let top = magnitude >> dropped;
+            (top.unchecked_as_u128(), top << dropped != magnitude, bits)
+        }
     };
-    let numerator = numerator.unchecked_as_u128();
     let mut quotient = numerator / SCALE;
-    sticky |= numerator % SCALE != 0;
+    sticky |= !numerator.is_multiple_of(SCALE);
     // magnitude / 10^DECIMALS = quotient * 2^(bits - NUMERATOR_BITS), and the significand is quotient / 2.
     let mut exponent = EXPONENT_BIAS + bits + 1 - NUMERATOR_BITS;
     if quotient >> (SIGNIFICAND_BITS + 1) != 0 {
