@@ -2,6 +2,7 @@ use std::cmp::Ordering;
 use std::ops::{
     Add, AddAssign, Div, DivAssign, Mul, MulAssign, Neg, Rem, RemAssign, Sub, SubAssign,
 };
+use std::sync::LazyLock;
 
 use af_sui_types::u256::U256;
 use num_traits::{One, Zero};
@@ -9,6 +10,9 @@ use serde::{Deserialize, Serialize};
 
 use super::errors::Error;
 use super::onchain;
+
+static GREATEST_BIT: LazyLock<U256> = LazyLock::new(|| U256::one() << 255_u8);
+static NOT_GREATEST_BIT: LazyLock<U256> = LazyLock::new(|| (U256::one() << 255_u8) - U256::one());
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Deserialize, Serialize)]
 pub struct I256(U256);
@@ -264,11 +268,11 @@ impl Zero for I256 {
 
 impl I256 {
     fn greatest_bit() -> U256 {
-        U256::one() << 255_u8
+        *GREATEST_BIT
     }
 
     fn not_greatest_bit() -> U256 {
-        (U256::one() << 255_u8) - U256::one()
+        *NOT_GREATEST_BIT
     }
 
     pub const fn neg_one() -> Self {
@@ -331,5 +335,14 @@ mod tests {
     #[test]
     fn from_i128_min_doesnt_underflow() {
         assert!(I256::from(i128::MIN).is_neg())
+    }
+
+    #[test]
+    fn sign_masks_are_the_shifted_values() {
+        assert_eq!(I256::greatest_bit(), U256::one() << 255_u8);
+        assert_eq!(
+            I256::not_greatest_bit(),
+            (U256::one() << 255_u8) - U256::one()
+        );
     }
 }
