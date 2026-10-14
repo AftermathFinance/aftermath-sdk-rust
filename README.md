@@ -80,6 +80,10 @@ Crates for interacting with Aftermath's services and the Sui network. It aims to
     [![package on crates.io](https://img.shields.io/crates/v/pyth-sui-sdk)](https://crates.io/crates/pyth-sui-sdk)
     [![Documentation (latest release)](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.rs/pyth-sui-sdk)
 
+- [`af-price-updates`](crates/af-price-updates)
+    [![package on crates.io](https://img.shields.io/crates/v/af-price-updates)](https://crates.io/crates/af-price-updates)
+    [![Documentation (latest release)](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.rs/af-price-updates)
+
 
 ## Using this SDK to read from/write to the Sui chain
 

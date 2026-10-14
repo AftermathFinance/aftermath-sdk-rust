@@ -1,0 +1,42 @@
+[package]
+description = "Price update formats and helpers for the Aftermath, Pyth, Pyth Lazer, and Stork oracles"
+name        = "af-price-updates"
+version     = "0.1.0"
+
+authors.workspace      = true
+categories.workspace   = true
+edition.workspace      = true
+license.workspace      = true
+repository.workspace   = true
+rust-version.workspace = true
+
+[package.metadata.docs.rs]
+# To build locally:
+# RUSTDOCFLAGS="--generate-link-to-definition" cargo doc --all-features --no-deps --open
+all-features = true
+rustdoc-args = [
+  # Generate links to definition in rustdoc source code pages
+  # https://github.com/rust-lang/rust/pull/84176
+  "--generate-link-to-definition",
+]
+
+[lints]
+workspace = true
+
+[dependencies]
+# Public dependencies; a SemVer-breaking bump in one of these must come with a SemVer-breaking bump
+# to this crate
+# https://rust-lang.github.io/rfcs/3516-public-private-dependencies.html
+bytes      = { version = "1.7", public = true }
+serde      = { version = "1", public = true, features = ["derive"] }
+
+base64ct    = "1.8"
+bcs         = "0.1"
+const-hex   = "1.16"
+ref-cast    = "1"
+rustc-hash  = "2.1"
+tiny-keccak = { version = "2", features = ["keccak"] }
+
+[dev-dependencies]
+base64ct   = { version = "1.8", features = ["alloc"] }
+serde_json = "1"
